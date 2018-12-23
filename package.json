@@ -1,0 +1,13 @@
+{
+    "name": "",
+    "version": "1.0.0",
+    "description": "",
+    "main": "",
+    "scripts": {
+      "server": "cd server && npm start",
+      "client": "cd client && npm start"
+    },
+    "author": "Zach Moore",
+    "license": "ISC"
+  }
+  
