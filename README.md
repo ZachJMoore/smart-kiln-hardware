@@ -44,6 +44,7 @@ After enabling SPI to be used on the raspberry pi, in the server directory, run 
     $ sudo apt-get install -y nodejs
     $ npm install
     $ mv server/.env.example server/.env
+    $ mv server/app/config/defaultConfig.json server/app/config/config.json
     $ node server.js
 ```
 

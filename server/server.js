@@ -3,9 +3,12 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 const kilnController = require("./app/routes/kilnController")
+const env = process.env.NODE_ENV
 const PORT = process.env.PORT || 2222;
-const DB_HOST = process.env.DB_HOST
-const io = require("socket.io-client")
+
+
+// Syncing to database
+require("./app/syncing/sync.js")
 
 
 // For Express
@@ -32,9 +35,6 @@ app.use("/api/get-schedules", (req, res)=>{
 app.use(express.static('app/public/'))
 app.get("*", (request, response) => (response.sendFile(__dirname + 'app/public/index.html')))
 
-// For Socket.io
-
-    const socket = io(DB_HOST)
 
 // Start server
 

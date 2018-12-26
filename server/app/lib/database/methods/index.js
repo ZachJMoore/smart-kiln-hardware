@@ -21,4 +21,4 @@ fs
     db[file.replace(".js", "")] = method
 })
 
-export default db
+module.exports = db
