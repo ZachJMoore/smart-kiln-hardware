@@ -273,6 +273,21 @@ class Kiln {
             this.setRelays(0) //set all relays off
             this.controller = new PID(this, this.config.temperatureOffset)
 
+            const self = this
+
+            async function setStartingTemperature(){
+                self.temperature = await self.getTemperature()
+                return self.temperature
+            }
+
+            setStartingTemperature()
+            .then((temperature)=>{
+                console.log("Starting temperature: ", temperature)
+            })
+            .catch((error)=>{
+                console.log("An error occured: ", error)
+            })
+
             setInterval(() => {
 
                 this.getTemperature()
@@ -299,4 +314,27 @@ class Kiln {
     }
 }
 
-module.exports = Kiln
+const config = require("../config/config.json")
+
+let kiln;
+let isFakeData = process.env.FAKE_DATA === "true"
+let isDebug = process.env.DEBUG === "true"
+
+if (!isFakeData){
+    const Gpio = require('onoff').Gpio;
+    const relayOne = new Gpio(27, 'out');
+
+    kiln = new Kiln({
+        relays: [relayOne],
+        debug: isDebug,
+        config: config
+    })
+} else {
+    kiln = new Kiln({
+        relays: [],
+        debug: isDebug,
+        config: config
+    })
+}
+
+module.exports = kiln

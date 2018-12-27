@@ -4,30 +4,7 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-const Kiln = require('../lib/kiln');
-
-const config = require("../config/config.json")
-
-let kiln;
-let isFakeData = process.env.FAKE_DATA === "true"
-let isDebug = process.env.DEBUG === "true"
-
-if (!isFakeData){
-    const Gpio = require('onoff').Gpio;
-    const relayOne = new Gpio(27, 'out');
-
-    kiln = new Kiln({
-        relays: [relayOne],
-        debug: isDebug,
-        config: config
-    })
-} else {
-    kiln = new Kiln({
-        relays: [],
-        debug: isDebug,
-        config: config
-    })
-}
+const kiln = require('../lib/kiln');
 
 kiln.init()
 
