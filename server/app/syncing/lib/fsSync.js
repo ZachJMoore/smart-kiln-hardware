@@ -26,7 +26,6 @@ class FSSync {
 
                         if (data){
                             fsStore.set("kiln", data)
-                            fsStore.save()
                             resolve(data)
                         }
                     })
@@ -44,7 +43,6 @@ class FSSync {
 
                         if (data){
                             fsStore.set("kiln", data)
-                            fsStore.save()
                             resolve(data)
                         }
                     })
@@ -52,8 +50,6 @@ class FSSync {
                         reject(error)
                     })
                 }
-
-                fsStore.save()
 
             })
         }
@@ -74,7 +70,6 @@ class FSSync {
 
                     fsStore.set("password", password)
                     fsStore.set("uuid", data.uuid)
-                    fsStore.save()
                     resolve(data)
                 })
                 .catch((error)=>{
@@ -97,7 +92,6 @@ class FSSync {
 
                     if (data){
                         fsStore.set("kiln", data)
-                        fsStore.save()
                     }
                     resolve(data)
                 })
@@ -118,7 +112,6 @@ class FSSync {
                 .then((data)=>{
                     if (data){
                         fsStore.set("firingSchedules", data)
-                        fsStore.save()
                     }
 
                     resolve(data)
