@@ -17,11 +17,11 @@ class Controls extends Component{
             let value = event.target.value
             let schedulePlaceholder = null
             this.props.state.schedules.forEach((schedule, index)=>{
-                if (schedule.id === value){
+                if (index === value){
                     schedulePlaceholder = schedule
                 }
             })
-            this.setState({scheduleID: value, schedule: schedulePlaceholder })
+            this.setState({scheduleID: value, schedule: this.props.state.schedules[value] })
         }
 
         this.startFiring = () =>{
@@ -78,7 +78,7 @@ class Controls extends Component{
                     <select value={this.state.scheduleID} onChange={this.changeSelection}>
                         <option value={0} disabled>Select Schedule</option>
                         {this.props.state.schedules.map(((schedule, index)=>
-                            <option value={schedule.id} key={index}>{schedule.name}</option>
+                            <option value={index} key={index}>{schedule.name}</option>
                         ))}
                     </select>
                     <div className="start-stop-container">

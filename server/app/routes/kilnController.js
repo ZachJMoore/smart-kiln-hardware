@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-const kiln = require('../lib/kiln');
+const kiln = require('../kiln/kiln');
 
 kiln.init()
 

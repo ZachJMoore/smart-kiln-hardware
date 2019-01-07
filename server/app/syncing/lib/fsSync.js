@@ -1,7 +1,4 @@
-const dbMethods = require("../../lib/database/methods/index.js")
 const fsStore = require("./fsStore.js")
-const generatePassword = require("../../lib/generatePassword.js")
-const responseHandler = require("../../lib/fetch/responseHandler.js")
 
 
 class FSSync {
@@ -9,119 +6,52 @@ class FSSync {
 
     constructor(fsStore){
 
-        this.login = () => {
-
-            return new Promise((resolve, reject)=>{
-
-                const password = fsStore.get("password", "")
-                const uuid = fsStore.get("uuid", "")
-
-                if (password === "" || uuid === ""){
-                    this.signUp()
-                    .then((data)=>{
-                        if (data.isAuthenticated === false || data.isError){
-                            reject(data)
-                            return
-                        }
-
-                        if (data){
-                            fsStore.set("kiln", data)
-                            resolve(data)
-                        }
-                    })
-                    .catch((error)=>{
-                        reject(error)
-                    })
-                } else {
-                    dbMethods.kiln.login(password, uuid)
-                    .then(responseHandler)
-                    .then((data)=>{
-                        if (data.isAuthenticated === false || data.isError){
-                            reject(data)
-                            return
-                        }
-
-                        if (data){
-                            fsStore.set("kiln", data)
-                            resolve(data)
-                        }
-                    })
-                    .catch((error)=>{
-                        reject(error)
-                    })
-                }
-
-            })
+        this.setCredentials = ({ password , uuid }) => {
+            fsStore.set("password", password)
+            fsStore.set("uuid", uuid)
         }
 
-        this.signUp = () => {
+        this.getCredentials = () => {
+            const password = fsStore.get("password", null)
+            const uuid = fsStore.get("uuid", null)
 
-            return new Promise((resolve, reject)=>{
-
-                const password = generatePassword()
-
-                dbMethods.kiln.signUp(password)
-                .then(responseHandler)
-                .then(data=>{
-                    if (data.isAuthenticated === false || data.isError){
-                        reject(data)
-                        return
-                    }
-
-                    fsStore.set("password", password)
-                    fsStore.set("uuid", data.uuid)
-                    resolve(data)
-                })
-                .catch((error)=>{
-                    reject(error)
-                })
-            })
+            return ({password: password, uuid: uuid})
         }
 
-        this.updateKilnData = () => {
-
-            return new Promise((resolve, reject)=>{
-
-                dbMethods.kiln.getKilnData()
-                .then(responseHandler)
-                .then((data)=>{
-                    if (data.isAuthenticated === false || data.isError){
-                        reject(data)
-                        return
-                    }
-
-                    if (data){
-                        fsStore.set("kiln", data)
-                    }
-                    resolve(data)
-                })
-                .catch((error)=>{
-                    reject(error)
-                })
-
-            })
-
+        this.setKilnData = (kilnData) => {
+            fsStore.set("kiln", kilnData)
         }
 
-        this.updateAllSchedules = (userId = 0)=>{
+        this.getKilnData = () => {
+            return fsStore.get("kiln", {})
+        }
 
-            return new Promise((resolve, reject)=>{
+        this.setAllDatabaseSchedules = (schedules)=>{
+            fsStore.set("databaseSchedules", schedules)
+        }
+        this.getAllDatabaseSchedules = ()=>{
+            return fsStore.get("databaseSchedules", [])
+        }
 
-                dbMethods.kiln.getAllSchedules()
-                .then(responseHandler)
-                .then((data)=>{
-                    if (data){
-                        fsStore.set("firingSchedules", data)
-                    }
+        this.addLocalSchedule = (schedule)=>{
+            let schedules = this.getAllLocalSchedules()
+            schedules.push(schedule)
+            fsStore.set("localSchedules", schedules)
+        }
 
-                    resolve(data)
-                })
-                .catch((error)=>{
-                    reject(error)
-                })
+        this.setAllLocalSchedules = (schedules)=>{
+            fsStore.set("localSchedules", schedules)
+        }
 
-            })
+        this.getAllLocalSchedules = ()=>{
+            return fsStore.get("localSchedules", [])
+        }
 
+        this.getAllSchedules = ()=>{
+            const dbSchedules = fsStore.get("databaseSchedules", [])
+            const localSchedules = fsStore.get("localSchedules", [])
+
+            return [...dbSchedules, ...localSchedules]
         }
 
     }

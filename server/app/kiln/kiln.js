@@ -3,7 +3,7 @@ const fs = require("fs")
 let max31855, thermoSensor;
 
 if (process.env.FAKE_DATA === "false"){
-    max31855 = require('./max31855');
+    max31855 = require('../lib/max31855');
     thermoSensor = new max31855();
 }
 
@@ -64,20 +64,24 @@ class PID {
 // {
 //     relays: [onOffGPIO],
 //     debug: false,
-//     config: config // see config/default-config.json
+//     config: config
 // }
 
 class Kiln {
     constructor(object) {
         this.temperature = 0
         this.isFiring = false
+        this.estimated_minutes_remaining = 0
         this.currentSchedule = {}
         this.temperatureLog = []
         this.controller = null
         this.relays = object.relays
         this.startupDate = Date.now()
         this.config = object.config
+        if (this.config.kiln_settings) this.temperature_offset = this.config.kiln_settings.temperature_offset || 0
+        else this.temperature_offset = 0
         this.debug = object.debug
+        this.kiln_log = {}
 
         this.getTemperature = () => {
             return new Promise((resolve, reject) => {
@@ -107,7 +111,8 @@ class Kiln {
                 temperature: this.temperature,
                 isFiring: this.isFiring,
                 currentSchedule: this.currentSchedule,
-                temperatureLog: this.temperatureLog
+                temperatureLog: this.temperatureLog,
+                estimated_minutes_remaining: this.estimated_minutes_remaining
             }
         }
 
@@ -133,14 +138,20 @@ class Kiln {
             return isOn
         }
 
-        this.startFiring = (firingSchedule) => {
+        this.startFiring = (firing_schedule) => {
 
-            if (this.isFiring !== true ){
+            if (!this.isFiring){
+
+                console.log(firing_schedule)
 
                 this.isFiring = true
-                this.currentSchedule = firingSchedule
-                this.firingScheduleInstance = this.fireSchedule(firingSchedule)
-                this.firingScheduleInstance.next()
+                this.currentSchedule = firing_schedule
+                this.fireScheduleInstance = this.fireSchedule(firing_schedule)
+                this.fireScheduleInstance.next()
+
+                let schedule_id = null
+                if (firing_schedule.id) schedule_id = firing_schedule.id
+                this.sync.startLog(schedule_id)
 
             }
 
@@ -149,10 +160,12 @@ class Kiln {
         this.stopFiring = ()=>{
             this.isFiring = false
             this.controller.stopPID()
+            this.sync.endLog()
         }
 
         this.fireSchedule = function* (schedule){
             if (!schedule){
+                this.stopFiring()
                 return
             }
 
@@ -221,7 +234,7 @@ class Kiln {
                             this.debug && console.log(`entering hold for ${ramp.hold*60} minutes`)
                             this.holdTimeout = setTimeout(()=>{
 
-                                if (this.firingScheduleInstance.next().done){
+                                if (this.fireScheduleInstance.next().done){
                                     endFiring()
                                     this.debug && console.log("Firing Completed")
                                }
@@ -244,7 +257,7 @@ class Kiln {
                             this.debug && console.log(`entering hold for ${ramp.hold*60} minutes`)
                             this.holdTimeout = setTimeout(()=>{
 
-                                if (this.firingScheduleInstance.next().done){
+                                if (this.fireScheduleInstance.next().done){
                                     endFiring()
                                     this.debug && console.log("Firing Completed")
                                }
@@ -271,22 +284,13 @@ class Kiln {
 
         this.init = () => {
             this.setRelays(0) //set all relays off
-            this.controller = new PID(this, this.config.temperatureOffset)
+            this.controller = new PID(this, this.temperature_offset)
 
-            const self = this
-
-            async function setStartingTemperature(){
-                self.temperature = await self.getTemperature()
-                return self.temperature
-            }
-
-            setStartingTemperature()
-            .then((temperature)=>{
-                console.log("Starting temperature: ", temperature)
+            this.getTemperature()
+            .then(temperature => {
+                this.temperature = temperature
             })
-            .catch((error)=>{
-                console.log("An error occured: ", error)
-            })
+            .catch(console.log)
 
             setInterval(() => {
 
@@ -310,11 +314,13 @@ class Kiln {
                     this.temperatureLog.pop()
                 }
             }, 60000)
+
+            this.sync = require("../syncing/sync.js")
         }
     }
 }
 
-const config = require("../config/config.json")
+const config = require("../syncing/lib/fsSync.js").getKilnData()
 
 let kiln;
 let isFakeData = process.env.FAKE_DATA === "true"
