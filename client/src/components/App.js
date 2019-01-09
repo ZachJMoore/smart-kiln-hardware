@@ -44,9 +44,7 @@ class App extends Component {
 
       kiln.getSchedules()
         .then(data=>data.json())
-        .then(object => {
-
-          let array = objectToArray(object)
+        .then(array => {
           this.setState({schedules: array})
         })
         .catch(console.log)

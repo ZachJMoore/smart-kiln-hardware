@@ -11,12 +11,12 @@ let ScheduleItem = (props) => (
                     <th>Target</th>
                     <th>Hold</th>
                 </tr>
-                {props.schedule.ramps.map((ramp, index)=>
+                {props.schedule.firing_schedule_ramps.map((ramp, index)=>
                     (<tr key={index}>
                         <td>{index + 1}</td>
-                        <td>{ramp.rate}</td>
-                        <td>{ramp.target}</td>
-                        <td>{ramp.hold}</td>
+                        <td>{ramp.ramp_rate}</td>
+                        <td>{ramp.target_temperature}</td>
+                        <td>{ramp.hold_minutes}</td>
                     </tr>)
                 )}
             </tbody>

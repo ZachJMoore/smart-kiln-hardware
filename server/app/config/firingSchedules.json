@@ -1,110 +1,27 @@
-{
-    "175c3d91f35ca200": {
-        "date": "1524787689554",
-        "name": "F/26 Long Holds",
-        "ramps": [
-            {
-                "rate": "500",
-                "target": "2100",
-                "hold": "0"
-            },
-            {
-                "rate": "135",
-                "target": "2225",
-                "hold": ".05"
-            },
-            {
-                "rate": "500",
-                "target": "1900",
-                "hold": "0"
-            },
-            {
-                "rate": "500",
-                "target": "1930",
-                "hold": "2.5"
-            },
-            {
-                "rate": "300",
-                "target": "1850",
-                "hold": "1"
-            },
-            {
-                "rate": "300",
-                "target": "1800",
-                "hold": "0"
-            },
-            {
-                "rate": "240",
-                "target": "600",
-                "hold": "0"
-            }
-        ]
-    },
-    "1a0663a357b93a000": {
-        "date": "1524760886705",
-        "name": "Crystalline Cone 6 (F/26)",
-        "ramps": [
-            {
-                "rate": "500",
-                "target": "2100",
-                "hold": "0"
-            },
-            {
-                "rate": "135",
-                "target": "2225",
-                "hold": ".05"
-            },
-            {
-                "rate": "500",
-                "target": "1900",
-                "hold": "0"
-            },
-            {
-                "rate": "500",
-                "target": "1930",
-                "hold": "2"
-            },
-            {
-                "rate": "300",
-                "target": "1850",
-                "hold": ".45"
-            },
-            {
-                "rate": "300",
-                "target": "1800",
-                "hold": "0"
-            },
-            {
-                "rate": "240",
-                "target": "600",
-                "hold": "0"
-            }
-        ]
-    },
-    "40c42b537c9030000": {
-        "date": "1531936032735",
+[
+    {
         "name": "Test",
-        "ramps": [
+        "firing_schedule_ramps": [
             {
-                "rate": "500",
-                "target": "90",
-                "hold": ".01"
+                "ramp_rate": 500,
+                "target_temperature": 90,
+                "hold_minutes": 1
             },
             {
-                "rate": "500",
-                "target": "100",
-                "hold": ".01"
+                "ramp_rate": 500,
+                "target_temperature": 100,
+                "hold_minutes": 1
             },
             {
-                "rate": "500",
-                "target": "120",
-                "hold": ".01"
+                "ramp_rate": 500,
+                "target_temperature": 120,
+                "hold_minutes": 1
             },
             {
-                "rate": "500",
-                "target": "110",
-                "hold": ".01"
+                "ramp_rate": 500,
+                "target_temperature": 110,
+                "hold_minutes": 1
             }
         ]
     }
-}
+]

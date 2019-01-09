@@ -180,16 +180,18 @@ class Kiln {
                 this.stopFiring()
             }
 
-            console.log(schedule.ramps)
+            let ramps = schedule.firing_schedule_ramps
 
-            for(let e = 0; e < schedule.ramps.length; e++){
+            console.log(ramps)
 
-                let ramp = schedule.ramps[e]
+            for(let e = 0; e < ramps.length; e++){
+
+                let ramp = ramps[e]
 
                 ramp = {
-                    rate: parseFloat(ramp.rate),
-                    target: parseFloat(ramp.target),
-                    hold: parseFloat(ramp.hold),
+                    rate: ramp.ramp_rate,
+                    target: ramp.target_temperature,
+                    hold: ramp.hold_minutes,
                 }
 
                 let isDownRamp = false
@@ -239,7 +241,7 @@ class Kiln {
                                     this.debug && console.log("Firing Completed")
                                }
 
-                            },(ramp.hold*60*60*1000))
+                            },(ramp.hold*60*1000))
                         }
 
                     } else {
@@ -262,7 +264,7 @@ class Kiln {
                                     this.debug && console.log("Firing Completed")
                                }
 
-                            },(ramp.hold*60*60*1000))
+                            },(ramp.hold*60*1000))
                         }
 
                     }

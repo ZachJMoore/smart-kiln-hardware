@@ -7,29 +7,13 @@ class Command extends Base{
         const { typeCheck } = this
 
         this.include = {
-            startFiringSchedule: [{schedule_id: typeCheck.number}],
+            startFiringSchedule: [{firing_schedule: typeCheck.object}],
             stopFiringSchedule: [],
             factoryReset: [{force: typeCheck.boolean}]
         }
 
     }
 
-}
-
-class CommandExtended extends Command{
-    constructor(props){
-        super(props)
-
-        this.execute = (props)=>{
-            this[this.type](props)
-        }
-
-        this.startFiringSchedule = (kiln) => {
-            
-        }
-
-
-    }
 }
 
 module.exports = Command

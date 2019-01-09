@@ -54,6 +54,19 @@ class FSSync {
             return [...dbSchedules, ...localSchedules]
         }
 
+        this.getScheduleById = (id)=>{
+            const schedules = this.getAllSchedules()
+            let schedule = null
+
+            schedules.some(sch=>{
+                if (sch.id === id) {
+                    schedule = sch
+                    return true
+                }
+            })
+            return schedule
+        }
+
     }
 
 }
