@@ -78,7 +78,7 @@ class Kiln {
         this.relays = object.relays
         this.startupDate = Date.now()
         this.config = object.config
-        if (this.config.kiln_settings) this.temperature_offset = this.config.kiln_settings.temperature_offset || 0
+        if (this.config && this.config.kiln_settings) this.temperature_offset = this.config.kiln_settings.temperature_offset || 0
         else this.temperature_offset = 0
         this.debug = object.debug
         this.kiln_log = {}
@@ -151,7 +151,6 @@ class Kiln {
 
                 let schedule_id = null
                 if (firing_schedule.id) schedule_id = firing_schedule.id
-                this.sync.startLog(schedule_id)
 
             }
 
@@ -160,7 +159,6 @@ class Kiln {
         this.stopFiring = ()=>{
             this.isFiring = false
             this.controller.stopPID()
-            this.sync.endLog()
         }
 
         this.fireSchedule = function* (schedule){
@@ -316,13 +314,11 @@ class Kiln {
                     this.temperatureLog.pop()
                 }
             }, 60000)
-
-            this.sync = require("../syncing/sync.js")
         }
     }
 }
 
-const config = require("../syncing/lib/fsSync.js").getKilnData()
+const kilnData = require("../syncing/lib/fsStore").getKilnData()
 
 let kiln;
 let isFakeData = process.env.FAKE_DATA === "true"
@@ -335,14 +331,15 @@ if (!isFakeData){
     kiln = new Kiln({
         relays: [relayOne],
         debug: isDebug,
-        config: config
+        config: kilnData
     })
 } else {
     kiln = new Kiln({
         relays: [],
         debug: isDebug,
-        config: config
+        config: kilnData
     })
 }
 
 module.exports = kiln
+

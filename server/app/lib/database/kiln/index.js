@@ -56,24 +56,6 @@ class Kiln {
             }).then(responseHandler)
         }
 
-        this.getCommands = () => {
-
-            return fetch(this.host + this.base + "/get-commands",{
-                ...this.options,
-                method: "get"
-            }).then(responseHandler)
-
-        }
-
-        this.updateReceivedCommands = (commands) => {
-
-            return fetch(this.host + this.base + "/update-received-commands",{
-                ...this.options,
-                method: "post",
-                body: JSON.stringify({ commands })
-            }).then(responseHandler)
-        }
-
         this.addAssociateSecret = () => {
 
             return fetch(this.host + this.base + "/add-associate-secret",{
