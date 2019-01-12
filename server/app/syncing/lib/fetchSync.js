@@ -12,7 +12,7 @@ class FetchSync{
 
         this.kilnData = null
 
-        this.loginAsync = async () => {
+        this.authenticateAsync = async () => {
 
             let credentials = this.store.getCredentials()
 
@@ -26,15 +26,13 @@ class FetchSync{
                 .catch(error=>{
                     if (!error.isAuthenticated){
                         this.kilnData = null
-                    } else {
-                        console.log(error)
                     }
                     return Promise.reject(error)
                 })
             }
 
             if (!credentials || !credentials.password || !credentials.uuid){
-                return this.signupAsync()
+                return this._signupAsync()
                 .then((data)=>{
                     return login(data)
                 })
@@ -43,7 +41,7 @@ class FetchSync{
             }
         }
 
-        this.signupAsync = ()=>{
+        this._signupAsync = async ()=>{
             return this.database.signup()
             .then(data => {
                 this.store.setCredentials(data)
@@ -52,14 +50,12 @@ class FetchSync{
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
                 return Promise.reject(error)
             })
         }
 
-        this.getKilnDataAsync = () => {
+        this.getKilnDataAsync = async () => {
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
 
@@ -72,21 +68,22 @@ class FetchSync{
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
                 return Promise.reject(error)
             })
         }
 
-        this.updateRealtimeDataAsync = ()=>{
+        this.updateRealtimeDataAsync = async ()=>{
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
 
                 let data = {
-                    is_firing: this.kiln.isFiring,
-                    current_temperature: this.kiln.temperature,
-                    estimated_minutes_remaining: this.kiln.estimated_minutes_remaining
+                    type: "base",
+                    properties: {
+                        is_firing: this.kiln.isFiring,
+                        current_temperature: this.kiln.temperature,
+                        estimated_minutes_remaining: this.kiln.estimated_minutes_remaining
+                    }
                 }
 
                 return this.database.updateRealtimeData(data)
@@ -96,16 +93,44 @@ class FetchSync{
                 .catch(error=>{
                     if (!error.isAuthenticated){
                         this.kilnData = null
-                    } else {
-                        console.log(error)
                     }
                     return Promise.reject(error)
                 })
         }
 
-        this.getDatabaseSchedulesAsync = ()=>{
+        this.updateRealtimeData = ()=>{
+
+            if (!this.kilnData) return responseError("kiln is not authenticated", null, 400, false)
+
+            let data = {
+                type: "base",
+                properties: {
+                    is_firing: this.kiln.isFiring,
+                    current_temperature: this.kiln.temperature,
+                    estimated_minutes_remaining: this.kiln.estimated_minutes_remaining
+                }
+            }
+
+            return this.database.updateRealtimeData(data)
+            .then(data=>{
+                return data
+            })
+            .catch(error=>{
+                if (!error.isAuthenticated){
+                    this.kilnData = null
+                }
+                return error
+            })
+        }
+
+        this.getDatabaseSchedulesAsync = async ()=>{
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
+
+            if (!this.kilnData.user_id || typeof this.kilnData.user_id !== typeof 1){
+                this.store.setAllDatabaseSchedules([])
+                return Promise.resolve([])
+            }
 
             return this.database.getAllSchedules()
             .then((data)=>{
@@ -115,14 +140,29 @@ class FetchSync{
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
                 return Promise.reject(error)
             })
         }
 
-        this.addTemperatureDatapointAsync = ()=>{
+        this.getDatabaseSchedules = ()=>{
+
+            if (!this.kilnData) return responseError("kiln is not authenticated", null, 400, false)
+
+            return this.database.getAllSchedules()
+            .then((data)=>{
+                this.store.setAllDatabaseSchedules(data)
+                return data
+            })
+            .catch(error=>{
+                if (!error.isAuthenticated){
+                    this.kilnData = null
+                }
+                return error
+            })
+        }
+
+        this.addTemperatureDatapointAsync = async ()=>{
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
 
@@ -133,8 +173,6 @@ class FetchSync{
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
                 return Promise.reject(error)
             })
@@ -142,22 +180,21 @@ class FetchSync{
 
         this.addTemperatureDatapoint = ()=>{
 
-            if (!this.kilnData) return
-            this.database.addTemperatureDatapoint(this.kiln.temperature)
-            .then(data=>{
+            if (!this.kilnData) return responseError("kiln is not authenticated", null, 400, false)
 
+            return this.database.addTemperatureDatapoint(this.kiln.temperature)
+            .then(data=>{
+                return data
             })
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
-                return Promise.reject(error)
+                return error
             })
         }
 
-        this.startLogAsync = (schedule_id)=>{
+        this.startLogAsync = async (schedule_id)=>{
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
 
@@ -170,14 +207,12 @@ class FetchSync{
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
                 return Promise.reject(error)
             })
         }
 
-        this.endLogAsync = ()=>{
+        this.endLogAsync = async()=>{
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
 
@@ -190,8 +225,6 @@ class FetchSync{
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
                 return Promise.reject(error)
             })
@@ -199,18 +232,18 @@ class FetchSync{
 
         this._addLogDatapoint = ()=>{
 
-            if (!this.kilnData) return
+            if (!this.kilnData) return responseError("kiln is not authenticated", null, 400, false)
 
             if (this.kiln_log)
-            this.database.addLogDatapoint(this.kiln_log.id, this.kiln.temperature)
+            return this.database.addLogDatapoint(this.kiln_log.id, this.kiln.temperature)
             .then(data=>{
+                return data
             })
             .catch(error=>{
                 if (!error.isAuthenticated){
                     this.kilnData = null
-                } else {
-                    console.log(error)
                 }
+                return error
             })
         }
     }

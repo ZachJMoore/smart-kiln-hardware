@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 2222;
 
 
 // Syncing to database
-require("./app/syncing/sync.js")
+const sync = require("./app/syncing/sync.js")
 
 
 // For Express

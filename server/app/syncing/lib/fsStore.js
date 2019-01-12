@@ -14,7 +14,7 @@ class FSStore {
             })
         }
 
-        this.getCredentials = () => {
+        this.getCredentials = (fs = false) => {
             return jetpack.read(this.root + "credentials.json", "json")
         }
 
@@ -24,7 +24,7 @@ class FSStore {
             })
         }
 
-        this.getKilnData = () => {
+        this.getKilnData = (fs = false) => {
             return jetpack.read(this.root + "kiln_data.json", "json")
         }
 
@@ -35,8 +35,8 @@ class FSStore {
         }
         this.getAllDatabaseSchedules = ()=>{
             let schedules = jetpack.read(this.root + "database_schedules.json", "json")
-            if (!Array.isArray(schedules)) return []
-            else return schedules
+            if (Array.isArray(schedules)) return schedules
+            else return []
         }
 
         this.setAllLocalSchedules = (schedules)=>{
