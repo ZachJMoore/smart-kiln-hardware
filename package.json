@@ -4,9 +4,19 @@
   "description": "",
   "main": "",
   "scripts": {
-    "server": "cd server && npm start",
-    "client": "cd client && npm start"
+    "install:server": "cd server && npm install",
+    "install:client": "cd client && npm install",
+    "install:all": "npm install && npm run install:server && npm run install:server",
+    "start:server": "cd server && npm run dev",
+    "start:client": "cd client && npm start",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "build:soft": "npm run build:client && npm run build:server && node build.js",
+    "production:soft": "cd build/soft && npm start"
   },
   "author": "Zach Moore",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "fs-jetpack": "^2.2.0"
+  }
 }

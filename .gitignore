@@ -1,2 +1,4 @@
 server/app/config
 server/README_2.MD
+/node_modules
+/build
