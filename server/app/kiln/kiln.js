@@ -1,4 +1,6 @@
 const fs = require("fs")
+ROOT_APP_PATH = fs.realpathSync('.');
+console.log(`Root App File Path: ${ROOT_APP_PATH}`);
 
 let max31855, thermoSensor;
 
@@ -6,9 +8,6 @@ if (process.env.FAKE_DATA === "false"){
     max31855 = require('../lib/max31855');
     thermoSensor = new max31855();
 }
-
-ROOT_APP_PATH = fs.realpathSync('.');
-console.log(`Root App File Path: ${ROOT_APP_PATH}`);
 
 class PID {
     constructor(kiln, temperatureOffset) {
@@ -118,7 +117,8 @@ class Kiln {
 
         this.setRelays = (value) => {
 
-            value === 1 ? value = 1 : value = 0
+            if (process.env.EIGHT_CHANNEL_RELAY_BOARD === "true") value === 1 ? value = 0 : value = 1
+            else value === 1 ? value = 1 : value = 0
 
             this.relays.forEach(relay => {
                 relay.writeSync(value)
@@ -130,8 +130,10 @@ class Kiln {
             let isOn = false
 
             this.relays.forEach(relay => {
+
                 if (relay.readSync() === 1){
-                    isOn = true
+                    if (process.env.EIGHT_CHANNEL_RELAY_BOARD === "true") isOn = false
+                    else isOn = true
                 }
             })
 
@@ -326,10 +328,26 @@ let isDebug = process.env.DEBUG === "true"
 
 if (!isFakeData){
     const Gpio = require('onoff').Gpio;
-    const relayOne = new Gpio(27, 'out');
+    let relays = []
+    if (process.env.EIGHT_CHANNEL_RELAY_BOARD === "true"){
+        relays = [
+            new Gpio(5, 'out'),
+            new Gpio(6, 'out'),
+            new Gpio(13, 'out'),
+            new Gpio(19, 'out'),
+            new Gpio(26, 'out'),
+            new Gpio(17, 'out'),
+            new Gpio(27, 'out'),
+            new Gpio(22, 'out')
+        ]
+    } else {
+        relays = [
+            new Gpio(27, 'out'),
+        ]
+    }
 
     kiln = new Kiln({
-        relays: [relayOne],
+        relays: relays,
         debug: isDebug,
         config: kilnData
     })

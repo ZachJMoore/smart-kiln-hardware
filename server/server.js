@@ -5,6 +5,7 @@ const app = express();
 const kilnController = require("./app/routes/kilnController")
 const env = process.env.NODE_ENV
 const PORT = process.env.PORT || 2222;
+const fsStore = require("./app/syncing/lib/fsStore.js")
 
 
 // Syncing to database
@@ -21,19 +22,15 @@ app.use((req, res, next)=>{
 app.use("/api/kiln", kilnController);
 
 app.use("/api/get-schedules", (req, res)=>{
-    fs.readFile("app/config/firingSchedules.json", "utf8", (error, data) => {
-        if (error){
-            console.log("error: ", error)
-            res.status(500).send()
-        } else {
-            data = JSON.parse(data)
-            res.send(data)
-        }
-    })
+    let schedules = fsStore.getAllSchedules()
+    res.json(schedules)
 })
 
-app.use(express.static('app/public/'))
-app.get("*", (request, response) => (response.sendFile(__dirname + 'app/public/index.html')))
+
+const ROOT_APP_PATH = fs.realpathSync('.');
+
+app.use(express.static(ROOT_APP_PATH + '/app/public'))
+app.get("*", (request, response) => (response.sendFile(ROOT_APP_PATH + '/app/public/index.html')))
 
 
 // Start server
