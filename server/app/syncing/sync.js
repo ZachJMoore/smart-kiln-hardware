@@ -12,9 +12,9 @@ class Sync{
             this.fetchSync.addTemperatureDatapoint()
         }
 
-        this.connect = ()=>{
+        this.connect = async ()=>{
             clearInterval(this.updateInterval)
-            this.fetchSync.authenticateAsync()
+            return this.fetchSync.authenticateAsync()
             .then((data)=>{
 
                 this.fetchSync.getDatabaseSchedulesAsync()
@@ -24,28 +24,44 @@ class Sync{
                 this.update()
 
                 this.updateInterval = setInterval(this.update, this.updateIntervalTick)
+
+                return data
             })
             .catch(console.log)
         }
 
         this.connect()
+        .then(()=>{
 
-        this.socket = io(process.env.DB_HOST + "/kiln")
-        let socket = this.socket
+            this.socket = io(process.env.DB_HOST + "/kiln")
+            let socket = this.socket
 
-        socket.on("connect", ()=>{
+            socket.on("connect", ()=>{
 
-            socket.emit("authentication", fsStore.getCredentials())
+                socket.emit("authentication", fsStore.getCredentials())
+
+            })
 
             socket.on("authenticated", ()=>{
-                console.log("websocket to remote server is authenticated")
+                console.log("authenticated")
+
+                socket.emit("owner-message", "send only to the owner")
             })
 
             socket.on("unauthorized", (error)=>{
                 console.log(error)
             })
 
-            socket.emit("test", "Kiln: Test authenticated socket emit")
+            socket.on("kiln-message", console.log)
+
+            setTimeout(()=>{
+                socket.emit("owner-message", "sent a little bit later")
+            }, 4000)
+
+            setTimeout(()=>{
+                socket.emit("owner-message", "last message sent to the kiln owner")
+            }, 8000)
+
         })
 
     }

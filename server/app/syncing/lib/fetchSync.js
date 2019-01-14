@@ -212,7 +212,7 @@ class FetchSync{
             })
         }
 
-        this.endLogAsync = async()=>{
+        this.endLogAsync = async () =>{
 
             if (!this.kilnData) return Promise.reject(responseError("Kiln is not authenticated", null, 400, false))
 
