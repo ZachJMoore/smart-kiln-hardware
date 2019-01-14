@@ -72,7 +72,8 @@ class Kiln {
         this.isFiring = false
         this.estimated_minutes_remaining = 0
         this.currentSchedule = {}
-        this.temperatureLog = []
+        this.temperatureDatapoints = []
+        this.maxTemperatureDatapointLength = 720
         this.controller = null
         this.relays = object.relays
         this.startupDate = Date.now()
@@ -80,6 +81,7 @@ class Kiln {
         if (this.config && this.config.kiln_settings) this.temperature_offset = this.config.kiln_settings.temperature_offset || 0
         else this.temperature_offset = 0
         this.debug = object.debug
+        this.errorMessage = null
         this.kiln_log = {}
 
         this.getTemperature = () => {
@@ -105,13 +107,43 @@ class Kiln {
             })
         }
 
-        this.getPackage = () => {
+        this.addTemperatureDatapoint = ()=>{
+            this.getTemperature()
+            .then((temperature)=>{
+                let data = {
+                    temperature: temperature,
+                    created_at: Date.now()
+                }
+
+                this.temperatureDatapoints.push(data)
+            })
+            .catch((error)=>{
+                this.errorMessage = error
+                this.debug && console.log(error)
+            })
+        }
+
+        this.trimTemperatureDatapoints = ()=>{
+            const datapoints = this.temperatureDatapoints
+            const maxLength = this.maxTemperatureDatapointLength
+
+            if (datapoints.length > maxLength) {
+                let extra = datapoints - maxLength
+                while (extra){
+                    extra--
+                    datapoints.shift()
+                }
+            }
+        }
+
+        this.getInformation = () => {
             return {
-                temperature: this.temperature,
-                isFiring: this.isFiring,
-                currentSchedule: this.currentSchedule,
-                temperatureLog: this.temperatureLog,
-                estimated_minutes_remaining: this.estimated_minutes_remaining
+                current_temperature: this.temperature,
+                is_firing: this.isFiring,
+                current_schedule: this.currentSchedule,
+                temperature_datapoints: this.temperatureDatapoints,
+                estimated_minutes_remaining: this.estimated_minutes_remaining,
+                error_message: this.errorMessage
             }
         }
 
@@ -284,39 +316,34 @@ class Kiln {
             }
         }
 
-        this.init = () => {
-            this.setRelays(0) //set all relays off
-            this.controller = new PID(this, this.temperature_offset)
+        this.setRelays(0) //set all relays off at start
+        this.controller = new PID(this, this.temperature_offset)
+
+        this.getTemperature()
+        .then(temperature => {
+            this.temperature = temperature
+        })
+        .catch(console.log)
+
+        setInterval(() => {
 
             this.getTemperature()
-            .then(temperature => {
-                this.temperature = temperature
-            })
-            .catch(console.log)
+                .then(temperature => {
+                    this.temperature = temperature
+                })
+                .catch((error)=>{
+                    this.debug && console.log(error)
+                    this.errorMessage = error
+                })
 
-            setInterval(() => {
+        }, 1000)
 
-                this.getTemperature()
-                    .then(temperature => {
-                        this.temperature = temperature
-                    })
-                    .catch(console.log)
+        this.addTemperatureDatapoint()
 
-            }, 1000)
-
-            setTimeout(() => {
-                this.temperatureLog.push(this.temperature)
-            }, 2000)
-
-            setInterval(() => {
-                if (this.temperatureLog.length < 60) {
-                    this.temperatureLog.unshift(this.temperature)
-                } else {
-                    this.temperatureLog.unshift(this.temperature)
-                    this.temperatureLog.pop()
-                }
-            }, 60000)
-        }
+        this.temperatureDatapointInterval = setInterval(() => {
+            this.addTemperatureDatapoint()
+            this.trimTemperatureDatapoints()
+        }, 60000)
     }
 }
 

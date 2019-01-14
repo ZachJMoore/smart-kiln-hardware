@@ -1,3 +1,6 @@
+const io = require("socket.io-client")
+const fsStore = require("./lib/fsStore.js")
+
 class Sync{
     constructor(fetchSync){
         this.fetchSync = fetchSync
@@ -26,6 +29,25 @@ class Sync{
         }
 
         this.connect()
+
+        this.socket = io(process.env.DB_HOST + "/kiln")
+        let socket = this.socket
+
+        socket.on("connect", ()=>{
+
+            socket.emit("authentication", fsStore.getCredentials())
+
+            socket.on("authenticated", ()=>{
+                console.log("websocket to remote server is authenticated")
+            })
+
+            socket.on("unauthorized", (error)=>{
+                console.log(error)
+            })
+
+            socket.emit("test", "Kiln: Test authenticated socket emit")
+        })
+
     }
 }
 
