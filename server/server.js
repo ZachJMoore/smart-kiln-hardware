@@ -23,7 +23,7 @@ app.use((req, res, next)=>{
 })
 
 
-require("./app/io/index.js")(io)
+require("./app/localIo/index.js")(io)
 
 const ROOT_APP_PATH = fs.realpathSync('.');
 
