@@ -1,8 +1,6 @@
-const kiln = require("../kiln/kiln.js")
+const kiln = require("../kiln/index.js")
 
 module.exports = (io)=>{
-
-    let number = 0
 
     io.on("connect", (socket)=>{
         console.log("a user connected")

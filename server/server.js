@@ -10,7 +10,7 @@ const fsStore = require("./app/syncing/lib/fsStore.js")
 
 
 // Syncing to database
-const sync = require("./app/syncing/sync.js")
+const synTwo = require("./app/syncing2/index.js")
 
 
 // For connections

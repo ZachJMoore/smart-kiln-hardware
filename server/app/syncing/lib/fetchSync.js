@@ -251,7 +251,7 @@ class FetchSync{
 
 const store = require("./fsStore.js")
 const database = require("../../lib/database/kiln/index.js")
-const kiln  = require("../../kiln/kiln.js")
+const kiln  = require("../../kiln/index.js")
 
 let fetchSync = new FetchSync(store, database, kiln)
 

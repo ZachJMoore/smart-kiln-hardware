@@ -1,23 +1,16 @@
 const fsStore = require("./lib/fsStore.js")
+const fetchSync = require("./lib/fetchSync")
 const remoteIo = require("../remoteIo/index.js")
 
 class Sync{
-    constructor(fetchSync){
-        this.fetchSync = fetchSync
-        this.updateInterval = null
-        this.updateIntervalTick = 1*60*1000
-
-        this.update = ()=>{
-            this.fetchSync.updateRealtimeData()
-            this.fetchSync.addTemperatureDatapoint()
-        }
+    constructor(){
 
         this.connect = async ()=>{
             clearInterval(this.updateInterval)
-            return this.fetchSync.authenticateAsync()
+            return fetchSync.authenticateAsync()
             .then((data)=>{
 
-                this.fetchSync.getDatabaseSchedulesAsync()
+                fetchSync.getDatabaseSchedulesAsync()
                 .then(()=>{})
                 .catch(console.log)
 
@@ -30,18 +23,15 @@ class Sync{
             .catch(console.log)
         }
 
+        remoteIo.connect(fsStore.getCredentials())
+
         this.connect()
         .then(()=>{
-
-            remoteIo.connect(fsStore.getCredentials())
-
+            console.log("logged in through http")
         })
 
     }
 }
 
-const fetchSync = require("./lib/fetchSync")
 
-const sync = new Sync(fetchSync)
-
-module.exports = sync
+module.exports = new Sync()
