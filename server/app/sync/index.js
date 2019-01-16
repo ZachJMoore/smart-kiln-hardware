@@ -1,6 +1,4 @@
-const fsStore = require("../fsStore/index.js")
 const remoteIo = require("../remoteIo/index.js")
-const kiln = require("../kiln/index.js")
 const authentication = require("./lib/authentication.js")
 
 class Sync{
@@ -42,10 +40,6 @@ class Sync{
         remoteIo.socket.on("unauthorized", (socket)=>{
             console.log("Socket: Something went wrong!")
             this.isAuthenticated.socket = false
-        })
-
-        remoteIo.socket.on("connect", ()=>{
-            console.log("Socket: We got connected")
         })
 
         this.connect()

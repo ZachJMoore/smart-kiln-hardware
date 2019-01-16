@@ -347,7 +347,7 @@ class Kiln {
     }
 }
 
-const kilnData = require("../syncing/lib/fsStore").getKilnData()
+const kilnData = require("../fsStore/authentication.js").getKilnData()
 
 let kiln;
 let isFakeData = process.env.FAKE_DATA === "true"

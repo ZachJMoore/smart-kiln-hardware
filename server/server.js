@@ -6,11 +6,10 @@ const http = require("http").Server(app)
 const io = require("socket.io")(http)
 const env = process.env.NODE_ENV
 const PORT = process.env.PORT || 2222;
-const fsStore = require("./app/syncing/lib/fsStore.js")
 
 
 // Syncing to database
-const synTwo = require("./app/syncing2/index.js")
+const sync = require("./app/sync/index.js")
 
 
 // For connections
