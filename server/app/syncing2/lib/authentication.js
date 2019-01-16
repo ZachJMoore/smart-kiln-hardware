@@ -87,8 +87,6 @@ class Authentication{
             })
         }
 
-        this.interval = null
-
         this.connect = (credentials)=>{
             this.authenticateAsync(credentials).then((kilnData)=>{
                 this.isAuthenticated = true
@@ -101,11 +99,7 @@ class Authentication{
                 this.onUnauthorized.forEach(fn=>{
                     fn(error)
                 })
-                this.interval = setInterval(() => {
-                    if (this.isAuthenticated) {
-                        clearInterval(this.interval);
-                        this.interval = null;
-                    }
+                setTimeout(() => {
                     this.credentials = fsStore.authentication.getCredentials()
                     this.connect()
                 }, 5000);
