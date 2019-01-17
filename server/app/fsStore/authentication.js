@@ -16,14 +16,14 @@ class Authentication extends Base{
             return this.directory.read("credentials.json", "json")
         }
 
-        this.setKilnData = (kilnData) => {
-            this.directory.write("kiln_data.json", kilnData, {
+        this.setAccountData = (accountData) => {
+            this.directory.write("account_data.json", accountData, {
                 atomic: true
             })
         }
 
-        this.getKilnData = () => {
-            return this.directory.read("kiln_data.json", "json")
+        this.getAccountData = () => {
+            return this.directory.read("account_data.json", "json")
         }
 
     }

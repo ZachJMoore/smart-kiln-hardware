@@ -7,8 +7,10 @@ class Queue extends Base{
         this.directory = this.directory.cwd("queue")
 
         this.temperatureDatapointExpirationMilliseconds = (process.env.QUEUE_TEMPERATURE_DATAPOINT_EXPIRATION_DAYS || 10) * 24 * 60 * 60 * 1000
-        this.logMaxCount = process.env.QUEUE_LOG_MAX_COUNT || 30
+        this.logMaxCount = (process.env.QUEUE_LOG_MAX_COUNT || 30)
 
+
+        // General Temperature Datapoints
         this.trimTemperatureDatapoints = (datapoints)=>{
             if (process.env.TRIM_QUEUE === "false") return datapoints
             return datapoints.filter((datapoint, index)=>{
@@ -31,7 +33,7 @@ class Queue extends Base{
             } else {
                 previousData = this.trimTemperatureDatapoints(previousData)
             }
-            this.previousData.push(datapoint)
+            previousData.push(datapoint)
             this.directory.write("temperature_datapoints.json", previousData, {
                 atomic: true
             })
@@ -47,6 +49,47 @@ class Queue extends Base{
             return data
         }
 
+
+        // Command updates
+        this.removeCommandUpdate = (id)=>{
+            let commands = this.getAllCommandUpdates()
+            let newAr = commands.splice()
+            commands.some((command, index)=>{
+                if (command.id === id){
+                    newAr.splice(index, 1)
+                    return true
+                } else return false
+            })
+            this.setAllCommandUpdates(newAr)
+        }
+
+        this.addCommandUpdate = (id)=>{
+            let commands = this.getAllCommandUpdates()
+            let newAr = commands.splice()
+            commands.some((command, index)=>{
+                if (command.id === id){
+                    newAr.splice(index, 1)
+                    return true
+                } else return false
+            })
+            this._setAllCommandUpdates(newAr)
+        }
+
+        this.getAllCommandUpdates = ()=>{
+            let data = this.directory.read("command_updates", "json")
+            if (!data) {
+                data = []
+            }
+            return data
+        }
+
+        this._setAllCommandUpdates = (commands)=>{
+            this.directory.write("command_updates.json", commands, {
+                atomic: true
+            })
+        }
+
+        // Kiln/Firing Logs
         this.trimLogs = (logs)=>{
             if (process.env.TRIM_QUEUE === "false") return logs
 
@@ -74,19 +117,19 @@ class Queue extends Base{
             })
         }
 
-        this.startLog = (log)=>{
+        this.addStartLog = (log)=>{
             let previousData = this.directory.read("start_logs", "json")
             if (!previousData){
                 previousData = []
             } else {
                 previousData = this.trimLogDatapoints(previousData)
             }
-            this.previousData.push(log)
+            previousData.push(log)
             this.directory.write("start_logs.json", previousData, {
                 atomic: true
             })
         }
-        this.getStartLogs = ()=>{
+        this.getAllStartLogs = ()=>{
             let data = this.directory.read("start_logs", "json")
             if (!data) return []
             else return data
@@ -98,7 +141,7 @@ class Queue extends Base{
             })
         }
 
-        this.endLog = (log)=>{
+        this.addEndLog = (log)=>{
             let previousData = this.directory.read("end_logs", "json")
             if (!previousData){
                 previousData = []
@@ -106,11 +149,12 @@ class Queue extends Base{
             else {
                 previousData = this.trimLogDatapoints(previousData)
             }
-            this.previousData.push(log)
+            previousData.push(log)
             this.directory.write("end_logs.json", previousData, {
                 atomic: true
             })
         }
+
         this.getEndLogs = ()=>{
             let data = this.directory.read("end_logs", "json")
             if (!data) return []
@@ -128,7 +172,7 @@ class Queue extends Base{
             if (!previousData){
                 previousData = []
             }
-            this.previousData.push(datapoint)
+            previousData.push(datapoint)
             this.directory.write("log_datapoints.json", previousData, {
                 atomic: true
             })

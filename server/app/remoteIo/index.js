@@ -16,7 +16,7 @@ class RemoteIo{
         this.isConnected = false
         this.interval = null
         this.credentials = null
-        this.error = null
+        this.authenticationError = null
 
         this.connect = (credentials)=>{
             if (Object.keys(this.socket).length > 2) {
@@ -51,12 +51,12 @@ class RemoteIo{
             })
 
             this.socket.on("unauthorized", (error)=>{
-                this.error = error
+                this.authenticationError = error
                 this.isAuthenticated = false
+                this.socket.disconnect()
             })
 
             this.socket.on("disconnect", ()=>{
-                console.log("we just got disconnected")
                 this.isAuthenticated = false
                 this.isConnected = false
 
@@ -67,7 +67,7 @@ class RemoteIo{
                     }
                     this.credentials = fsStore.authentication.getCredentials()
                     this.reconnect()
-                }, 5000);
+                }, (process.env.RECONNECT_ATTEMPT_INTERVAL || 10 * 1000));
             })
 
             this.socketOn.forEach((object)=>{

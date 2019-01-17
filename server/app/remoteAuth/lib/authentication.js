@@ -52,7 +52,7 @@ class Authentication{
                 return this.database.login(password, uuid)
                 .then((data)=>{
                     this.kilnData = data
-                    fsStore.authentication.setKilnData(data)
+                    fsStore.authentication.setAccountData(data)
                     return Promise.resolve(data)
                 })
                 .catch(error=>{
@@ -102,7 +102,7 @@ class Authentication{
                 setTimeout(() => {
                     this.credentials = fsStore.authentication.getCredentials()
                     this.connect()
-                }, 5000);
+                }, (process.env.RECONNECT_ATTEMPT_INTERVAL || 10 * 1000));
             })
         }
     }

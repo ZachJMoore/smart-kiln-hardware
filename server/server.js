@@ -6,13 +6,12 @@ const http = require("http").Server(app)
 const io = require("socket.io")(http)
 const env = process.env.NODE_ENV
 const PORT = process.env.PORT || 2222;
+const remoteAuth = require("./app/remoteAuth/index.js")
 
+// io between user interface and server
+require("./app/io/index.js")(io)
 
-// Syncing to database
-const sync = require("./app/sync/index.js")
-
-
-// For connections
+// For app routes
 
 app.use((req, res, next)=>{
     res.header("Access-Control-Allow-Headers", "x-access-token, Content-Type");
@@ -20,9 +19,6 @@ app.use((req, res, next)=>{
     res.header("Access-Control-Allow-Credentials", true)
     next();
 })
-
-
-require("./app/localIo/index.js")(io)
 
 const ROOT_APP_PATH = fs.realpathSync('.');
 

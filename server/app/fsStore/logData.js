@@ -25,7 +25,7 @@ class LogData extends Base{
             } else {
                 previousData = this.trimTemperatureDatapoints(previousData)
             }
-            this.previousData.push(datapoint)
+            previousData.push(datapoint)
             this.directory.write("temperature_datapoints.json", previousData, {
                 atomic: true
             })
@@ -69,7 +69,7 @@ class LogData extends Base{
             } else {
                 previousData = this.trimLogDatapoints(previousData)
             }
-            this.previousData.push(log)
+            previousData.push(log)
             this.directory.write("start_logs.json", previousData, {
                 atomic: true
             })
@@ -88,7 +88,7 @@ class LogData extends Base{
             else {
                 previousData = this.trimLogDatapoints(previousData)
             }
-            this.previousData.push(log)
+            previousData.push(log)
             this.directory.write("end_logs.json", previousData, {
                 atomic: true
             })
@@ -104,7 +104,7 @@ class LogData extends Base{
             if (!previousData){
                 previousData = []
             }
-            this.previousData.push(datapoint)
+            previousData.push(datapoint)
             this.directory.write("log_datapoints.json", previousData, {
                 atomic: true
             })

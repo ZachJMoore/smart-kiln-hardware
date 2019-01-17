@@ -1,7 +1,7 @@
 const remoteIo = require("../remoteIo/index.js")
 const authentication = require("./lib/authentication.js")
 
-class Sync{
+class RemoteAuth {
     constructor(){
 
         this.kilnData = null
@@ -37,9 +37,14 @@ class Sync{
             console.log("Socket: We are authenticated!")
         })
 
-        remoteIo.socket.on("unauthorized", (socket)=>{
+        remoteIo.socket.on("unauthorized", (error)=>{
+            console.log(error)
             console.log("Socket: Something went wrong!")
             this.isAuthenticated.socket = false
+        })
+
+        remoteIo.socket.on("disconnect", ()=>{
+            console.log("Socket: We just got disconnected")
         })
 
         this.connect()
@@ -47,4 +52,4 @@ class Sync{
     }
 }
 
-module.exports = new Sync()
+module.exports = new RemoteAuth()
