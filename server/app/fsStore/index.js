@@ -1,15 +1,15 @@
-const authentication = require("./authentication.js")
-const queue = require("./queue.js")
-const firingSchedules = require("./firingSchedules.js")
-const logData = require("./logData.js")
-const receivedCommands = require("./receivedCommands.js")
-const kilnData = require("./kilnData.js")
+const fs = require("fs")
+const path = require("path")
 
-module.exports = {
-    authentication,
-    queue,
-    firingSchedules,
-    logData,
-    receivedCommands,
-    kilnData
-}
+const fsStore = {}
+
+fs
+.readdirSync(__dirname)
+.filter(file => {
+    return (file.indexOf(".") !== 0) && (file !== "index.js") && (file !== "Base.js")
+})
+.forEach(file => {
+    fsStore[file.replace(".js", "")] = require(path.join(__dirname, file))
+})
+
+module.exports = fsStore

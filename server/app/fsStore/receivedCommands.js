@@ -4,7 +4,7 @@ class ReceivedCommands extends Base{
     constructor(props){
         super(props)
 
-        this.directory = this.directory.cwd("received_commands")
+        this.directory = this.directory.cwd("receivedCommands")
 
         this.deleteAllCommands = ()=>{
             this.directory.write("commands.json", [], {
@@ -31,7 +31,7 @@ class ReceivedCommands extends Base{
         }
 
         this.getAllCommands = ()=>{
-            let data = this.directory.read("commands", "json")
+            let data = this.directory.read("commands.json", "json")
             if (!data) {
                 data = []
             }
@@ -39,7 +39,7 @@ class ReceivedCommands extends Base{
         }
 
         this.getCommand = ()=>{
-            let data = this.directory.read("commands", "json")
+            let data = this.directory.read("commands.json", "json")
             if (!data) {
                 data = []
             }

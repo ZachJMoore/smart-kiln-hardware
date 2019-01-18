@@ -10,7 +10,6 @@ class Queue extends Base{
         this.logMaxCount = (process.env.QUEUE_LOG_MAX_COUNT || 30)
 
 
-        // General Temperature Datapoints
         this.trimTemperatureDatapoints = (datapoints)=>{
             if (process.env.TRIM_QUEUE === "false") return datapoints
             return datapoints.filter((datapoint, index)=>{
@@ -27,8 +26,8 @@ class Queue extends Base{
         }
 
         this.addTemperatureDatapoint = (datapoint)=>{
-            let previousData = this.directory.read("temperature_datapoints", "json")
-            if (!previousData){
+            let previousData = this.directory.read("temperature_datapoints.json", "json")
+            if (!Array.isArray(previousData)){
                 previousData = []
             } else {
                 previousData = this.trimTemperatureDatapoints(previousData)
@@ -40,7 +39,7 @@ class Queue extends Base{
         }
 
         this.getTemperatureDatapoints = ()=>{
-            let data = this.directory.read("temperature_datapoints", "json")
+            let data = this.directory.read("temperature_datapoints.json", "json")
             if (!data) {
                 data = []
             } else {
@@ -51,23 +50,18 @@ class Queue extends Base{
 
 
         // Command updates
+
+        this.deleteCommandUpdates = ()=>{
+            this.directory.write("command_updates.json", [], {
+                atomic: true
+            })
+        }
+
         this.removeCommandUpdate = (id)=>{
             let commands = this.getAllCommandUpdates()
             let newAr = commands.splice()
             commands.some((command, index)=>{
-                if (command.id === id){
-                    newAr.splice(index, 1)
-                    return true
-                } else return false
-            })
-            this.setAllCommandUpdates(newAr)
-        }
-
-        this.addCommandUpdate = (id)=>{
-            let commands = this.getAllCommandUpdates()
-            let newAr = commands.splice()
-            commands.some((command, index)=>{
-                if (command.id === id){
+                if (command === id){
                     newAr.splice(index, 1)
                     return true
                 } else return false
@@ -75,8 +69,17 @@ class Queue extends Base{
             this._setAllCommandUpdates(newAr)
         }
 
+        this.addCommandUpdate = (id)=>{
+            let commands = this.getAllCommandUpdates()
+            if (!commands) {
+                commands = []
+            }
+            commands.push(id)
+            this._setAllCommandUpdates(commands)
+        }
+
         this.getAllCommandUpdates = ()=>{
-            let data = this.directory.read("command_updates", "json")
+            let data = this.directory.read("command_updates.json", "json")
             if (!data) {
                 data = []
             }
@@ -102,7 +105,7 @@ class Queue extends Base{
 
         this.trimLogDatapoints = (id)=>{
             let tld = this.getLogDatapoints().filter((datapoint, index)=>{
-                if (datapoint.log_id === id) return false
+                if (datapoint.local_id === id) return false
                 else return true
             })
 
@@ -118,7 +121,7 @@ class Queue extends Base{
         }
 
         this.addStartLog = (log)=>{
-            let previousData = this.directory.read("start_logs", "json")
+            let previousData = this.directory.read("start_logs.json", "json")
             if (!previousData){
                 previousData = []
             } else {
@@ -130,7 +133,7 @@ class Queue extends Base{
             })
         }
         this.getAllStartLogs = ()=>{
-            let data = this.directory.read("start_logs", "json")
+            let data = this.directory.read("start_logs.json", "json")
             if (!data) return []
             else return data
         }
@@ -142,7 +145,7 @@ class Queue extends Base{
         }
 
         this.addEndLog = (log)=>{
-            let previousData = this.directory.read("end_logs", "json")
+            let previousData = this.directory.read("end_logs.json", "json")
             if (!previousData){
                 previousData = []
             }
@@ -155,8 +158,8 @@ class Queue extends Base{
             })
         }
 
-        this.getEndLogs = ()=>{
-            let data = this.directory.read("end_logs", "json")
+        this.getAllEndLogs = ()=>{
+            let data = this.directory.read("end_logs.json", "json")
             if (!data) return []
             else return data
         }
@@ -168,7 +171,7 @@ class Queue extends Base{
         }
 
         this.addLogDatapoint = (datapoint)=>{
-            let previousData = this.directory.read("log_datapoints", "json")
+            let previousData = this.directory.read("log_datapoints.json", "json")
             if (!previousData){
                 previousData = []
             }
@@ -177,8 +180,8 @@ class Queue extends Base{
                 atomic: true
             })
         }
-        this.getLogDatapoints = ()=>{
-            let data = this.directory.read("log_datapoints", "json")
+        this.getAllLogDatapoints = ()=>{
+            let data = this.directory.read("log_datapoints.json", "json")
             if (!data) return []
             else return data
         }

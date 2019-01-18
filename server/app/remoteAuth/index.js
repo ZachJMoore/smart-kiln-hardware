@@ -4,7 +4,6 @@ const authentication = require("./lib/authentication.js")
 class RemoteAuth {
     constructor(){
 
-        this.kilnData = null
         this.isAuthenticated = {
             http: false,
             socket: false
@@ -14,10 +13,11 @@ class RemoteAuth {
         this.connectHttp = ()=>{
             authentication.on("authenticated", (kilnData=>{
                 console.log("Http: We are authenticated")
-                this.kilnData = kilnData
+                this.isAuthenticated.http = true
             }))
             authentication.on("unauthorized", (error)=>{
-                console.log(error)
+                this.isAuthenticated.http = false
+                console.log("HTTP: There was an error logging in")
             })
             authentication.connect()
         }
@@ -44,6 +44,7 @@ class RemoteAuth {
         })
 
         remoteIo.socket.on("disconnect", ()=>{
+            this.isAuthenticated.socket = false
             console.log("Socket: We just got disconnected")
         })
 

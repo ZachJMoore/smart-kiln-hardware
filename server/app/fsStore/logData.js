@@ -9,7 +9,7 @@ class LogData extends Base{
         this.temperatureDatapointExpirationMilliseconds = (process.env.LOCAL_TEMPERATURE_DATAPOINT_EXPIRATION_DAYS || 1) * 24 * 60 * 60 * 1000
         this.logMaxCount = process.env.LOCAL_LOG_MAX_COUNT || 10
 
-        this.trimTemperatureDatapoints = (datapoints)=>{
+        this._trimTemperatureDatapoints = (datapoints)=>{
             if (process.env.TRIM_QUEUE === "false") return datapoints
             return datapoints.filter((datapoint, index)=>{
                 let expiration = Date.now() - this.temperatureDatapointExpirationMilliseconds
@@ -19,11 +19,11 @@ class LogData extends Base{
         }
 
         this.addTemperatureDatapoint = (datapoint)=>{
-            let previousData = this.directory.read("temperature_datapoints", "json")
+            let previousData = this.directory.read("temperature_datapoints.json", "json")
             if (!previousData){
                 previousData = []
             } else {
-                previousData = this.trimTemperatureDatapoints(previousData)
+                previousData = this._trimTemperatureDatapoints(previousData)
             }
             previousData.push(datapoint)
             this.directory.write("temperature_datapoints.json", previousData, {
@@ -32,11 +32,11 @@ class LogData extends Base{
         }
 
         this.getTemperatureDatapoints = ()=>{
-            let data = this.directory.read("temperature_datapoints", "json")
+            let data = this.directory.read("temperature_datapoints.json", "json")
             if (!data) {
                 data = []
             } else {
-                data = this.trimTemperatureDatapoints(data)
+                data = this._trimTemperatureDatapoints(data)
             }
             return data
         }
@@ -51,7 +51,7 @@ class LogData extends Base{
             return ar
         }
 
-        this.trimLogDatapoints = (id)=>{
+        this._trimLogDatapoints = (id)=>{
             let tld = this.getLogDatapoints().filter((datapoint, index)=>{
                 if (datapoint.log_id === id) return false
                 else return true
@@ -62,12 +62,12 @@ class LogData extends Base{
             })
         }
 
-        this.startLog = (log)=>{
-            let previousData = this.directory.read("start_logs", "json")
+        this.addStartLog = (log)=>{
+            let previousData = this.directory.read("start_logs.json", "json")
             if (!previousData){
                 previousData = []
             } else {
-                previousData = this.trimLogDatapoints(previousData)
+                previousData = this._trimLogDatapoints(previousData)
             }
             previousData.push(log)
             this.directory.write("start_logs.json", previousData, {
@@ -75,18 +75,18 @@ class LogData extends Base{
             })
         }
         this.getStartLogs = ()=>{
-            let data = this.directory.read("start_logs", "json")
+            let data = this.directory.read("start_logs.json", "json")
             if (!data) return []
             else return data
         }
 
         this.endLog = (log)=>{
-            let previousData = this.directory.read("end_logs", "json")
+            let previousData = this.directory.read("end_logs.json", "json")
             if (!previousData){
                 previousData = []
             }
             else {
-                previousData = this.trimLogDatapoints(previousData)
+                previousData = this._trimLogDatapoints(previousData)
             }
             previousData.push(log)
             this.directory.write("end_logs.json", previousData, {
@@ -94,13 +94,13 @@ class LogData extends Base{
             })
         }
         this.getEndLogs = ()=>{
-            let data = this.directory.read("end_logs", "json")
+            let data = this.directory.read("end_logs.json", "json")
             if (!data) return []
             else return data
         }
 
         this.addLogDatapoint = (datapoint)=>{
-            let previousData = this.directory.read("log_datapoints", "json")
+            let previousData = this.directory.read("log_datapoints.json", "json")
             if (!previousData){
                 previousData = []
             }
@@ -110,7 +110,7 @@ class LogData extends Base{
             })
         }
         this.getLogDatapoints = ()=>{
-            let data = this.directory.read("log_datapoints", "json")
+            let data = this.directory.read("log_datapoints.json", "json")
             if (!data) return []
             else return data
         }

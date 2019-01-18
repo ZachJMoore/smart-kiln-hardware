@@ -72,8 +72,6 @@ class Kiln {
         this.isFiring = false
         this.estimated_minutes_remaining = 0
         this.currentSchedule = {}
-        this.temperatureDatapoints = []
-        this.maxTemperatureDatapointLength = 720
         this.controller = null
         this.relays = object.relays
         this.startupDate = Date.now()
@@ -83,6 +81,24 @@ class Kiln {
         this.debug = object.debug
         this.errorMessage = null
         this.kiln_log = {}
+
+        this.firingStartedFunctions = []
+        this.firingEndedFunctions = []
+        this.firingCompletedFunctions = []
+
+        this.on = (string, fn)=>{
+            if (string === "firingStarted"){
+                this.firingStartedFunctions.push(fn)
+            }
+
+            if (string === "firingEnded"){
+                this.firingEndedFunctions.push(fn)
+            }
+
+            if (string === "firingCompleted"){
+                this.firingCompletedFunctions.push(fn)
+            }
+        }
 
         this.getTemperature = () => {
             return new Promise((resolve, reject) => {
@@ -107,43 +123,12 @@ class Kiln {
             })
         }
 
-        this.addTemperatureDatapoint = ()=>{
-            this.getTemperature()
-            .then((temperature)=>{
-                let data = {
-                    temperature: temperature,
-                    created_at: Date.now()
-                }
-
-                this.temperatureDatapoints.push(data)
-            })
-            .catch((error)=>{
-                this.errorMessage = error
-                this.debug && console.log(error)
-            })
-        }
-
-        this.trimTemperatureDatapoints = ()=>{
-            const datapoints = this.temperatureDatapoints
-            const maxLength = this.maxTemperatureDatapointLength
-
-            if (datapoints.length > maxLength) {
-                let extra = datapoints - maxLength
-                while (extra){
-                    extra--
-                    datapoints.shift()
-                }
-            }
-        }
-
-        this.getInformation = () => {
+        this.getKilnData = () => {
             return {
                 current_temperature: this.temperature,
                 is_firing: this.isFiring,
-                current_schedule: this.currentSchedule,
-                temperature_datapoints: this.temperatureDatapoints,
-                estimated_minutes_remaining: this.estimated_minutes_remaining,
-                error_message: this.errorMessage
+                current_schedule_id: this.currentSchedule.id,
+                estimated_minutes_remaining: this.estimated_minutes_remaining
             }
         }
 
@@ -183,8 +168,11 @@ class Kiln {
                 this.fireScheduleInstance = this.fireSchedule(firing_schedule)
                 this.fireScheduleInstance.next()
 
-                let schedule_id = null
-                if (firing_schedule.id) schedule_id = firing_schedule.id
+                let scheduleId = this.currentSchedule.id || null
+
+                this.firingStartedFunctions.forEach(fn=>{
+                    fn(scheduleId)
+                })
 
             }
 
@@ -193,6 +181,10 @@ class Kiln {
         this.stopFiring = ()=>{
             this.isFiring = false
             this.controller.stopPID()
+
+            this.firingEndedFunctions.forEach(fn=>{
+                fn()
+            })
         }
 
         this.fireSchedule = function* (schedule){
@@ -337,13 +329,6 @@ class Kiln {
                 })
 
         }, 1000)
-
-        this.addTemperatureDatapoint()
-
-        this.temperatureDatapointInterval = setInterval(() => {
-            this.addTemperatureDatapoint()
-            this.trimTemperatureDatapoints()
-        }, 60000)
     }
 }
 

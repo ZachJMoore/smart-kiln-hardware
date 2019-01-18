@@ -1,4 +1,5 @@
 const remoteIo = require("../remoteIo/index.js")
+const conduit = require("../conduit/index.js")
 const fsStore = require("../fsStore/index.js")
 const kiln = require("../kiln/index.js")
 
@@ -16,27 +17,10 @@ module.exports = (io)=>{
         })
 
         socket.on("get-kiln-data", ()=>{
-            socket.emit("kiln-data", kiln.getInformation())
+            socket.emit("kiln-data", kiln.getKilnData())
         })
 
     })
-
-    setInterval(()=>{
-        if (remoteIo.isAuthenticated){
-            remoteIo.socket.emit("get-account-data", (error)=>{
-                if (error) console.log(error)
-            })
-            remoteIo.socket.emit("get-firing-schedules", (error)=>{
-                if (error) console.log(error)
-            })
-            remoteIo.socket.emit("get-commands", (error)=>{
-                if (error) console.log(error)
-            })
-            remoteIo.socket.emit("add-temperature-datapoint", kiln.temperature, (error)=>{
-                if (error) console.log(error)
-            })
-        }
-    }, 5 * 1000)
 
     remoteIo.socket.on("account-data", (data)=>{
         io.emit("account-data", data)
