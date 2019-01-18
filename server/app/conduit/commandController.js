@@ -9,6 +9,7 @@ class CommandController{
 
         this.commandsPending = true
         this.commandInterval = null
+        this.previousCommand = null
 
         remoteIo.socket.on("commands", (data)=>{
             this._addCommands(data)
@@ -27,7 +28,7 @@ class CommandController{
 
         this._executeCommand = (command)=>{
             // start
-            console.log(command)
+            console.log("this", command)
             // finish
             requestQueue.updateCommand(command.id)
             fsStore.receivedCommands.removeCommand(command.id)
@@ -38,6 +39,7 @@ class CommandController{
             if (this.commandsPending){
                 let command = fsStore.receivedCommands.getCommand()
                 if (!command) this.commandsPending = false
+                else if (this.previousCommand && this.previousCommand.id === command.id) return
                 else this._executeCommand(command)
             } else {
                 this._stopCommandInterval()

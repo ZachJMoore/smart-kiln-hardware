@@ -101,7 +101,6 @@ class RequestQueue{
         this._bulkAddTemperatureDatapoints = (datapoints) => {
             if (remoteIo.isAuthenticated){
                 remoteIo.socket.emit("bulk-add-temperature-datapoints", datapoints, (error)=>{
-                    console.log(error)
                     if (!error){
                         fsStore.queue.deleteAllTemperatureDatapoints()
                         this.inQueue.temperatureDatapoints = false
