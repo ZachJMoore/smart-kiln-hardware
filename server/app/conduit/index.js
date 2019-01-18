@@ -62,7 +62,7 @@ class Conduit{
         }
 
         this.startMainInterval = ()=>{
-            this.mainInterval = setInterval(this.mainIntervalFunction, 10*1000)
+            this.mainInterval = setInterval(this.mainIntervalFunction, this.tick)
         }
 
         this.stopMainInterval = ()=>{
