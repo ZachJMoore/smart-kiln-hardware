@@ -10,16 +10,13 @@ class Conduit{
 
         this.kilnLog = fsStore.kilnLog.getKilnLog()
         this.kilnData = fsStore.kilnData.getKilnData()
+        this.accountData = fsStore.authentication.getAccountData()
         this.logDatapointIntervalTick = (process.env.LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS || 60 ) * 1000
         this.temperatureDatapointIntervalTick = (process.env.LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS || 60 ) * 1000
         this.realtimeDataUpdateIntervalTick = (process.env.REALTIME_DATA_EMIT_INTERVAL_SECONDS || 15) * 1000
         this.logDatapointInterval = null
         this.temperatureDatapointInterval = null
         this.realtimeDataUpdateInterval = null
-
-        if (this.kilnData && this.kilnData.is_firing){
-            // something went wrong, we were supposed to be firing
-        }
 
         // Temperature datapoint interval
         this._addTemperatureDatapoint = ()=>{
@@ -41,7 +38,7 @@ class Conduit{
 
         // Log datapoint interval
         this._addLogDatapoint = ()=>{
-            let datapoint = dataConstructors.LogDatapoint(this.kilnLog.local_id, kiln.temperature)
+            let datapoint = dataConstructors.logDatapoint(this.kilnLog.local_id, kiln.temperature)
             requestQueue.addLogDatapoint(datapoint)
             fsStore.logData.addLogDatapoint(datapoint)
         }
@@ -83,22 +80,29 @@ class Conduit{
         this._startLog = (scheduleId)=>{
             this.kilnLog = dataConstructors.startLog(scheduleId)
             requestQueue.addStartLog(this.kilnLog)
+            fsStore.logData.addStartLog(this.kilnLog)
             fsStore.kilnLog.setKilnLog(this.kilnLog)
             this._startLogInterval()
         }
 
         this._endLog = ()=>{
             requestQueue.addEndLog(this.kilnLog)
+            fsStore.logData.addEndLog()
             this.kilnLog = null
-            fsStore.kilnLog.setKilnLog(null)
-            this._stopLogInterval()
+            fsStore.kilnLog.setKilnLog({})
+            this._stopLogDatapointInterval()
         }
 
-        // extra
-        this._startupFunctions = ()=>{
-            this._startTemperatureDatapointInterval()
-            this._startRealtimeDataUpdateInterval()
+        // Start doing stuff ---------------------------------------------------------------------------------------------
+
+        if (this.kilnData && this.kilnData.is_firing){
+            console.log("Firing was interrupted!!")
+
+            this._endLog()
+            this._updateRealtimeData()
         }
+
+        // if (this.accountData.realtimeData !== this.kilnData){ do stuff }
 
         // remote Io
 
@@ -125,7 +129,9 @@ class Conduit{
         })
 
         // startup
-        this._startupFunctions()
+
+        this._startTemperatureDatapointInterval()
+        this._startRealtimeDataUpdateInterval()
 
     }
 }

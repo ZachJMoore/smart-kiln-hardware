@@ -93,18 +93,33 @@ class Queue extends Base{
         }
 
         // Kiln/Firing Logs
-        this.trimLogs = (logs)=>{
+        this._trimLogs = (logs)=>{
             if (process.env.TRIM_QUEUE === "false") return logs
 
             let ar = logs.splice()
             let spliceCount = ar.length - this.logMaxCount
-            ar.splice(0, spliceCount)
+            let dTrim = ar.splice(0, spliceCount)
+            dTrim.forEach(log=>{
+                this._trimLogDatapoints(log.local_id)
+                this._trimEndLogs(log.local_id)
+            })
 
             return ar
         }
 
-        this.trimLogDatapoints = (id)=>{
-            let tld = this.getLogDatapoints().filter((datapoint, index)=>{
+        this._trimEndLogs = (id)=>{
+            let tld = this.getAllEndLogs().filter((log, index)=>{
+                if (log.local_id === id) return false
+                else return true
+            })
+
+            this.directory.write("end_logs.json", tld, {
+                atomic: true
+            })
+        }
+
+        this._trimLogDatapoints = (id)=>{
+            let tld = this.getAllLogDatapoints().filter((datapoint, index)=>{
                 if (datapoint.local_id === id) return false
                 else return true
             })
@@ -125,7 +140,7 @@ class Queue extends Base{
             if (!previousData){
                 previousData = []
             } else {
-                previousData = this.trimLogDatapoints(previousData)
+                previousData = this._trimLogs(previousData)
             }
             previousData.push(log)
             this.directory.write("start_logs.json", previousData, {
@@ -148,9 +163,6 @@ class Queue extends Base{
             let previousData = this.directory.read("end_logs.json", "json")
             if (!previousData){
                 previousData = []
-            }
-            else {
-                previousData = this.trimLogDatapoints(previousData)
             }
             previousData.push(log)
             this.directory.write("end_logs.json", previousData, {

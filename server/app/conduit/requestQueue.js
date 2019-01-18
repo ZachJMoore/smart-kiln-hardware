@@ -115,7 +115,7 @@ class RequestQueue{
             if (remoteIo.isAuthenticated){
                 remoteIo.socket.emit("bulk-add-start-logs", startLogs, (error)=>{
                     if (!error){
-                        fsStore.queue.DeleteAllStartLogs()
+                        fsStore.queue.deleteAllStartLogs()
                         this.inQueue.startLogs = false
                     }
                 })

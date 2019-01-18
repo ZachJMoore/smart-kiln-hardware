@@ -161,8 +161,6 @@ class Kiln {
 
             if (!this.isFiring){
 
-                console.log(firing_schedule)
-
                 this.isFiring = true
                 this.currentSchedule = firing_schedule
                 this.fireScheduleInstance = this.fireSchedule(firing_schedule)

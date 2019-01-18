@@ -6,6 +6,7 @@ class FiringSchedules extends Base{
 
         this.directory = this.directory.cwd("firingSchedules")
 
+
         this.setAllDatabaseSchedules = (schedules)=>{
             this.directory.write("database_schedules.json", schedules, {
                 atomic: true
@@ -15,6 +16,20 @@ class FiringSchedules extends Base{
             let schedules = this.directory.read("database_schedules.json", "json")
             if (Array.isArray(schedules)) return schedules
             else return []
+        }
+
+        this.getDatabaseScheduleById = (id)=>{
+            let schedules = this.getAllDatabaseSchedules()
+            let sch = null
+
+            schedules.some((schedule, index)=>{
+                if (schedule.id === id){
+                    sch = schedule
+                    return true
+                } else return false
+            })
+
+            return sch
         }
 
         this.setAllLocalSchedules = (schedules)=>{

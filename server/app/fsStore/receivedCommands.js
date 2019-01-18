@@ -14,14 +14,13 @@ class ReceivedCommands extends Base{
 
         this.removeCommand = (id)=>{
             let commands = this.getAllCommands()
-            let newAr = commands.splice()
             commands.some((command, index)=>{
                 if (command.id === id){
-                    newAr.splice(index, 1)
+                    commands.splice(index, 1)
                     return true
                 } else return false
             })
-            this.setAllCommands(newAr)
+            this.setAllCommands(commands)
         }
 
         this.addCommand = (command)=>{
