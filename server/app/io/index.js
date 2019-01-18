@@ -24,14 +24,9 @@ module.exports = (io)=>{
 
     remoteIo.socket.on("account-data", (data)=>{
         io.emit("account-data", data)
-        fsStore.authentication.setAccountData(data)
     })
     remoteIo.socket.on("firing-schedules", (data)=>{
         io.emit("firing-schedules", data)
-        fsStore.firingSchedules.setAllDatabaseSchedules(data)
-    })
-    remoteIo.socket.on("commands", (data)=>{
-        fsStore.receivedCommands.setAllCommands(data)
     })
 
     remoteIo.socket.on("message-s", (data)=>{
