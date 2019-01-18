@@ -51,7 +51,7 @@ class Queue extends Base{
 
         // Command updates
 
-        this.deleteCommandUpdates = ()=>{
+        this.deleteAllCommandUpdates = ()=>{
             this.directory.write("command_updates.json", [], {
                 atomic: true
             })

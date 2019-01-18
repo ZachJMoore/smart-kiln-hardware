@@ -39,11 +39,11 @@ class RequestQueue{
 
         this.updateCommand = (commandId) => {
             if (remoteIo.isAuthenticated){
-                remoteIo.socket.emit("update-commands", commandId, (error)=>{
+                remoteIo.socket.emit("update-command", commandId, (error)=>{
                     if (error) this._queueCommandUpdate(commandId)
                 })
             } else {
-                this._queueCommandUpdate(command)
+                this._queueCommandUpdate(commandId)
             }
         }
 
@@ -87,11 +87,7 @@ class RequestQueue{
             }
         }
 
-
-
         // -----------------------------------------------------------------------------------------------------------------------
-
-
 
         this._bulkUpdateCommands = (commandIds) => {
                 remoteIo.socket.emit("bulk-update-commands", commandIds, (error)=>{

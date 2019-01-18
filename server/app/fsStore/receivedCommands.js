@@ -24,6 +24,18 @@ class ReceivedCommands extends Base{
             this.setAllCommands(newAr)
         }
 
+        this.addCommand = (command)=>{
+            let commands = this.getAllCommands()
+            commands.push(command)
+            this.setAllCommands(commands)
+        }
+
+        this.bulkAddCommands = (bcs)=>{
+            let commands = this.getAllCommands()
+            commands = [...commands, ...bcs]
+            this.setAllCommands(commands)
+        }
+
         this.setAllCommands = (commands)=>{
             this.directory.write("commands.json", commands, {
                 atomic: true
@@ -43,7 +55,7 @@ class ReceivedCommands extends Base{
             if (!data) {
                 data = []
             }
-            return data[0] || false
+            return data[0] || null
         }
     }
 }

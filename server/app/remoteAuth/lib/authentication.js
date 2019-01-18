@@ -102,7 +102,7 @@ class Authentication{
                 setTimeout(() => {
                     this.credentials = fsStore.authentication.getCredentials()
                     this.connect()
-                }, (process.env.RECONNECT_ATTEMPT_INTERVAL || 10 * 1000));
+                }, (process.env.RECONNECT_ATTEMPT_INTERVAL_SECONDS || 10 ) * 1000);
             })
         }
     }
