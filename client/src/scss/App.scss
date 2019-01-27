@@ -1,0 +1,69 @@
+:root{
+    --text-color: #5C5C5C;
+    --navbar-height: 46px
+}
+
+body{
+    overflow: hidden;
+}
+
+.App{
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.navbar{
+    height: var(--navbar-height);
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: stretch;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2), 0 0 14px rgba(103, 129, 177, 0.2);
+
+    .info{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 18px;
+
+        .right{
+            margin-right:20px;
+        }
+
+        .temperature{
+            font-size: 18px;
+            color: var(--text-color);
+            font-weight: 400;
+        }
+    }
+}
+
+.sidebar{
+    position: fixed;
+}
+
+.content{
+    margin-top: var(--navbar-height);
+    overflow: auto;
+    align-self: stretch;
+    flex: 1;
+}
+
+.chart-container{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 25px;
+    height: calc(calc(100vh - var(--navbar-height)) - 25px);
+}
