@@ -1,6 +1,7 @@
 :root{
     --text-color: #5C5C5C;
-    --navbar-height: 46px
+    --navbar-height: 46px;
+    --box-shadow-default: 0 0 8px rgba(0, 0, 0, 0.2), 0 0 14px rgba(103, 129, 177, 0.2);
 }
 
 body{
@@ -25,10 +26,15 @@ body{
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.5);
+    background: #2196F3;
+    color: white;
     display: flex;
     align-items: stretch;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2), 0 0 14px rgba(103, 129, 177, 0.2);
+    box-shadow: var(--box-shadow-default);
+
+    .sidebar-button{
+        color: inherit;
+    }
 
     .info{
         flex: 1;
@@ -43,7 +49,7 @@ body{
 
         .temperature{
             font-size: 18px;
-            color: var(--text-color);
+            color: inherit;
             font-weight: 400;
         }
     }
@@ -51,6 +57,54 @@ body{
 
 .sidebar{
     position: fixed;
+    height: 100vh;
+    display: flex;
+    z-index: 5000;
+    transition: ease 250ms;
+    will-change: translate;
+
+    .sidebar-container{
+        width: 250px;
+        background-color: white;
+        box-shadow: var(--box-shadow-default);
+        overflow: auto;
+        transition: ease 250ms;
+        will-change: box-shadow;
+
+        .sidebar-header{
+            width: 100%;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .sidebar-sub-header{
+            width: 100%;
+            text-align: center;
+            margin: 0 0 10px 0;
+            font-weight: 300;
+        }
+    }
+
+    .sidebar-dim{
+        width: 100vw;
+        background-color: #0008;
+        transition: ease 250ms;
+        will-change: background-color;
+    }
+
+    &.hidden{
+
+        transform: translateX(-250px);
+        pointer-events: none;
+
+        .sidebar-dim{
+            background-color: #0000;
+        }
+
+        .sidebar-container{
+            box-shadow: none;
+        }
+    }
 }
 
 .content{
@@ -58,12 +112,4 @@ body{
     overflow: auto;
     align-self: stretch;
     flex: 1;
-}
-
-.chart-container{
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 25px;
-    height: calc(calc(100vh - var(--navbar-height)) - 25px);
 }
