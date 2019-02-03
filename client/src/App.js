@@ -14,6 +14,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Divider } from '@material-ui/core';
+import FiringSchedules from "./components/FiringSchedules"
+import Settings from "./components/Settings"
 
 const ListItemLink = (props) => {
   return <ListItem button component={Link} {...props} />;
@@ -105,6 +107,8 @@ class App extends Component {
         <div className="content">
           <div className="content-scroll-container">
             <Route exact path="/" render={()=>(<Home datapoints={this.state.datapoints} isFahrenheit={this.state.isFahrenheit}/>)} />
+            <Route exact path="/firing-schedules" render={()=>(<FiringSchedules firingSchedules={this.state.firingSchedules} isFahrenheit={this.state.isFahrenheit}/>)} />
+            <Route exact path="/settings" render={()=>(<Settings isFahrenheit={this.state.isFahrenheit}/>)} />
           </div>
         </div>
       </div>

@@ -3,8 +3,8 @@ import { Line, Chart } from "react-chartjs-2"
 import * as zoom from 'chartjs-plugin-zoom' // Must be imported for zoom to work
 import Button from "@material-ui/core/Button"
 import styles from "./index.module.scss"
- 
-class HomeChart extends Component{
+
+class HomeChart extends Component {
 
     unpackDatapoints = (array, props) => {
         if (!array || array.length === 0) return []
@@ -14,12 +14,12 @@ class HomeChart extends Component{
 
             let y = datapoint[props.y]
 
-            if (!props.isFahrenheit){
-                y = (y - 32)*(5/9)
+            if (!props.isFahrenheit) {
+                y = (y - 32) * (5 / 9)
             }
 
             y = parseInt(y.toFixed(2))
-            return {x: x, y: y}
+            return { x: x, y: y }
         })
     }
 
@@ -31,22 +31,22 @@ class HomeChart extends Component{
 
             let y = data[props.y]
 
-            if (!props.isFahrenheit){
-                y = (y - 32)*(5/9)
+            if (!props.isFahrenheit) {
+                y = (y - 32) * (5 / 9)
             }
 
             //TODO: Set x:date value based on ramp rate
 
             y = parseInt(y.toFixed(2))
-            return {x: x, y: y}
+            return { x: x, y: y }
         })
     }
 
     chart = {
-        resetZoom: ()=>{}
+        resetZoom: () => { }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let self = this
         Chart.pluginService.register({
             afterDraw: function (chart, easing) {
@@ -55,7 +55,7 @@ class HomeChart extends Component{
         });
     }
 
-    render(){
+    render() {
 
         return (
             <div className={styles["chart-container"]}>
@@ -64,12 +64,13 @@ class HomeChart extends Component{
                         data={{
                             datasets: [{
                                 label: "Temperature",
-                                data: this.unpackDatapoints(this.props.datapoints, {x: "created_at", y: "temperature", isFahrenheit: this.props.isFahrenheit}),
-                                pointRadius: 2
+                                data: this.unpackDatapoints(this.props.datapoints, { x: "created_at", y: "temperature", isFahrenheit: this.props.isFahrenheit }),
+                                pointRadius: 2,
+                                borderColor: "#5C5C5C"
                             },
                             {
                                 label: "Schedule",
-                                data: this.unpackScheduleRamps(this.props.scheduleRamps, {x: "ramp_rate", y: "target_temperature", isFahrenheit: this.props.isFahrenheit}),
+                                data: this.unpackScheduleRamps(this.props.scheduleRamps, { x: "ramp_rate", y: "target_temperature", isFahrenheit: this.props.isFahrenheit }),
                                 pointRadius: 2
                             }]
                         }}
@@ -84,13 +85,16 @@ class HomeChart extends Component{
                             scales: {
                                 yAxes: [{
                                     ticks: {
-                                        beginAtZero:true,
-                                        type: "temperature"
+                                        beginAtZero: true,
+                                        fontColor: "#5C5C5C"
                                     }
                                 }],
                                 xAxes: [{
                                     type: 'time',
-                                    ticks:{
+                                    ticks: {
+                                        fontColor: "#5C5C5C",
+                                        autoSkip: false,
+                                        maxRotation: 0,
                                     }
                                 }]
                             },
@@ -139,7 +143,7 @@ class HomeChart extends Component{
                     />
                 </div>
                 <div className={styles["chart-controls-container"]}>
-                    <Button onClick={()=>{this.chart.resetZoom()}}>reset</Button>
+                    <Button onClick={() => { this.chart.resetZoom() }}>reset</Button>
                 </div>
             </div>
         )
