@@ -16,6 +16,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { Divider } from '@material-ui/core';
 import FiringSchedules from "./components/FiringSchedules"
 import Settings from "./components/Settings"
+import firingSchedules from "./firingSchedules"
 
 const ListItemLink = (props) => {
   return <ListItem button component={Link} {...props} />;
@@ -29,7 +30,8 @@ class App extends Component {
     current_temperature: 1832,
     temperatureText: "",
     datapoints: [{temperature: 5, created_at: 1548532407617}, {temperature: 10, created_at: 1548532417617}],
-    sidebarIsShown: false
+    sidebarIsShown: false,
+    firingSchedules: firingSchedules
   }
 
   getTemperatureText = (isFahrenheit)=>{

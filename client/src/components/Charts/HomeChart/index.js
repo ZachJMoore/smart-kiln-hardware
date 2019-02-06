@@ -3,8 +3,13 @@ import { Line, Chart } from "react-chartjs-2"
 import * as zoom from 'chartjs-plugin-zoom' // Must be imported for zoom to work
 import Button from "@material-ui/core/Button"
 import styles from "./index.module.scss"
+import convertSchedule from "../../../lib/charting/convertSchedule"
 
 class HomeChart extends Component {
+
+    state = {
+        isInteractive: false
+    }
 
     unpackDatapoints = (array, props) => {
         if (!array || array.length === 0) return []
@@ -23,27 +28,16 @@ class HomeChart extends Component {
         })
     }
 
-    unpackScheduleRamps = (array, props) => {
-        if (!array || array.length === 0) return []
-        return array.map(data => {
-
-            let x = data[props.x]
-
-            let y = data[props.y]
-
-            if (!props.isFahrenheit) {
-                y = (y - 32) * (5 / 9)
-            }
-
-            //TODO: Set x:date value based on ramp rate
-
-            y = parseInt(y.toFixed(2))
-            return { x: x, y: y }
-        })
+    toggleInteraction = () => {
+        this.setState({ isInteractive: !this.state.isInteractive })
     }
 
     chart = {
         resetZoom: () => { }
+    }
+
+    componentWillMount() {
+        Chart.plugins.register(zoom)
     }
 
     componentDidMount() {
@@ -55,12 +49,17 @@ class HomeChart extends Component {
         });
     }
 
+    componentWillUnmount(){
+        this.chartReference.chartInstance.destroy()
+    }
+
     render() {
 
         return (
             <div className={styles["chart-container"]}>
-                <div className={styles["chart"]}>
+                <div className={styles.chart + " " + (!this.state.isInteractive ? styles.isNotInteractive : styles.isInteractive)}>
                     <Line
+                        ref={ref=>this.chartReference = ref}
                         data={{
                             datasets: [{
                                 label: "Temperature",
@@ -70,8 +69,9 @@ class HomeChart extends Component {
                             },
                             {
                                 label: "Schedule",
-                                data: this.unpackScheduleRamps(this.props.scheduleRamps, { x: "ramp_rate", y: "target_temperature", isFahrenheit: this.props.isFahrenheit }),
-                                pointRadius: 2
+                                data: convertSchedule(this.props.scheduleRamps, { isFahrenheit: this.props.isFahrenheit }), //TODO: Make sure that convertSchedule is passed a start object with the starting date of a firing schedule log and the starting temp
+                                pointRadius: 2,
+                                borderColor: "#5C5C5C"
                             }]
                         }}
                         options={{
@@ -116,7 +116,7 @@ class HomeChart extends Component {
                             },
                             maintainAspectRatio: false,
                             pan: {
-                                enabled: true,
+                                enabled: this.state.isInteractive,
                                 mode: 'xy',
                                 rangeMin: {
                                     x: null,
@@ -128,7 +128,7 @@ class HomeChart extends Component {
                                 }
                             },
                             zoom: {
-                                enabled: true,
+                                enabled: this.state.isInteractive,
                                 mode: 'xy',
                                 rangeMin: {
                                     x: null,
@@ -138,12 +138,21 @@ class HomeChart extends Component {
                                     x: null,
                                     y: null
                                 }
+                            },
+                            layout: {
+                                padding: {
+                                    left: 0,
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0
+                                }
                             }
                         }}
                     />
                 </div>
                 <div className={styles["chart-controls-container"]}>
                     <Button onClick={() => { this.chart.resetZoom() }}>reset</Button>
+                    <Button onClick={() => { this.toggleInteraction() }}>Toggle Interaction</Button>
                 </div>
             </div>
         )
