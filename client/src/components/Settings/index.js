@@ -1,5 +1,5 @@
-import React, { Component } from "react"
-import styles from "./index.module.scss"
+import React, { Component } from "reactn"
+// import styles from "./index.module.scss"
 
 class Settings extends Component{
     render(){

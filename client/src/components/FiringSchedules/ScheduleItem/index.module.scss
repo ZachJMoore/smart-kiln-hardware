@@ -1,0 +1,28 @@
+.headerContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.scheduleName{
+    font-size: 22px;
+    font-weight: 400;
+    margin: 10;
+    padding-left: 15px;
+}
+
+.coneTemperature{
+    font-size: 20px;
+    font-weight: 400;
+    margin: 10;
+    padding-right: 15px;
+}
+
+.chartContainer{
+    margin-top: 10px;
+    height: calc(75vh - var(--navbar-height));
+}
+
+.rampTableContainer{
+    margin: 15px;
+}

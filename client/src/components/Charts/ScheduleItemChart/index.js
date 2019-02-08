@@ -3,7 +3,7 @@ import { Line } from "react-chartjs-2"
 import styles from "./index.module.scss"
 import convertSchedule from "../../../lib/charting/convertSchedule";
 
-class ScheduleThumbnail extends Component {
+class ScheduleItemChart extends Component {
 
     componentWillUnmount(){
         this.chartReference.chartInstance.destroy()
@@ -18,6 +18,7 @@ class ScheduleThumbnail extends Component {
                         ref={ref=>this.chartReference = ref}
                         data={{
                             datasets: [{
+                                label: "Temperature",
                                 data: convertSchedule(this.props.scheduleRamps, { isFahrenheit: this.global.isFahrenheit }),
                                 pointRadius: 2,
                                 borderColor: "#5C5C5C"
@@ -25,11 +26,14 @@ class ScheduleThumbnail extends Component {
                         }}
                         options={{
                             tooltips: {
-                                display: false
+                                bodySpacing: 4,
+                                xPadding: 12,
+                                mode: "nearest",
+                                intersect: 0,
+                                position: "nearest"
                             },
                             scales: {
                                 yAxes: [{
-                                    display: false,
                                     ticks: {
                                         beginAtZero: true,
                                         fontColor: "#5C5C5C"
@@ -37,7 +41,6 @@ class ScheduleThumbnail extends Component {
                                 }],
                                 xAxes: [{
                                     type: 'time',
-                                    display: false,
                                     ticks: {
                                         fontColor: "#5C5C5C",
                                         autoSkip: false,
@@ -46,7 +49,7 @@ class ScheduleThumbnail extends Component {
                                 }]
                             },
                             animation: {
-                                duration: 0
+                                duration: 300
                             },
                             legend: {
                                 display: false
@@ -57,6 +60,10 @@ class ScheduleThumbnail extends Component {
                                 }
                             },
                             responsive: true,
+                            hover: {
+                                mode: "nearest",
+                                intersect: true
+                            },
                             maintainAspectRatio: false,
                             pan: {
                                 enabled: false
@@ -66,9 +73,9 @@ class ScheduleThumbnail extends Component {
                             },
                             layout: {
                                 padding: {
-                                    left: 5,
-                                    right: 5,
-                                    top: 5,
+                                    left: 10,
+                                    right: 0,
+                                    top: 0,
                                     bottom: 0
                                 }
                             }
@@ -80,4 +87,4 @@ class ScheduleThumbnail extends Component {
     }
 }
 
-export default ScheduleThumbnail
+export default ScheduleItemChart

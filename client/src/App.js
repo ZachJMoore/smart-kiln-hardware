@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'reactn';
 import './scss/App.scss';
 import { Route, Link } from "react-router-dom"
 import MenuIcon from "@material-ui/icons/Menu"
@@ -16,7 +16,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { Divider } from '@material-ui/core';
 import FiringSchedules from "./components/FiringSchedules"
 import Settings from "./components/Settings"
-import firingSchedules from "./firingSchedules"
+import ScheduleItem from './components/FiringSchedules/ScheduleItem';
+import getTemperatureText from "./lib/getTemperatureText"
 
 const ListItemLink = (props) => {
   return <ListItem button component={Link} {...props} />;
@@ -24,37 +25,21 @@ const ListItemLink = (props) => {
 
 class App extends Component {
 
-  state = {
-    currentTime: "6:34 pm",
-    isFahrenheit: true,
-    current_temperature: 1832,
-    temperatureText: "",
-    datapoints: [{temperature: 5, created_at: 1548532407617}, {temperature: 10, created_at: 1548532417617}],
-    sidebarIsShown: false,
-    firingSchedules: firingSchedules
-  }
-
-  getTemperatureText = (isFahrenheit)=>{
-    if (isFahrenheit === undefined) isFahrenheit = this.state.isFahrenheit
-    const temp = isFahrenheit ? this.state.current_temperature : (this.state.current_temperature - 32)*(5/9)
-    return temp + "º" + (isFahrenheit ? "F" : "C")
-  }
-
   toggleTemperatureDisplayType = ()=>{
-    const isFahrenheit = !this.state.isFahrenheit
-    this.setState({
+    const isFahrenheit = !this.global.isFahrenheit
+    this.setGlobal({
       isFahrenheit: isFahrenheit,
-      temperatureText: this.getTemperatureText(isFahrenheit)
+      temperatureText: getTemperatureText(this.global.current_temperature, isFahrenheit)
     })
   }
 
   toggleSidebar = ()=>{
-    this.setState({sidebarIsShown: !this.state.sidebarIsShown})
+    this.setGlobal({sidebarIsShown: !this.global.sidebarIsShown})
   }
 
   componentDidMount(){
-    this.setState({
-      temperatureText: this.getTemperatureText()
+    this.setGlobal({
+      temperatureText: getTemperatureText(this.global.current_temperature, this.global.isFahrenheit)
     })
   }
 
@@ -65,14 +50,14 @@ class App extends Component {
           <IconButton onClick={this.toggleSidebar} className="sidebar-button"><MenuIcon/></IconButton>
           <div className="info">
             <div className="left">
-              <span className="time">{this.state.currentTime}</span>
+              <span className="time">{this.global.currentTime}</span>
             </div>
             <div className="right">
-              <Button onClick={this.toggleTemperatureDisplayType} className="temperature">{this.state.temperatureText}</Button>
+              <Button onClick={this.toggleTemperatureDisplayType} className="temperature">{this.global.temperatureText}</Button>
             </div>
           </div>
         </nav>
-        <nav className={"sidebar" + (this.state.sidebarIsShown ? "" : " hidden")}>
+        <nav className={"sidebar" + (this.global.sidebarIsShown ? "" : " hidden")}>
           <div className="sidebar-container">
             <div className="sidebar-scroll-container">
               <h1 className="sidebar-header">Smart Kiln</h1>
@@ -108,9 +93,17 @@ class App extends Component {
         </nav>
         <div className="content">
           <div className="content-scroll-container">
-            <Route exact path="/" render={()=>(<Home datapoints={this.state.datapoints} isFahrenheit={this.state.isFahrenheit}/>)} />
-            <Route exact path="/firing-schedules" render={()=>(<FiringSchedules firingSchedules={this.state.firingSchedules} isFahrenheit={this.state.isFahrenheit}/>)} />
-            <Route exact path="/settings" render={()=>(<Settings isFahrenheit={this.state.isFahrenheit}/>)} />
+            <Route exact path="/" render={()=>(<Home datapoints={this.global.datapoints} isFahrenheit={this.global.isFahrenheit}/>)} />
+            <Route exact path="/firing-schedules" render={()=>(<FiringSchedules firingSchedules={this.global.firingSchedules} isFahrenheit={this.global.isFahrenheit}/>)} />
+            <Route exact path="/settings" render={()=>(<Settings isFahrenheit={this.global.isFahrenheit}/>)} />
+            {this.global.firingSchedules.map(
+              (schedule, index)=>(
+                <Route 
+                  exact
+                  path={`/firing-schedules/${schedule.id}`} 
+                  render={()=>(<ScheduleItem schedule={schedule} />)}
+                  key={index}
+                />))}
           </div>
         </div>
       </div>

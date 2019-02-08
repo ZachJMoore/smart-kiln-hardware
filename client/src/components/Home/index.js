@@ -1,4 +1,4 @@
-import React from "react"
+import React from "reactn"
 import { HomeChart } from "../Charts"
 import styles from "./index.module.scss"
 

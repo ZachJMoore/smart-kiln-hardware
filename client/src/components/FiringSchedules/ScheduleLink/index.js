@@ -1,8 +1,9 @@
-import React from "react"
+import React, { Component } from "reactn"
 import { ScheduleThumbnail } from "../../Charts"
 import * as styles from "./index.module.scss"
 import { Card, CardActionArea, CardMedia, CardContent } from "@material-ui/core"
 import { Link, withRouter } from "react-router-dom"
+import getCone from "../../../lib/getCone";
 
 const ActionLink = (props)=>(
     <Link to={props.to}>
@@ -10,33 +11,29 @@ const ActionLink = (props)=>(
     </Link>
 )
 
-const ScheduleLink = (props) => {
+class ScheduleLink extends Component{
 
-    let getCone = (nb)=>{
-        if (`${nb}`.includes("-")){
-            return `0${Math.abs(nb)}`
-        } else {
-            return `${nb}`
-        }
+    render(){
+
+        return (
+            <Card className={styles.card}>
+                <CardActionArea>
+                    <CardMedia
+                        className={styles.scheduleChart}
+                        src="schedule chart"
+                        component={() => <ActionLink to={`${this.props.location.pathname}/${this.props.firingSchedule.id}`} scheduleRamps={this.props.firingSchedule.firing_schedule_ramps} isFahrenheit={this.global.isFahrenheit} />}
+                    />
+                </CardActionArea>
+                <CardContent>
+                    <div className={styles.content}>
+                        <h4>{this.props.firingSchedule.name}</h4>
+                        <h5>{getCone(this.props.firingSchedule.cone)}</h5>
+                    </div>
+                </CardContent>
+            </Card>
+        );
+
     }
-
-    return (
-        <Card className={styles.card}>
-            <CardActionArea>
-                <CardMedia
-                    className={styles.scheduleChart}
-                    src="schedule chart"
-                    component={() => <ActionLink to={`${props.location.pathname}/${props.firingSchedule.id}`} scheduleRamps={props.firingSchedule.firing_schedule_ramps} isFahrenheit={props.isFahrenheit} />}
-                />
-            </CardActionArea>
-            <CardContent>
-                <div className={styles.content}>
-                    <h4>{props.firingSchedule.name}</h4>
-                    <h5>{getCone(props.firingSchedule.cone)}</h5>
-                </div>
-            </CardContent>
-        </Card>
-    );
 }
 
 export default withRouter(ScheduleLink)

@@ -1,9 +1,10 @@
-import React, { Component } from "react"
+import React, { Component } from "reactn"
 import { Line, Chart } from "react-chartjs-2"
 import * as zoom from 'chartjs-plugin-zoom' // Must be imported for zoom to work
 import Button from "@material-ui/core/Button"
 import styles from "./index.module.scss"
 import convertSchedule from "../../../lib/charting/convertSchedule"
+import getTemperature from "../../../lib/getTemperature";
 
 class HomeChart extends Component {
 
@@ -19,11 +20,7 @@ class HomeChart extends Component {
 
             let y = datapoint[props.y]
 
-            if (!props.isFahrenheit) {
-                y = (y - 32) * (5 / 9)
-            }
-
-            y = parseInt(y.toFixed(2))
+            y = getTemperature(y, props.isFahrenheit)
             return { x: x, y: y }
         })
     }
@@ -63,13 +60,13 @@ class HomeChart extends Component {
                         data={{
                             datasets: [{
                                 label: "Temperature",
-                                data: this.unpackDatapoints(this.props.datapoints, { x: "created_at", y: "temperature", isFahrenheit: this.props.isFahrenheit }),
+                                data: this.unpackDatapoints(this.props.datapoints, { x: "created_at", y: "temperature", isFahrenheit: this.global.isFahrenheit }),
                                 pointRadius: 2,
                                 borderColor: "#5C5C5C"
                             },
                             {
                                 label: "Schedule",
-                                data: convertSchedule(this.props.scheduleRamps, { isFahrenheit: this.props.isFahrenheit }), //TODO: Make sure that convertSchedule is passed a start object with the starting date of a firing schedule log and the starting temp
+                                data: convertSchedule(this.props.scheduleRamps, { isFahrenheit: this.global.isFahrenheit }), //TODO: Make sure that convertSchedule is passed a start object with the starting date of a firing schedule log and the starting temp
                                 pointRadius: 2,
                                 borderColor: "#5C5C5C"
                             }]
