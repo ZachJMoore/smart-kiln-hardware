@@ -6,7 +6,7 @@ class FiringSchedules extends Component{
     render(){
         return <>
             <div className={styles.scheduleContainer}>
-                {this.props.firingSchedules.map((schedule, index)=><ScheduleLink firingSchedule={schedule} key={index} />)}
+                {this.global.firingSchedules.map((schedule, index)=><ScheduleLink firingSchedule={schedule} key={index} />)}
             </div>
         </>
     }

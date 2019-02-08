@@ -1,18 +1,21 @@
-import React from "reactn"
+import React, { Component } from "reactn"
 import { HomeChart } from "../Charts"
 import styles from "./index.module.scss"
 
-let Home = (props)=>(
-    <>
-        <div className={styles["chart-container"]}>
-            <HomeChart datapoints={props.datapoints} isFahrenheit={props.isFahrenheit}/>
-        </div>
-        <div className={styles["current-status-container"]}>
-            <ul>
-            <li>current_temperature: {props.temperatureText}</li>
-            </ul>
-        </div>
-    </>
-)
+export default class Home extends Component{
 
-export default Home
+    render(){
+
+        return (<>
+            <div className={styles["chart-container"]}>
+                <HomeChart datapoints={this.global.datapoints}/>
+            </div>
+            <div className={styles["current-status-container"]}>
+                <ul>
+                <li>current_temperature: {this.global.temperatureText}</li>
+                </ul>
+            </div>
+        </>)
+
+    }
+}

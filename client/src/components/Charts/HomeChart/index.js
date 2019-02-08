@@ -20,7 +20,7 @@ class HomeChart extends Component {
 
             let y = datapoint[props.y]
 
-            y = getTemperature(y, props.isFahrenheit)
+            y = getTemperature(y, this.global.isFahrenheit)
             return { x: x, y: y }
         })
     }
@@ -113,7 +113,7 @@ class HomeChart extends Component {
                             },
                             maintainAspectRatio: false,
                             pan: {
-                                enabled: this.state.isInteractive,
+                                enabled: true,
                                 mode: 'xy',
                                 rangeMin: {
                                     x: null,
@@ -125,7 +125,7 @@ class HomeChart extends Component {
                                 }
                             },
                             zoom: {
-                                enabled: this.state.isInteractive,
+                                enabled: true,
                                 mode: 'xy',
                                 rangeMin: {
                                     x: null,

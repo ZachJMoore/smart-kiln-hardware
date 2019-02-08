@@ -93,9 +93,9 @@ class App extends Component {
         </nav>
         <div className="content">
           <div className="content-scroll-container">
-            <Route exact path="/" render={()=>(<Home datapoints={this.global.datapoints} isFahrenheit={this.global.isFahrenheit}/>)} />
-            <Route exact path="/firing-schedules" render={()=>(<FiringSchedules firingSchedules={this.global.firingSchedules} isFahrenheit={this.global.isFahrenheit}/>)} />
-            <Route exact path="/settings" render={()=>(<Settings isFahrenheit={this.global.isFahrenheit}/>)} />
+            <Route exact path="/" render={()=>(<Home/>)} />
+            <Route exact path="/firing-schedules" render={()=>(<FiringSchedules />)} />
+            <Route exact path="/settings" render={()=>(<Settings />)} />
             {this.global.firingSchedules.map(
               (schedule, index)=>(
                 <Route 
@@ -103,7 +103,8 @@ class App extends Component {
                   path={`/firing-schedules/${schedule.id}`} 
                   render={()=>(<ScheduleItem schedule={schedule} />)}
                   key={index}
-                />))}
+                />))
+              }
           </div>
         </div>
       </div>
