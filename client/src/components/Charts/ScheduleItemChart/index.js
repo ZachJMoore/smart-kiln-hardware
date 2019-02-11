@@ -54,11 +54,6 @@ class ScheduleItemChart extends Component {
                             legend: {
                                 display: false
                             },
-                            elements: {
-                                line: {
-                                    tension: 0
-                                }
-                            },
                             responsive: true,
                             hover: {
                                 mode: "nearest",

@@ -51,11 +51,6 @@ class ScheduleThumbnail extends Component {
                             legend: {
                                 display: false
                             },
-                            elements: {
-                                line: {
-                                    tension: 0
-                                }
-                            },
                             responsive: true,
                             maintainAspectRatio: false,
                             pan: {

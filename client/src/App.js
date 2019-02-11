@@ -18,6 +18,7 @@ import FiringSchedules from "./components/FiringSchedules"
 import Settings from "./components/Settings"
 import ScheduleItem from './components/FiringSchedules/ScheduleItem';
 import getTemperatureText from "./lib/getTemperatureText"
+import io from "socket.io-client";
 
 const ListItemLink = (props) => {
   return <ListItem button component={Link} {...props} />;
@@ -38,9 +39,27 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.setGlobal({
-      temperatureText: getTemperatureText(this.global.current_temperature, this.global.isFahrenheit)
+    
+    let socket = null
+
+    if (process.env.NODE_ENV === "development"){
+      socket = io("localhost:2222");
+    } else {
+      socket = io()
+    }
+
+    this.setGlobal({socket})
+
+    socket.on("connect", ()=>{
+        console.log("connected")
     })
+
+    socket.on("current_temperature", (current_temperature)=>{this.setGlobal({current_temperature, temperatureText: getTemperatureText(current_temperature, this.global.isFahrenheit)})})
+
+    socket.on("current_temperature_datapoints", (current_temperature_datapoints)=>{this.setGlobal({current_temperature_datapoints})})
+
+    socket.on("firing_schedules", (firing_schedules)=>{this.setGlobal({firing_schedules})})
+
   }
 
   render() {
@@ -96,7 +115,7 @@ class App extends Component {
             <Route exact path="/" render={()=>(<Home/>)} />
             <Route exact path="/firing-schedules" render={()=>(<FiringSchedules />)} />
             <Route exact path="/settings" render={()=>(<Settings />)} />
-            {this.global.firingSchedules.map(
+            {this.global.firing_schedules.map(
               (schedule, index)=>(
                 <Route 
                   exact

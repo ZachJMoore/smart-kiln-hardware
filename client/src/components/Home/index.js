@@ -8,7 +8,7 @@ export default class Home extends Component{
 
         return (<>
             <div className={styles["chart-container"]}>
-                <HomeChart datapoints={this.global.datapoints}/>
+                <HomeChart datapoints={this.global.current_temperature_datapoints}/>
             </div>
             <div className={styles["current-status-container"]}>
                 <ul>

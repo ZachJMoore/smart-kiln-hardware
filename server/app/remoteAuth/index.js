@@ -17,7 +17,6 @@ class RemoteAuth {
             }))
             authentication.on("unauthorized", (error)=>{
                 this.isAuthenticated.http = false
-                console.log("HTTP: There was an error logging in")
             })
             authentication.connect()
         }

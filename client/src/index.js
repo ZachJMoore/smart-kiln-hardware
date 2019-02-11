@@ -6,16 +6,16 @@ import './scss/index.scss';
 import App from './App';
 import { BrowserRouter } from "react-router-dom"
 import * as serviceWorker from './serviceWorker';
-import firingSchedules from "./firingSchedules"
+import getTemperatureText from './lib/getTemperatureText';
 
 setGlobal({
-    currentTime: "6:34 pm",
+    currentTime: "0:00 am",
     isFahrenheit: true,
-    current_temperature: 1832,
-    temperatureText: "",
-    datapoints: [{ temperature: 5, created_at: 1548532407617 }, { temperature: 10, created_at: 1548532417617 }],
+    current_temperature: 0,
+    temperatureText: getTemperatureText(0, true),
+    current_temperature_datapoints: [],
     sidebarIsShown: false,
-    firingSchedules: firingSchedules
+    firing_schedules: [],
 })
 
 ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));

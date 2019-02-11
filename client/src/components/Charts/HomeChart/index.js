@@ -5,16 +5,46 @@ import Button from "@material-ui/core/Button"
 import styles from "./index.module.scss"
 import convertSchedule from "../../../lib/charting/convertSchedule"
 import getTemperature from "../../../lib/getTemperature";
+import splitDatapoints from "../../../lib/splitDatapoints";
 
 class HomeChart extends Component {
 
     state = {
-        isInteractive: false
+        isInteractive: false,
+        datapoints: [],
+        scheduleDatapoints: [],
+        min: 0
+    }
+
+    minCycle = 1;
+
+    toggleMin(){
+        let min
+
+        if (this.minCycle === 0){
+            min = 0
+            this.minCycle++
+        } else if (this.minCycle === 1){
+            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 1*60*60*1000
+            this.minCycle++
+        } else if (this.minCycle === 2){
+            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 2*60*60*1000
+            this.minCycle++
+        } else if (this.minCycle === 3){
+            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 6*60*60*1000
+            this.minCycle++
+        } else if (this.minCycle === 4){
+            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 12*60*60*1000
+            this.minCycle = 0;
+        }
+
+        this.setState({min})
     }
 
     unpackDatapoints = (array, props) => {
         if (!array || array.length === 0) return []
-        return array.map(datapoint => {
+        let rt = array.map(datapoint => {
+            if (datapoint === null) return null
 
             let x = datapoint[props.x]
 
@@ -23,6 +53,8 @@ class HomeChart extends Component {
             y = getTemperature(y, this.global.isFahrenheit)
             return { x: x, y: y }
         })
+        
+        return rt
     }
 
     toggleInteraction = () => {
@@ -62,7 +94,8 @@ class HomeChart extends Component {
                                 label: "Temperature",
                                 data: this.unpackDatapoints(this.props.datapoints, { x: "created_at", y: "temperature", isFahrenheit: this.global.isFahrenheit }),
                                 pointRadius: 2,
-                                borderColor: "#5C5C5C"
+                                borderColor: "#5C5C5C",
+                                spanGaps: false
                             },
                             {
                                 label: "Schedule",
@@ -88,6 +121,9 @@ class HomeChart extends Component {
                                 }],
                                 xAxes: [{
                                     type: 'time',
+                                    time: {
+                                        min: this.state.min
+                                    },
                                     ticks: {
                                         fontColor: "#5C5C5C",
                                         autoSkip: false,
@@ -98,13 +134,13 @@ class HomeChart extends Component {
                             animation: {
                                 duration: 300
                             },
-                            legend: {
-                                display: false
-                            },
                             elements: {
                                 line: {
-                                    tension: 0
+                                    spanGaps: false
                                 }
+                            },
+                            legend: {
+                                display: false
                             },
                             responsive: true,
                             hover: {
@@ -150,6 +186,7 @@ class HomeChart extends Component {
                 <div className={styles["chart-controls-container"]}>
                     <Button onClick={() => { this.chart.resetZoom() }}>reset</Button>
                     <Button onClick={() => { this.toggleInteraction() }}>Toggle Interaction</Button>
+                    <Button onClick={() => { this.toggleMin() }}>timescale</Button>
                 </div>
             </div>
         )

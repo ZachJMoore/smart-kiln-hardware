@@ -6,39 +6,31 @@ const kiln = require("../kiln/index.js")
 module.exports = (io)=>{
     io.on("connection", (socket)=>{
 
-        socket.on("message", (data)=>{
-            console.log("User to kiln: " + data)
-        })
+        socket.emit("current_temperature", kiln.temperature)
 
-        socket.emit("message", "Here!")
+        socket.emit("current_temperature_datapoints", fsStore.logData.getTemperatureDatapoints())
 
-        socket.on("message-s", (data)=>{
-            remoteIo.socket.emit("message-s", data)
-        })
+        socket.emit("firing_schedules", fsStore.firingSchedules.getAllDatabaseSchedules())
 
-        socket.on("get-kiln-data", ()=>{
-            socket.emit("kiln-data", kiln.getKilnData())
+        socket.on("get-firing_schedules", ()=>{
+            socket.emit("firing_schedules", fsStore.firingSchedules.getAllDatabaseSchedules())
         })
 
     })
 
-    remoteIo.socket.on("account-data", (data)=>{
-        io.emit("account-data", data)
-    })
-    remoteIo.socket.on("firing-schedules", (data)=>{
-        io.emit("firing-schedules", data)
-    })
+    setInterval(()=>{
+        io.emit("current_temperature", kiln.temperature)
+    }, 5*1000)
 
-    remoteIo.socket.on("message-s", (data)=>{
-        io.emit("message-s", data)
-    })
+    setInterval(()=>{
+        io.emit("current_temperature_datapoints", fsStore.logData.getTemperatureDatapoints())
+    }, 60*1000)
 
-    remoteIo.socket.on("connect", ()=>{
-        remoteIo.socket.emit("message", "Here!")
-    })
-
-    remoteIo.socket.on("message", (data)=>{
-        console.log("server to kiln: " + data)
-      })
+    // remoteIo.socket.on("account-data", (data)=>{
+    //     io.emit("account-data", data)
+    // })
+    // remoteIo.socket.on("firing-schedules", (data)=>{
+    //     io.emit("firing-schedules", data)
+    // })
 
 }
