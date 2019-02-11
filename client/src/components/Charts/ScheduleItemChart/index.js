@@ -60,12 +60,6 @@ class ScheduleItemChart extends Component {
                                 intersect: true
                             },
                             maintainAspectRatio: false,
-                            pan: {
-                                enabled: false
-                            },
-                            zoom: {
-                                enabled: false
-                            },
                             layout: {
                                 padding: {
                                     left: 10,

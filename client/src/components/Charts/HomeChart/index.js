@@ -1,6 +1,5 @@
 import React, { Component } from "reactn"
-import { Line, Chart } from "react-chartjs-2"
-import * as zoom from 'chartjs-plugin-zoom' // Must be imported for zoom to work
+import { Line } from "react-chartjs-2" // Must be imported for zoom to work
 import Button from "@material-ui/core/Button"
 import styles from "./index.module.scss"
 import convertSchedule from "../../../lib/charting/convertSchedule"
@@ -10,72 +9,88 @@ import splitDatapoints from "../../../lib/splitDatapoints";
 class HomeChart extends Component {
 
     state = {
-        isInteractive: false,
         datapoints: [],
         scheduleDatapoints: [],
-        min: 0
+        timeScale: 0
     }
 
-    minCycle = 1;
+    timeScales = [
+        {
+            text: "1H",
+            type: "hour",
+            step: 1
+        },
+        {
+            text: "3H",
+            type: "hour",
+            step: 3
+        },
+        {
+            text: "6H",
+            type: "hour",
+            step: 6
+        },
+        {
+            text: "12H",
+            type: "hour",
+            step: 12
+        },
+        {
+            text: "24H",
+            type: "hour",
+            step: 24
+        }
+    ]
 
-    toggleMin(){
-        let min
+    setTimeScale = (scale)=>{
+        let multiplier = 0
 
-        if (this.minCycle === 0){
-            min = 0
-            this.minCycle++
-        } else if (this.minCycle === 1){
-            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 1*60*60*1000
-            this.minCycle++
-        } else if (this.minCycle === 2){
-            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 2*60*60*1000
-            this.minCycle++
-        } else if (this.minCycle === 3){
-            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 6*60*60*1000
-            this.minCycle++
-        } else if (this.minCycle === 4){
-            if (this.props.datapoints.length !== 0) min = this.props.datapoints[this.props.datapoints.length-1].created_at - 12*60*60*1000
-            this.minCycle = 0;
+        if (scale.type === "hour"){
+            multiplier = 60*60*1000
         }
 
-        this.setState({min})
+        // if (other type e.g. day, month){ set multiplier}
+
+        let timeScale = scale.step*multiplier
+
+        this.setState({timeScale})
     }
 
-    unpackDatapoints = (array, props) => {
-        if (!array || array.length === 0) return []
-        let rt = array.map(datapoint => {
+    getTimeScale = ()=>{
+        if (!this.props.datapoints || this.props.datapoints.length === 0) return []
+        else return this.props.datapoints[this.props.datapoints.length -1].created_at - this.state.timeScale
+    }
+
+    unpackDatapoints = () => {
+        let datapoints = null;
+
+        if (!this.props.datapoints || this.props.datapoints.length === 0) return []
+        else datapoints = this.props.datapoints
+
+        datapoints = splitDatapoints(datapoints)
+
+        let rt = datapoints.map(datapoint => {
             if (datapoint === null) return null
 
-            let x = datapoint[props.x]
+            let x = datapoint.created_at
 
-            let y = datapoint[props.y]
+            let y = datapoint.temperature
 
             y = getTemperature(y, this.global.isFahrenheit)
             return { x: x, y: y }
         })
-        
         return rt
     }
 
-    toggleInteraction = () => {
-        this.setState({ isInteractive: !this.state.isInteractive })
+    unpackSchedule = ()=>{
+        return []
+        //TODO: add schedule conversion and context based on if a schedule is being fired
+        //TODO: Make sure that convertSchedule is passed a start object with the starting date of a firing schedule log and the starting temp
+        //TODO: hide all datapoints and start fresh datapoints in correlation to the schedule
     }
 
-    chart = {
-        resetZoom: () => { }
-    }
-
-    componentWillMount() {
-        Chart.plugins.register(zoom)
-    }
-
-    componentDidMount() {
-        let self = this
-        Chart.pluginService.register({
-            afterDraw: function (chart, easing) {
-                self.chart = chart
-            }
-        });
+    componentDidMount(){
+        this.setTimeScale(this.timeScales[0])
     }
 
     componentWillUnmount(){
@@ -86,20 +101,20 @@ class HomeChart extends Component {
 
         return (
             <div className={styles["chart-container"]}>
-                <div className={styles.chart + " " + (!this.state.isInteractive ? styles.isNotInteractive : styles.isInteractive)}>
+                <div className={styles.chart}>
                     <Line
                         ref={ref=>this.chartReference = ref}
                         data={{
                             datasets: [{
                                 label: "Temperature",
-                                data: this.unpackDatapoints(this.props.datapoints, { x: "created_at", y: "temperature", isFahrenheit: this.global.isFahrenheit }),
+                                data: this.unpackDatapoints(),
                                 pointRadius: 2,
                                 borderColor: "#5C5C5C",
                                 spanGaps: false
                             },
                             {
                                 label: "Schedule",
-                                data: convertSchedule(this.props.scheduleRamps, { isFahrenheit: this.global.isFahrenheit }), //TODO: Make sure that convertSchedule is passed a start object with the starting date of a firing schedule log and the starting temp
+                                data: this.unpackSchedule(),
                                 pointRadius: 2,
                                 borderColor: "#5C5C5C"
                             }]
@@ -122,7 +137,7 @@ class HomeChart extends Component {
                                 xAxes: [{
                                     type: 'time',
                                     time: {
-                                        min: this.state.min
+                                        min: this.getTimeScale()
                                     },
                                     ticks: {
                                         fontColor: "#5C5C5C",
@@ -148,30 +163,6 @@ class HomeChart extends Component {
                                 intersect: true
                             },
                             maintainAspectRatio: false,
-                            pan: {
-                                enabled: true,
-                                mode: 'xy',
-                                rangeMin: {
-                                    x: null,
-                                    y: null
-                                },
-                                rangeMax: {
-                                    x: null,
-                                    y: null
-                                }
-                            },
-                            zoom: {
-                                enabled: true,
-                                mode: 'xy',
-                                rangeMin: {
-                                    x: null,
-                                    y: null
-                                },
-                                rangeMax: {
-                                    x: null,
-                                    y: null
-                                }
-                            },
                             layout: {
                                 padding: {
                                     left: 0,
@@ -184,9 +175,9 @@ class HomeChart extends Component {
                     />
                 </div>
                 <div className={styles["chart-controls-container"]}>
-                    <Button onClick={() => { this.chart.resetZoom() }}>reset</Button>
-                    <Button onClick={() => { this.toggleInteraction() }}>Toggle Interaction</Button>
-                    <Button onClick={() => { this.toggleMin() }}>timescale</Button>
+                    {this.timeScales.map((scale, index)=>{
+                        return <Button onClick={() => { this.setTimeScale(scale) }} key={index}>{scale.text}</Button>
+                    })}
                 </div>
             </div>
         )

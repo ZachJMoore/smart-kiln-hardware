@@ -53,12 +53,6 @@ class ScheduleThumbnail extends Component {
                             },
                             responsive: true,
                             maintainAspectRatio: false,
-                            pan: {
-                                enabled: false
-                            },
-                            zoom: {
-                                enabled: false
-                            },
                             layout: {
                                 padding: {
                                     left: 5,

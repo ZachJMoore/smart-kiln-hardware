@@ -6,7 +6,7 @@ const getTemperature = (temperature, isFahrenheit)=>{
         t = (temperature - 32) * (5 / 9)
     }
 
-    t = parseInt(t.toFixed(2))
+    t = parseFloat(t.toFixed(2))
 
     return t
 }
