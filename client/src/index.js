@@ -16,6 +16,10 @@ setGlobal({
     current_temperature_datapoints: [],
     sidebarIsShown: false,
     firing_schedules: [],
+    firing_schedule_log_datapoints: [],
+    kilnState: {
+        is_firing: false
+    }
 })
 
 ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));

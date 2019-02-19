@@ -38,7 +38,7 @@ class Conduit{
 
         // Log datapoint interval
         this._addLogDatapoint = ()=>{
-            let datapoint = dataConstructors.logDatapoint(this.kilnLog.local_id, kiln.temperature)
+            let datapoint = dataConstructors.logDatapoint()
             requestQueue.addLogDatapoint(datapoint)
             fsStore.logData.addLogDatapoint(datapoint)
         }
@@ -120,8 +120,8 @@ class Conduit{
         })
 
         // Kiln
-        kiln.on("firingStarted", (scheduleId)=>{
-            this._startLog(scheduleId)
+        kiln.on("firingStarted", (schedule)=>{
+            this._startLog(schedule.id)
         })
 
         kiln.on("firingStopped", ()=>{

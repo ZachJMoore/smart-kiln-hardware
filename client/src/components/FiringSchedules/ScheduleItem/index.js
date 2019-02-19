@@ -8,12 +8,38 @@ import {
     TableHead,
     TableRow,
     TableCell,
-    TableBody
+    TableBody,
+    Button
 } from "@material-ui/core"
 
 class ScheduleItem extends Component{
 
+    state = {
+        isLoading: false
+    }
+
+    startSchedule = () => {
+        this.setState({isLoading: true})
+        this.global.socket.emit("start-firing-schedule", this.props.schedule.id, (error)=>{
+            if (error){
+                alert(new Error(error))
+                this.setState({isLoading: false})
+            }
+        })
+    }
+
     render(){
+
+        if (this.state.isLoading){
+
+            return (
+                <div className={styles.loadingContainer}>
+                    <div className="loading"></div>
+                </div>
+            )
+
+        }
+        
         return (
             <>
                 <div className={styles.headerContainer}>
@@ -42,6 +68,9 @@ class ScheduleItem extends Component{
                             ))}
                         </TableBody>
                     </Table>
+                </div>
+                <div className={styles.controlsContainer}>
+                    <Button onClick={this.startSchedule} variant="contained" color="primary" disabled={this.global.kilnState.is_firing}>Fire Schedule</Button>
                 </div>
             </>
         )

@@ -169,7 +169,7 @@ class Kiln {
                 let scheduleId = this.currentSchedule.id || null
 
                 this.firingStartedFunctions.forEach(fn=>{
-                    fn(scheduleId)
+                    fn(firing_schedule)
                 })
 
             }
@@ -198,8 +198,19 @@ class Kiln {
                 clearInterval(this.increaseInterval)
                 clearInterval(this.firingScheduleCheckInterval)
                 clearTimeout(this.holdTimeout)
-                this.controller.stopPID()
                 this.stopFiring()
+            }
+
+            let completeFiring = () => {
+                clearInterval(this.increaseInterval)
+                clearInterval(this.firingScheduleCheckInterval)
+                clearTimeout(this.holdTimeout)
+                this.isFiring = false
+                this.controller.stopPID()
+
+                this.firingCompletedFunctions.forEach(fn=>{
+                    fn()
+                })
             }
 
             let ramps = schedule.firing_schedule_ramps
@@ -259,7 +270,7 @@ class Kiln {
                             this.holdTimeout = setTimeout(()=>{
 
                                 if (this.fireScheduleInstance.next().done){
-                                    endFiring()
+                                    completeFiring()
                                     this.debug && console.log("Firing Completed")
                                }
 
@@ -282,7 +293,7 @@ class Kiln {
                             this.holdTimeout = setTimeout(()=>{
 
                                 if (this.fireScheduleInstance.next().done){
-                                    endFiring()
+                                    completeFiring()
                                     this.debug && console.log("Firing Completed")
                                }
 

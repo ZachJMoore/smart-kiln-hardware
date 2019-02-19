@@ -1,11 +1,12 @@
 const fsStore = require("../../../fsStore/index.js")
+const kiln = require("../../../kiln")
 
 module.exports = (temperature)=>{
 
-    let local_id = fsStore.kilnLog.getLocalId()
     return {
-        local_id: local_id,
-        temperature: temperature,
+        local_id: fsStore.kilnLog.getLocalId(),
+        temperature: kiln.temperature,
         created_at: Date.now()
     }
+    
 }

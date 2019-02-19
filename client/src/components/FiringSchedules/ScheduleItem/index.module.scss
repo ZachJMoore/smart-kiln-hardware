@@ -26,3 +26,17 @@
 .rampTableContainer{
     margin: 15px;
 }
+
+.controlsContainer{
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loadingContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - var(--navbar-height));
+}

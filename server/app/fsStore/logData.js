@@ -132,6 +132,15 @@ class LogData extends Base{
                 atomic: true
             })
         }
+        this.getLogDatapointsById = (id)=>{
+            let rt = []
+            let data = this.directory.read("log_datapoints.json", "json")
+            if (!data || data.length === 0) return rt
+            else {
+                rt = data.filter((datapoint)=>datapoint.local_id === id)
+            }
+            return rt
+        }
         this.getAllLogDatapoints = ()=>{
             let data = this.directory.read("log_datapoints.json", "json")
             if (!data) return []

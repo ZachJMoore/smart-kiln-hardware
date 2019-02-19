@@ -7,9 +7,8 @@ const convertSchedule = (scheduleRamps, props) => {
 
     if (props.start){
         start = props.start
-        start.y = getTemperature(start.y, props.isFahrenheit)
     } else {
-        start = {x: Date.now(), y: getTemperature(50, props.isFahrenheit)}
+        start = {x: Date.now(), y: 50}
     }
 
     let date = start.x
@@ -38,8 +37,6 @@ const convertSchedule = (scheduleRamps, props) => {
         x = date + millisecondsNeeded
         date += millisecondsNeeded
 
-        y = getTemperature(y, props.isFahrenheit)
-
         datapoints.push({ x: x, y: y })
 
         if (ramp.hold_minutes > 0){
@@ -49,8 +46,15 @@ const convertSchedule = (scheduleRamps, props) => {
             datapoints.push({x: x, y: y})
         }
     })
-    
-    return [start, ...datapoints]
+
+    return [start, ...datapoints].map(datapoint=>{
+        return {
+            x: datapoint.x,
+            y: getTemperature(datapoint.y, props.isFahrenheit)
+        }
+    })
+
+
 
 }
 

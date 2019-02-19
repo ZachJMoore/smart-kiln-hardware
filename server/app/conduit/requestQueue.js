@@ -70,10 +70,10 @@ class RequestQueue{
         this.addEndLog = (endLog) => {
             if (remoteIo.isAuthenticated){
                 remoteIo.socket.emit("add-end-log", endLog, (error)=>{
-                    if (error) this._queueStartLog(endLog)
+                    if (error) this._queueEndLog(endLog)
                 })
             } else {
-                this._queueStartLog(endLog)
+                this._queueEndLog(endLog)
             }
         }
 

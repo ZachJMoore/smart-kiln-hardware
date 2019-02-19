@@ -4,7 +4,7 @@ import ScheduleLink from "./ScheduleLink"
 
 class FiringSchedules extends Component{
     componentDidMount(){
-        this.global.socket.emit("get-firing_schedules")
+        this.global.socket.emit("get-firing-schedules")
     }
 
     render(){

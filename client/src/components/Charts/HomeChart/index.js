@@ -4,13 +4,11 @@ import Button from "@material-ui/core/Button"
 import styles from "./index.module.scss"
 import convertSchedule from "../../../lib/charting/convertSchedule"
 import getTemperature from "../../../lib/getTemperature";
-import splitDatapoints from "../../../lib/splitDatapoints";
+import splitDatapoints from "../../../lib/charting/splitDatapoints";
 
 class HomeChart extends Component {
 
     state = {
-        datapoints: [],
-        scheduleDatapoints: [],
         timeScale: 0
     }
 
@@ -57,19 +55,29 @@ class HomeChart extends Component {
     }
 
     getTimeScale = ()=>{
-        if (!this.props.datapoints || this.props.datapoints.length === 0) return []
+
+        if (this.global.kilnState.is_firing){
+            let datapoints = this.global.firing_schedule_log_datapoints
+            if (datapoints.length > 0){
+                return datapoints[datapoints.length -1].created_at + this.state.timeScale
+            } else return 0
+        } else if (!this.props.datapoints || this.props.datapoints.length === 0) return 0
         else return this.props.datapoints[this.props.datapoints.length -1].created_at - this.state.timeScale
     }
 
     unpackDatapoints = () => {
         let datapoints = null;
+        let rt = []
 
-        if (!this.props.datapoints || this.props.datapoints.length === 0) return []
-        else datapoints = this.props.datapoints
+        if (!this.props.datapoints && !this.global.firing_schedule_log_datapoints) return rt
+        else {
+            if (this.global.kilnState.is_firing && this.global.firing_schedule_log_datapoints) datapoints = this.global.firing_schedule_log_datapoints
+            else datapoints = this.props.datapoints
+        }
 
         datapoints = splitDatapoints(datapoints)
 
-        let rt = datapoints.map(datapoint => {
+        rt = datapoints.map(datapoint => {
             if (datapoint === null) return null
 
             let x = datapoint.created_at
@@ -79,14 +87,23 @@ class HomeChart extends Component {
             y = getTemperature(y, this.global.isFahrenheit)
             return { x: x, y: y }
         })
+
         return rt
     }
 
     unpackSchedule = ()=>{
-        return []
-        //TODO: add schedule conversion and context based on if a schedule is being fired
-        //TODO: Make sure that convertSchedule is passed a start object with the starting date of a firing schedule log and the starting temp
-        //TODO: hide all datapoints and start fresh datapoints in correlation to the schedule
+
+        let rt = []
+        if (!this.global.kilnState.is_firing || !this.global.currentSchedule || !this.global.kilnLog) return rt
+        rt = convertSchedule(this.global.currentSchedule.firing_schedule_ramps, {
+            start: {
+                y: this.global.kilnLog.starting_fahrenheit_temperature,
+                x: this.global.kilnLog.created_at
+            },
+            isFahrenheit: this.global.isFahrenheit
+        })
+
+        return rt
     }
 
     componentDidMount(){
@@ -98,6 +115,9 @@ class HomeChart extends Component {
     }
 
     render() {
+
+        // console.log("Datapoints: ", this.unpackDatapoints())
+        // console.log("Firing Schedule: ", this.unpackSchedule())
 
         return (
             <div className={styles["chart-container"]}>
@@ -116,7 +136,8 @@ class HomeChart extends Component {
                                 label: "Schedule",
                                 data: this.unpackSchedule(),
                                 pointRadius: 2,
-                                borderColor: "#5C5C5C"
+                                borderColor: "#2c555f",
+                                backgroundColor: "#5baec119"
                             }]
                         }}
                         options={{
@@ -137,7 +158,8 @@ class HomeChart extends Component {
                                 xAxes: [{
                                     type: 'time',
                                     time: {
-                                        min: this.getTimeScale()
+                                        max: this.global.kilnState.is_firing ? this.getTimeScale() : null,
+                                        min: this.global.kilnState.is_firing ? null : this.getTimeScale()
                                     },
                                     ticks: {
                                         fontColor: "#5C5C5C",
@@ -151,7 +173,8 @@ class HomeChart extends Component {
                             },
                             elements: {
                                 line: {
-                                    spanGaps: false
+                                    spanGaps: false,
+                                    tension: 0
                                 }
                             },
                             legend: {

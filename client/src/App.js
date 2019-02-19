@@ -1,6 +1,6 @@
 import React, { Component } from 'reactn';
 import './scss/App.scss';
-import { Route, Link } from "react-router-dom"
+import { Route, Link, withRouter } from "react-router-dom"
 import MenuIcon from "@material-ui/icons/Menu"
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
@@ -54,18 +54,50 @@ class App extends Component {
         console.log("connected")
     })
 
-    socket.on("current_temperature", (current_temperature)=>{this.setGlobal({current_temperature, temperatureText: getTemperatureText(current_temperature, this.global.isFahrenheit)})})
+    socket.on("current-temperature", (current_temperature)=>{this.setGlobal({current_temperature, temperatureText: getTemperatureText(current_temperature, this.global.isFahrenheit)})})
 
-    socket.on("current_temperature_datapoints", (current_temperature_datapoints)=>{this.setGlobal({current_temperature_datapoints})})
+    socket.on("current-temperature-datapoints", (current_temperature_datapoints)=>{this.setGlobal({current_temperature_datapoints})})
 
-    socket.on("firing_schedules", (firing_schedules)=>{this.setGlobal({firing_schedules})})
+    socket.on("firing-schedules", (firing_schedules)=>{this.setGlobal({firing_schedules})})
+
+    socket.on("firing-schedule-log-datapoints", (datapoints=>{
+      this.setGlobal({firing_schedule_log_datapoints: datapoints})
+    }))
+
+    socket.on("kiln-state", (kilnState)=>{
+      this.setGlobal({kilnState})
+    })
+
+    socket.on("firing-schedule-started", (schedule, kilnLog)=>{
+      this.setGlobal({
+        currentSchedule: schedule,
+        kilnLog: kilnLog
+      })
+      this.props.history.push("/")
+    })
+
+    socket.on("firing-schedule-ended", ()=>{
+      console.log("Firing schedule ended")
+      this.setGlobal({
+        currentSchedule: null,
+        kilnLog: null
+      })
+    })
+    socket.on("firing-schedule-completed", ()=>{
+      console.log("Firing schedule completed")
+      this.setGlobal({
+        currentSchedule: null,
+        kilnLog: null
+      })
+    })
 
   }
 
   render() {
+
     return (
       <div className="App">
-        <nav className="navbar">
+        <nav className="navbar" style={{background: this.global.kilnState.is_firing ? "#20CD99" : "#2196F3"}}>
           <IconButton onClick={this.toggleSidebar} className="sidebar-button"><MenuIcon/></IconButton>
           <div className="info">
             <div className="left">
@@ -131,4 +163,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
