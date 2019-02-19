@@ -54,15 +54,34 @@ class HomeChart extends Component {
         this.setState({timeScale})
     }
 
-    getTimeScale = ()=>{
+    getTimeScale = (minMax)=>{
+
+        let isMin = true
+
+        if (minMax === "max"){
+            isMin = false
+        }
+
 
         if (this.global.kilnState.is_firing){
             let datapoints = this.global.firing_schedule_log_datapoints
-            if (datapoints.length > 0){
-                return datapoints[datapoints.length -1].created_at + this.state.timeScale
+            if (datapoints && datapoints.length > 0){
+                if (isMin)
+                return datapoints[datapoints.length -1].created_at - (this.state.timeScale/2)
+                else return datapoints[datapoints.length -1].created_at + (this.state.timeScale/2)
+            } else if (this.global.kilnLog){
+                if (isMin)
+                return this.global.kilnLog.created_at - (this.state.timeScale/2)
+                else return this.global.kilnLog.created_at + (this.state.timeScale/2)
             } else return 0
-        } else if (!this.props.datapoints || this.props.datapoints.length === 0) return 0
-        else return this.props.datapoints[this.props.datapoints.length -1].created_at - this.state.timeScale
+        } else {
+            let datapoints = this.props.datapoints
+            if (datapoints && datapoints.length > 0){
+                if (isMin)
+                return datapoints[datapoints.length -1].created_at - this.state.timeScale
+                else return 0
+            } else return 0
+        }
     }
 
     unpackDatapoints = () => {
@@ -158,8 +177,8 @@ class HomeChart extends Component {
                                 xAxes: [{
                                     type: 'time',
                                     time: {
-                                        max: this.global.kilnState.is_firing ? this.getTimeScale() : null,
-                                        min: this.global.kilnState.is_firing ? null : this.getTimeScale()
+                                        min: this.getTimeScale("min"),
+                                        max: this.getTimeScale("max")
                                     },
                                     ticks: {
                                         fontColor: "#5C5C5C",
