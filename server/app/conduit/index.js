@@ -87,7 +87,7 @@ class Conduit{
 
         this._endLog = ()=>{
             requestQueue.addEndLog(this.kilnLog)
-            fsStore.logData.addEndLog()
+            fsStore.logData.addEndLog(this.kilnLog)
             this.kilnLog = null
             fsStore.kilnLog.setKilnLog({})
             this._stopLogDatapointInterval()
@@ -124,7 +124,10 @@ class Conduit{
             this._startLog(schedule.id)
         })
 
-        kiln.on("firingStopped", ()=>{
+        kiln.on("firingEnded", ()=>{
+            this._endLog()
+        })
+        kiln.on("firingCompleted", ()=>{
             this._endLog()
         })
 

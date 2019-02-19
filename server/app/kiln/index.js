@@ -179,10 +179,6 @@ class Kiln {
         this.stopFiring = ()=>{
             this.isFiring = false
             this.controller.stopPID()
-
-            this.firingEndedFunctions.forEach(fn=>{
-                fn()
-            })
         }
 
         this.fireSchedule = function* (schedule){
@@ -199,6 +195,10 @@ class Kiln {
                 clearInterval(this.firingScheduleCheckInterval)
                 clearTimeout(this.holdTimeout)
                 this.stopFiring()
+
+                this.firingEndedFunctions.forEach(fn=>{
+                    fn()
+                })
             }
 
             let completeFiring = () => {

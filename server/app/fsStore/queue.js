@@ -96,7 +96,7 @@ class Queue extends Base{
         this._trimLogs = (logs)=>{
             if (process.env.TRIM_QUEUE === "false") return logs
 
-            let ar = logs.splice()
+            let ar = logs.slice()
             let spliceCount = ar.length - this.logMaxCount
             let dTrim = ar.splice(0, spliceCount)
             dTrim.forEach(log=>{
