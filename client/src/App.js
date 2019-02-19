@@ -101,7 +101,7 @@ class App extends Component {
           <IconButton onClick={this.toggleSidebar} className="sidebar-button"><MenuIcon/></IconButton>
           <div className="info">
             <div className="left">
-              <span className="time">{this.global.currentTime}</span>
+              <span className="time">{this.global.currentTimeString}</span>
             </div>
             <div className="right">
               <Button onClick={this.toggleTemperatureDisplayType} className="temperature">{this.global.temperatureText}</Button>
