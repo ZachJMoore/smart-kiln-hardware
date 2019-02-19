@@ -156,7 +156,8 @@ class HomeChart extends Component {
                                 data: this.unpackSchedule(),
                                 pointRadius: 2,
                                 borderColor: "#2c555f",
-                                backgroundColor: "#5baec119"
+                                backgroundColor: "#5baec119",
+                                lineTension: 0
                             }]
                         }}
                         options={{
@@ -191,10 +192,6 @@ class HomeChart extends Component {
                                 duration: 300
                             },
                             elements: {
-                                line: {
-                                    spanGaps: false,
-                                    tension: 0
-                                }
                             },
                             legend: {
                                 display: false
