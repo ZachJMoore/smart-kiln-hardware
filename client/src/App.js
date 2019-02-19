@@ -130,12 +130,12 @@ class App extends Component {
                   <ListItemText primary="Schedules" />
                 </ListItemLink>
 
-                <ListItemLink onClick={this.toggleSidebar} to="/settings">
+                {/* <ListItemLink onClick={this.toggleSidebar} to="/settings">
                   <ListItemIcon>
                     <SettingsIcon />
                   </ListItemIcon>
                   <ListItemText primary="Settings" />
-                </ListItemLink>
+                </ListItemLink> */}
 
               </List>
             </div>
@@ -146,7 +146,7 @@ class App extends Component {
           <div className="content-scroll-container">
             <Route exact path="/" render={()=>(<Home/>)} />
             <Route exact path="/firing-schedules" render={()=>(<FiringSchedules />)} />
-            <Route exact path="/settings" render={()=>(<Settings />)} />
+            {/* <Route exact path="/settings" render={()=>(<Settings />)} /> */}
             {this.global.firing_schedules.map(
               (schedule, index)=>(
                 <Route 
