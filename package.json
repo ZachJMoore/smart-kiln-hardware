@@ -1,24 +1,29 @@
 {
-  "name": "",
-  "version": "2.0.0",
-  "description": "",
-  "main": "",
+  "name": "smart-kiln-standalone",
+  "version": "5.0.0",
+  "description": "Smart IoT kiln controller",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.3",
+    "fetch-cookie": "^0.7.2",
+    "fs-jetpack": "^2.2.0",
+    "node-fetch": "^2.3.0",
+    "nodemon": "^1.18.9",
+    "onoff": "^2.0.0",
+    "passeljs": "^2.3.14",
+    "pi-spi": "^1.0.2",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {},
   "scripts": {
-    "install:server": "cd server && npm install",
-    "install:client": "cd client && npm install",
-    "install:all": "npm install && npm run install:server && npm run install:server",
-    "start:server": "cd server && npm run start:nodemon",
-    "start:client": "cd client && npm start",
-    "build:client": "cd client && npm run build",
-    "build:server": "cd server && npm run build",
-    "compile": "node compile.js",
-    "compile:server": "npm run build:server && node compile.js",
-    "compile:client": "npm run build:client && node compile.js",
-    "build": "npm run build:client && npm run build:server && npm run compile"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "start:nodemon": "nodemon app.js --config nodemon.json",
+    "build": "node compile.js"
   },
   "author": "Zach Moore",
-  "license": "ISC",
-  "dependencies": {
-    "fs-jetpack": "^2.2.0"
-  }
+  "license": "GPL-3.0"
 }
