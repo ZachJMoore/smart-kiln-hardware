@@ -36,11 +36,28 @@ module.exports = class Relays{
 
     setRelays(value){
 
-        if (typeof value === "number"){
-            this.relays.forEach(relay => {
-                relay.writeSync(value)
-            })
+        if (this.relayType === "v1"){
+
+            if (typeof value === "number"){
+                this.relays.forEach(relay => {
+                    relay.writeSync(value)
+                })
+            }
+
+        }else if (this.relayType === "v2"){
+
+            if (typeof value === "number"){
+
+                if (value === 1) value = 0
+                else value = 1
+                
+                this.relays.forEach(relay => {
+                    relay.writeSync(value)
+                })
+            }
+
         }
+
     }
 
     checkRelays(){

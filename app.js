@@ -1,6 +1,6 @@
 require("dotenv").config()
 const passel = require("passeljs")
-const { exposedComponentFunctions } = passel
+const dispatcher = require("./app/dispatcher")
 const Kiln = require("./app/components/Kiln")
 const firingSchedule = require("./firingSchedule.json")
 
@@ -9,5 +9,3 @@ const firingSchedule = require("./firingSchedule.json")
 passel.use(Kiln)
 
 passel.mountComponents()
-
-exposedComponentFunctions.Kiln.startFiring(firingSchedule)

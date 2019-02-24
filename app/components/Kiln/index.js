@@ -18,9 +18,10 @@ module.exports = class Kiln extends Components.Base{
 
         this.state = {
             thermoSensor: {
+                hasValidReading: false,
+                hasValidReadingCount: 0,
                 average: 0,
-                nanCount: 0,
-                temperatures: []
+                sensors: []
             },
             thermoSensorError: null,
             isFiring: false,
@@ -134,23 +135,20 @@ module.exports = class Kiln extends Components.Base{
 
     startFiring(schedule){
 
-        if (!this.state.isFiring && schedule){
+        if (this.state.isFiring) return new Error("kiln is already firing")
+        if (!schedule) return new Error("no schedule was provided")
 
+        this.setState({
+            isFiring: true,
+            firingLifeCycle: "started",
+            firingError: null,
+            scheduleId: schedule.id,
+            schedule: schedule
+        })
+        this._fire_schedule_instance = this._fire_schedule()
+        this._fire_schedule_instance.next()
 
-            this.setState({
-                isFiring: true,
-                firingLifeCycle: "started",
-                firingError: null,
-                scheduleId: schedule.id,
-                schedule: schedule
-            })
-            this._fire_schedule_instance = this._fire_schedule()
-            this._fire_schedule_instance.next()
-
-        } else {
-            if (!schedule) return new Error("No schedule was provided")
-            if (!this.state.isFiring) return new Error("Kiln is already firing")
-        }
+        return (true)
     }
 
     errorFiring(error){
@@ -174,6 +172,8 @@ module.exports = class Kiln extends Components.Base{
             scheduleId: null,
             schedule: null
         })
+
+        return (true)
     }
 
     finishFiring(){
@@ -207,7 +207,10 @@ module.exports = class Kiln extends Components.Base{
         //Check state to see if we were firing before last shutdown
         if (this.state.isFiring){
             this.setState({
-                isFiring: false
+                isFiring: false,
+                rampIndex: null,
+                scheduleId: null,
+                schedule: null
             })
 
             // TODO: Add error handling for erroneous shutdowns
@@ -246,9 +249,5 @@ module.exports = class Kiln extends Components.Base{
                     })
                 })
         }, 5*1000)
-
-        setTimeout(()=>{
-
-        }, 1000)
     }
 }

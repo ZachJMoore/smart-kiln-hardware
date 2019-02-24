@@ -12,7 +12,7 @@ module.exports = class ThermoSensor{
 
             this.sensors = [
                 {
-                    readTempC: ()=>{
+                    readTempC: async ()=>{
                         if ((Math.random()*10).toFixed(0) % 2){
                             return (26+1)
                         } else {
@@ -36,55 +36,52 @@ module.exports = class ThermoSensor{
 
     }
 
-    readCelsius(){
-        let hasValidReading = false
-        let hasValidReadingCount = 0
-        let average = 0
-        let sensors = []
-        this.sensors.forEach(sensor=>{
-            let temperature = sensor.readTempC(value=>value)
-            if (!isNaN(temperature)){
-                hasValidReading = true
-                hasValidReadingCount++
-                average += temperature
-                sensors.push({
-                    hasValidReading: true,
-                    temperature
-                })
-            } else {
-                sensors.push({
-                    hasValidReading: false,
-                    temperature: null
-                })
-            }
-        })
-        if (!hasValidReading) return new Error("No valid readings from thermocouple(s)")
-        else return {
-            hasValidReading,
-            hasValidReadingCount,
-            average: average / hasValidReadingCount,
-            sensors
-        }
-    }
-
-    readFahrenheit(){
-        let status = this.readCelsius()
-        if (helpers.isError(status)) return status
-        else {
-            status.average = helpers.celsiusToFahrenheit(status.average),
-            status.temperatures = status.sensors.map(object=>{
-                object.temperature = helpers.celsiusToFahrenheit(object.temperature)
-                return object
-            })
-            return status
-        }
-    }
-
     async readCelsiusAsync(){
-        return this.readCelsius()
+        return new Promise((resolve, reject)=>{
+            Promise.all(
+              this.sensors.map((sensor)=>{
+                return sensor.readTempC()
+              })
+            ).then((temperatures)=>{
+                let hasValidReading = false
+                let hasValidReadingCount = 0
+                let average = 0
+                let sensors = []
+                temperatures.map(temperature=>{
+                  if (!isNaN(temperature)){
+                    hasValidReading = true
+                    hasValidReadingCount++
+                    average += temperature
+                    sensors.push({
+                        hasValidReading: true,
+                        temperature
+                    })
+                  } else {
+                      sensors.push({
+                          hasValidReading: false,
+                          temperature: null
+                      })
+                  }
+                })
+                if (!hasValidReading) return reject(new Error("No valid readings from thermocouple(s)"))
+                else return resolve({
+                    hasValidReading,
+                    hasValidReadingCount,
+                    average: average / hasValidReadingCount,
+                    sensors
+                })
+            })
+
+          })
     }
 
     async readFahrenheitAsync(){
-        return this.readFahrenheit()
+        const status = await this.readCelsius().then(value=>value);
+        status.average = helpers.celsiusToFahrenheit(status.average),
+            status.sensors = status.sensors.map(object => {
+                object.temperature = helpers.celsiusToFahrenheit(object.temperature);
+                return object;
+            });
+        return Promise.resolve(status);
     }
 }

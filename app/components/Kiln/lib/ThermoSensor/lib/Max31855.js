@@ -19,12 +19,12 @@ function MAX31855(debug = false) {
 }
 
 /** Read 32 bits from the SPI bus. */
-MAX31855.prototype._read32 = function(callback) {
-  this._spi.read(4, function(error, bytes) {
-    if(error) {
+MAX31855.prototype._read32 = function (callback) {
+  this._spi.read(4, function (error, bytes) {
+    if (error) {
       console.error(error);
     } else {
-      if(!bytes || bytes.length != 4) {
+      if (!bytes || bytes.length != 4) {
         throw new Error('MAX31855: Did not read expected number of bytes from device!');
       } else {
         value = bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3];
@@ -36,14 +36,14 @@ MAX31855.prototype._read32 = function(callback) {
 };
 
 /** Returns the internal temperature value in degrees Celsius. */
-MAX31855.prototype.readInternalC = function(callback) {
-  if(callback) {
-    this._read32(function(value) {
+MAX31855.prototype.readInternalC = function (callback) {
+  if (callback) {
+    this._read32(function (value) {
       // Ignore bottom 4 bits of thermocouple data.
-  		value >>= 4;
-  		// Grab bottom 11 bits as internal temperature data.
-  		var internal = value & 0x7FF;
-  		if(value & 0x800) {
+      value >>= 4;
+      // Grab bottom 11 bits as internal temperature data.
+      var internal = value & 0x7FF;
+      if (value & 0x800) {
         // Negative value, take 2's compliment.
         internal = ~internal + 1;
       }
@@ -56,28 +56,26 @@ MAX31855.prototype.readInternalC = function(callback) {
 };
 
 /** Return the thermocouple temperature value. Value is returned in degrees celsius */
-MAX31855.prototype.readTempC = function(callback) {
-  if(callback) {
-    var self = this; // Scope closure
-    this._read32(function(value) {
-      // Check for error reading value.
-      if(value & 0x7) {
-        callback(NaN);
-      } else {
-        if(value & 0x80000000) { // Check if signed bit is set.
-          // Negative value, shift the bits and take 2's compliment.
-          value >>= 18;
-          value = ~value + 1;
-        } else { // Positive value, just shift the bits to get the value.
-          value >>= 18;
+MAX31855.prototype.readTempC = function () {
+    return new Promise((resolve ,reject)=>{
+      var self = this; // Scope closure
+      this._read32(function (value) {
+        // Check for error reading value.
+        if (value & 0x7) {
+          resolve(NaN);
+        } else {
+          if (value & 0x80000000) { // Check if signed bit is set.
+            // Negative value, shift the bits and take 2's compliment.
+            value >>= 18;
+            value = ~value + 1;
+          } else { // Positive value, just shift the bits to get the value.
+            value >>= 18;
+          }
+          // Scale by 0.25 degrees C per bit
+          resolve(value * 0.25);
         }
-        // Scale by 0.25 degrees C per bit
-        callback(value * 0.25);
-      }
-    });
-  } else {
-    console.log('MAX31855: Read request issued with no callback.');
-  }
+      });
+    })
 };
 
 module.exports = MAX31855;

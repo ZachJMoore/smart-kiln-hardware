@@ -20,5 +20,7 @@ jetpack.copy(ROOT_PATH+"/Dockerfile", ROOT_PATH+"/build/Dockerfile")
 jetpack.copy(ROOT_PATH+"/.dockerignore", ROOT_PATH+"/build/.dockerignore")
 jetpack.copy(ROOT_PATH+"/LICENSE.md", ROOT_PATH+"/build/LICENSE.md")
 jetpack.copy(ROOT_PATH+"/README.md", ROOT_PATH+"/build/README.md")
+jetpack.copy(ROOT_PATH+"/firingSchedule.json", ROOT_PATH+"/build/firingSchedule.json")
+jetpack.copy(ROOT_PATH+"/nodemon.json", ROOT_PATH+"/build/nodemon.json")
 
 console.log("build complete")

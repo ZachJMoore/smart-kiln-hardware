@@ -1,5 +1,5 @@
 {
-  "name": "smart-kiln-standalone",
+  "name": "smart-kiln-hardware",
   "version": "5.0.0",
   "description": "Smart IoT kiln controller",
   "main": "server.js",
@@ -19,7 +19,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:tc": "node app/tests/tc.js",
+    "test:relays": "node app/tests/relays.js",
     "start": "node app.js",
     "start:nodemon": "nodemon app.js --config nodemon.json",
     "build": "node compile.js"
