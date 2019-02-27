@@ -15,6 +15,11 @@ module.exports = function* (){
 
     for(let e = 0; e < ramps.length; e++){
 
+        this.setState({
+            rampIndex: e,
+            isHolding: false,
+        })
+
         let tick = 5;
 
         let ramp = ramps[e]
@@ -70,6 +75,9 @@ module.exports = function* (){
                     this.PID.setTarget(ramp.target)
 
                     if (isDebug) console.log(`entering hold for ${ramp.hold*60} minutes`)
+                    this.setState({
+                        isHolding: true
+                    })
                     this._firing_schedule_hold_timeout = setTimeout(()=>{
 
                         if (this._fire_schedule_instance.next().done){
@@ -92,6 +100,9 @@ module.exports = function* (){
                     this.PID.setTarget(ramp.target)
 
                     if (isDebug) console.log(`entering hold for ${ramp.hold*60} minutes`)
+                    this.setState({
+                        isHolding: true
+                    })
                     this._firing_schedule_hold_timeout = setTimeout(()=>{
 
                         if (this._fire_schedule_instance.next().done){

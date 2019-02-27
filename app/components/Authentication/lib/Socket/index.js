@@ -1,7 +1,7 @@
 const { Components } = require("passeljs")
 const io = require("socket.io-client")
 
-module.exports = class IO extends Components.Base{
+module.exports = class Socket extends Components.Base{
     constructor(props){
         super(props)
 
@@ -26,10 +26,6 @@ module.exports = class IO extends Components.Base{
 
             }
         })
-    }
-
-
-    componentDidMount(){
 
         this.socket = io(process.env.DB_HOST + "/kiln")
 
@@ -66,6 +62,14 @@ module.exports = class IO extends Components.Base{
                 this.socket.connect()
             }, (process.env.SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS || 10) * 1000);
         })
+
+        this.setGlobal({
+            socket: this.socket
+        })
+    }
+
+
+    componentDidMount(){
 
         this.socket.on("account-data", (data)=>{
             this.props.updateAccountData(data)

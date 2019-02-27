@@ -17,3 +17,7 @@ module.exports.cancelFiringAsync = async ()=>{
     if (helpers.isError(rt)) throw rt
     else return rt
 }
+
+module.exports.logExposedFunctions = ()=>{
+    console.log(exposedComponentFunctions)
+}

@@ -1,5 +1,5 @@
 const { Components } = require("passeljs")
-const IO = require("./lib/IO")
+const Socket = require("./lib/Socket")
 const HTTP = require("./lib/HTTP")
 
 module.exports = class Authentication extends Components.Base{
@@ -35,13 +35,19 @@ module.exports = class Authentication extends Components.Base{
                         {
                             key: "account",
                             emit: true
+                        },
+                        {
+                            key: "httpIsAuthenticated",
+                            emit: true
+                        },
+                        {
+                            key: "socketIsAuthenticated",
+                            emit: true
                         }
                     ]
                 }
             }
         }
-
-        this.socket = null
         this.updateSocketAuthState = this.updateSocketAuthState.bind(this)
 
         this.updateHTTPAuthState = this.updateHTTPAuthState.bind(this)
@@ -77,19 +83,18 @@ module.exports = class Authentication extends Components.Base{
     }
 
     componentWillMount(){
-    }
-
-    componentDidMount(){
-
-        this.IO = this.use(IO, {
+        this.use(Socket, {
             updateAuthState: this.updateSocketAuthState,
             updateAccountData: this.updateAccountData
         })
 
-        this.http = this.use(HTTP, {
+        this.use(HTTP, {
             updateAuthState: this.updateHTTPAuthState,
             updateAccountData: this.updateAccountData,
             updateCredentials: this.updateCredentials
         })
+    }
+
+    componentDidMount(){
     }
 }

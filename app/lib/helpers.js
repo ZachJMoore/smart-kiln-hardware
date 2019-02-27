@@ -27,3 +27,37 @@ module.exports.createObjectPath = (path, obj) => {
         return prev[curr] = {}
     }, obj)
 }
+
+module.exports.convertNumberToLetters = (number)=>{
+    const l = [ "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" ]
+    const ns = number.toString().split("")
+    let lts = ""
+
+    ns.forEach((string=>{
+        lts += l[parseInt(string)]
+    }))
+
+    return lts
+}
+
+module.exports.convertLettersToNumber = (letters)=>{
+    const l = {
+        a: 0,
+        b: 1,
+        c: 2,
+        d: 3,
+        e: 4,
+        f: 5,
+        g: 6,
+        h: 7,
+        i: 8,
+        j: 9
+    }
+    let nb = []
+
+    letters.split("").forEach((letter)=>{
+        nb.push(l[letter])
+    })
+
+    return parseInt(nb.join(""))
+}

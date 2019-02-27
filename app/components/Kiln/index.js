@@ -28,6 +28,7 @@ module.exports = class Kiln extends Components.Base{
             firingLifeCycle: null, //started, finished, canceled, errored
             firingError: null,
             rampIndex: null,
+            isHolding: false,
             scheduleId: null,
             schedule: null
         }
@@ -53,6 +54,9 @@ module.exports = class Kiln extends Components.Base{
                         },
                         {
                             key: "rampIndex"
+                        },
+                        {
+                            key: "isHolding"
                         },
                         {
                             key: "scheduleId"
@@ -85,6 +89,10 @@ module.exports = class Kiln extends Components.Base{
                         },
                         {
                             key: "rampIndex",
+                            emit: false
+                        },
+                        {
+                            key: "isHolding",
                             emit: false
                         },
                         {
@@ -139,11 +147,11 @@ module.exports = class Kiln extends Components.Base{
         if (!schedule) return new Error("no schedule was provided")
 
         this.setState({
-            isFiring: true,
             firingLifeCycle: "started",
             firingError: null,
             scheduleId: schedule.id,
-            schedule: schedule
+            schedule: schedule,
+            isFiring: true
         })
         this._fire_schedule_instance = this._fire_schedule()
         this._fire_schedule_instance.next()
@@ -154,23 +162,25 @@ module.exports = class Kiln extends Components.Base{
     errorFiring(error){
         if (isDebug) console.log(error)
         this.setState({
-            isFiring: false,
             firingLifeCycle: "error",
             firingError: error,
             rampIndex: null,
             scheduleId: null,
-            schedule: null
+            schedule: null,
+            isHolding: false,
+            isFiring: false
         })
     }
 
     cancelFiring(){
         if (isDebug) console.log("Fire schedule canceled")
         this.setState({
-            isFiring: false,
             firingLifeCycle: "canceled",
             rampIndex: null,
             scheduleId: null,
-            schedule: null
+            schedule: null,
+            isHolding: false,
+            isFiring: false
         })
 
         return (true)
@@ -179,48 +189,16 @@ module.exports = class Kiln extends Components.Base{
     finishFiring(){
         if (isDebug) console.log("Fire schedule finished")
         this.setState({
-            isFiring: false,
             firingLifeCycle: "finished",
             rampIndex: null,
             scheduleId: null,
-            schedule: null
+            schedule: null,
+            isHolding: false,
+            isFiring: false
         })
     }
 
     componentWillMount(){
-
-        this.stateChanged.on("isFiring", (isFiring)=>{
-
-            if (!isFiring){
-                if (isDebug) console.log("clearing fire schedule intervals and removing instance")
-                this.fireScheduleInstance = null
-                this.clearFireScheduleIntervals()
-            }
-
-            this.ensureFsState({
-                isFiring: isFiring
-            })
-
-        })
-
-
-        //Check state to see if we were firing before last shutdown
-        if (this.state.isFiring){
-            this.setState({
-                isFiring: false,
-                rampIndex: null,
-                scheduleId: null,
-                schedule: null
-            })
-
-            // TODO: Add error handling for erroneous shutdowns
-        }
-
-
-        this.PID = this.use(PID, {
-            setRelays: this.setRelays,
-            checkRelays: this.checkRelays
-        })
 
         this.thermoSensor.readFahrenheitAsync()
             .then((status)=>{
@@ -233,6 +211,36 @@ module.exports = class Kiln extends Components.Base{
                     thermoSensorError: error
                 })
             })
+
+        this.stateChanged.on("isFiring", (isFiring)=>{
+
+            if (!isFiring){
+                if (isDebug) console.log("clearing fire schedule intervals and removing instance")
+                this.fireScheduleInstance = null
+                this.clearFireScheduleIntervals()
+            }
+
+            this.ensureFsState()
+
+        })
+
+        this.PID = this.use(PID, {
+            setRelays: this.setRelays,
+            checkRelays: this.checkRelays
+        })
+
+
+        //Check state to see if we were firing before last shutdown
+        if (this.state.isFiring){
+            this.setState({
+                rampIndex: null,
+                scheduleId: null,
+                schedule: null,
+                isFiring: false
+            })
+
+            // TODO: Add error handling for erroneous shutdowns
+        }
     }
 
     componentDidMount(){

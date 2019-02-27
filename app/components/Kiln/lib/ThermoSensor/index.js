@@ -12,12 +12,14 @@ module.exports = class ThermoSensor{
 
             this.sensors = [
                 {
-                    readTempC: async ()=>{
-                        if ((Math.random()*10).toFixed(0) % 2){
-                            return (26+1)
-                        } else {
-                            return (26+2)
-                        }
+                    readTempC: ()=>{
+                        return new Promise((resolve, reject)=>{
+                            if ((Math.random()*10).toFixed(0) % 2){
+                                resolve(26+1)
+                            } else {
+                                resolve(26+2)
+                            }
+                        })
                     }
                 }
             ]
@@ -76,7 +78,7 @@ module.exports = class ThermoSensor{
     }
 
     async readFahrenheitAsync(){
-        const status = await this.readCelsius().then(value=>value);
+        const status = await this.readCelsiusAsync().then(value=>value);
         status.average = helpers.celsiusToFahrenheit(status.average),
             status.sensors = status.sensors.map(object => {
                 object.temperature = helpers.celsiusToFahrenheit(object.temperature);

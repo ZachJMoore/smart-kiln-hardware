@@ -1594,10 +1594,10 @@ pascalcase@^0.1.1:
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
 
-passeljs@^2.3.14:
-  version "2.3.14"
-  resolved "https://registry.yarnpkg.com/passeljs/-/passeljs-2.3.14.tgz#45b82bdb7040b6feb4399a93d93c81371730be41"
-  integrity sha512-X2YnrYIKnC+zhioJY0Z1x5YjO64wtFpgXXQxXuO1y3x4pejb+lXC3OrW+SQyiCdMeqq8pdvmCZaEAszRgQDGGQ==
+passeljs@^2.4.26:
+  version "2.4.26"
+  resolved "https://registry.yarnpkg.com/passeljs/-/passeljs-2.4.26.tgz#c2f8db61aa475c1235c2d882fe2016b23f6c25e9"
+  integrity sha512-PJvuDsAQFntY1A+cxl/YNnhcm5ZT0ShKlp+9xuiME8TpBDKwj2Jimu0bvr+IMCpglzsclSZ95cVJsHRZxmSlgw==
   dependencies:
     fs-jetpack "^2.2.2"
     lodash "^4.17.11"

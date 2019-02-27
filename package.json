@@ -12,7 +12,7 @@
     "node-fetch": "^2.3.0",
     "nodemon": "^1.18.9",
     "onoff": "^2.0.0",
-    "passeljs": "^2.3.14",
+    "passeljs": "^2.4.26",
     "pi-spi": "^1.0.2",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0"
