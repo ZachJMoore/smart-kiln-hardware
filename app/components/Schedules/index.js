@@ -1,4 +1,5 @@
 const { Components } = require("passeljs")
+const _ = require("lodash")
 
 module.exports = class Schedules extends Components.Base{
     constructor(props){
@@ -42,9 +43,7 @@ module.exports = class Schedules extends Components.Base{
     }
 
     getScheduleById(id){
-        let schArr = this.state.databaseSchedule.filter(sid=>sid===id)
-        if (schArr.length === 0) return null
-        else return schArr[0]
+        return _.find(this.state.databaseSchedules, {id: id})
     }
 
     componentDidMount(){

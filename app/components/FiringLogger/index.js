@@ -76,6 +76,43 @@ module.exports = class FiringLogger extends Components.Base{
         }
     }
 
+    uploadDatapoint(){
+        let datapoint = this.getDatapoint()
+        this.global.socket.emit("add-log-datapoint", datapoint, (error)=>{
+            if (error) console.log(error)
+        })
+    }
+
+    addDatapoint(){
+        let datapoint = this.getDatapoint()
+        this.setState((state)=>{
+            state.datapoints.push(datapoint)
+            return state
+        })
+    }
+
+    trimKilnLogs(logs, isBackup = false){
+
+        // TODO: Make sure we remove start and end logs together when trimming
+
+        let limit = null
+
+        if (isBackup) {
+            limit = process.env.KILN_LOG_BACKUP_LIMIT_COUNT
+            limit = parseInt(limit)
+            if (isNaN(limit)) limit = 30
+        } else { 
+            limit = process.env.KILN_LOG_LIMIT_COUNT
+            limit = parseInt(limit)
+            if (isNaN(limit)) limit = 60
+        }
+
+        if (logs.length > limit){
+            let sliceCount = logs.length - limit
+            logs.splice(0, sliceCount)
+        }
+    }
+
     componentWillMount(){
 
         this.globalChanged.on("Kiln.isFiring", (isFiring)=>{
@@ -97,19 +134,13 @@ module.exports = class FiringLogger extends Components.Base{
                 })
                 this.ensureFsState()
                 this.kiln_log_datapoint_interval = setInterval(()=>{
-
-                    let datapoint = this.getDatapoint()
-                    this.global.socket.emit("add-log-datapoint", datapoint, (error)=>{
-                        if (error) console.log(error)
-                    })
-                    this.setState((state)=>{
-                        state.datapoints.push(datapoint)
-                        return state
-                    })
-    
+                    this.uploadDatapoint()
+                    this.addDatapoint()
                 }, (process.env.KILN_LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS || 60) * 1000)
             } else {
                 clearInterval(this.kiln_log_datapoint_interval)
+                this.addDatapoint()
+                this.uploadDatapoint()
                 this.setState({
                     kilnLog:{
                         local_id: this.state.kilnLog.local_id,
@@ -129,8 +160,7 @@ module.exports = class FiringLogger extends Components.Base{
             this.setState((state)=>{
 
                 state.kilnLogs.push(kilnLog)
-                //TODO: trim logs
-                // this.trimKilnLogs(state.kilnLogs)
+                this.trimKilnLogs(state.kilnLogs)
 
                 let addedToBackup = false
                 if (!this.global.Authentication.socketIsAuthenticated){
@@ -153,8 +183,7 @@ module.exports = class FiringLogger extends Components.Base{
                 }
 
                 if (addedToBackup){
-                    //TODO: trim logs
-                    // this.trimKilnLogs(state.backupKilnLogs, true)
+                    this.trimKilnLogs(state.backupKilnLogs, true)
                 }
 
                 return state

@@ -64,40 +64,54 @@ module.exports = class DatapointLogger extends Components.Base{
     }
 
     trackDatapoints(){
-        let shouldEnsureFsState = false
-        this.setState((state)=>{
-            let datapoint =  this.getDatapoint()
+        let datapoint = this.getDatapoint()
 
-            state.datapoints.push(datapoint)
-            this.trimDatapoints(state.datapoints)
+        let datapoints = [...this.state.datapoints, datapoint]
+        this.trimDatapoints(datapoints)
 
-            let addedToBackup = false
-            if (!this.global.Authentication.socketIsAuthenticated){
-                state.backupDatapoints.push(datapoint)
-                addedToBackup = true
+        let backupDatapoints = [...this.state.backupDatapoints, datapoint]
+        this.trimDatapoints(backupDatapoints, true)
 
-            } else {
-                this.global.socket.emit("bulk-add-temperature-datapoints", [...state.backupDatapoints, datapoint], (error)=>{
+        if (!this.global.Authentication.socketIsAuthenticated){
+
+            // If we aren't authenticated: backup datapoints
+            this.setState({
+                datapoints,
+                backupDatapoints
+            })
+
+        } else {
+            this.global.socket.emit("bulk-add-temperature-datapoints", backupDatapoints, (error)=>{
+                if (error){
+                    throw new Error(error.message)
+                } else {
+                    backupDatapoints = []
+                }
+
+                this.setState({
+                    datapoints,
+                    backupDatapoints
+                })
+                if (!error) this.ensureFsState()
+            })
+        }
+    }
+
+    componentWillMount(){
+        this.globalChanged.on("Authentication.socketIsAuthenticated", (socketIsAuthenticated)=>{
+            if (socketIsAuthenticated){
+                this.global.socket.emit("bulk-add-temperature-datapoints", this.state.backupDatapoints, (error)=>{
                     if (error){
-                        console.log(error)
-                        state.backupDatapoints.push(datapoint)
-                        addedToBackup = true
+                        throw new Error(error.message)
                     } else {
-                        if (state.backupDatapoints.length > 0){
-                            shouldEnsureFsState = true
-                        }
-                        state.backupDatapoints = []
+                        this.setState({
+                            backupDatapoints: []
+                        })
+                        this.ensureFsState()
                     }
                 })
             }
-
-            if (addedToBackup){
-                this.trimDatapoints(state.backupDatapoints, true)
-            }
-
-            return state
         })
-        if (shouldEnsureFsState) this.ensureFsState()
     }
 
     componentDidMount(){

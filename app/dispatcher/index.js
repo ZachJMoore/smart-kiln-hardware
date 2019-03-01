@@ -18,6 +18,6 @@ module.exports.cancelFiringAsync = async ()=>{
     else return rt
 }
 
-module.exports.logExposedFunctions = ()=>{
-    console.log(exposedComponentFunctions)
+module.exports.getScheduleById = (id)=>{
+    return exposedComponentFunctions.Schedules.getScheduleById(id)
 }
