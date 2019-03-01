@@ -7,8 +7,10 @@ module.exports = class RealtimeData extends Components.Base{
 
     getRealtimeData(){
         return ({
-            current_temperature: this.global.Kiln.thermoSensor.average,
-            thermo_sensor_error: this.global.Kiln.thermoSensorError,
+            average_temperature: this.global.Kiln.thermoSensor.average,
+            has_valid_thermocouple_reading: this.global.Kiln.thermoSensor.hasValidReading,
+            has_valid_thermocouple_reading_count: this.global.Kiln.thermoSensor.hasValidReadingCount,
+            thermocouple_sensor_error: this.global.Kiln.thermoSensorError ? this.global.Kiln.thermoSensorError.message : null,
             is_firing: this.global.Kiln.isFiring,
             firing_life_cycle: this.global.Kiln.firingLifeCycle,
             firing_error: this.global.Kiln.firingError,

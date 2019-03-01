@@ -78,12 +78,13 @@ module.exports = class ThermoSensor{
     }
 
     async readFahrenheitAsync(){
-        const status = await this.readCelsiusAsync().then(value=>value);
-        status.average = helpers.celsiusToFahrenheit(status.average),
+        return this.readCelsiusAsync().then((status)=>{
+            status.average = helpers.celsiusToFahrenheit(status.average),
             status.sensors = status.sensors.map(object => {
                 object.temperature = helpers.celsiusToFahrenheit(object.temperature);
                 return object;
             });
-        return Promise.resolve(status);
+            return Promise.resolve(status)
+        })
     }
 }

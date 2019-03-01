@@ -248,11 +248,18 @@ module.exports = class Kiln extends Components.Base{
             this.thermoSensor.readFahrenheitAsync()
                 .then((status)=>{
                     this.setState({
-                        thermoSensor: status
+                        thermoSensor: status,
+                        thermoSensorError: null
                     })
                 })
                 .catch((error)=>{
                     this.setState({
+                        thermoSensor: {
+                            hasValidReading: false,
+                            hasValidReadingCount: 0,
+                            average: 0,
+                            sensors: []
+                        },
                         thermoSensorError: error
                     })
                 })
