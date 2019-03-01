@@ -8,7 +8,7 @@ module.exports = class CommandRunner extends Components.Base{
         super(props)
 
         this.state = {
-            completedCommands: []
+            completedCommands: [],
         }
 
         this.options = {
