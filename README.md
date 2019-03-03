@@ -39,7 +39,7 @@ The thermocouple are screwed directly to the amp. Neutral/ground coming back fro
 
 https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312
 
-Dependencies: node, SPI, ZeroConf, systemd-networkd helper tools, systemd-networkd setup
+Dependencies: node, SPI, ZeroConf, systemd-networkd helper tools, systemd-networkd setup, forever && forever-service
 
 ##### Node for PiZW:
 ```
@@ -68,10 +68,17 @@ or in /boot/config.txt append the following line:
 
 ##### systemd-networkd helper tools
 ```
-    sudo apt install rng-tools
+    $ sudo apt install rng-tools
 ```
 
 ##### systemd-networkd setup
 ```
-    sudo yarn setup
+    $ sudo yarn setup
+```
+
+
+##### forever && forever-service
+```
+    $ npm install -g forever
+    & npm install -g forever-service
 ```

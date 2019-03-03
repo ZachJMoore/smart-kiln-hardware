@@ -151,6 +151,9 @@ const setupSDND = async (props)=>{
 
     isDebug && console.log("Setting up 'systemd-networkd' and writing appropriate files and permissions.")
     isDebug && console.log("Enable persistent journaling, useful for troubleshooting.")
+
+    // TODO: Catch all errors an decide which ones to exit on.
+    // TODO: Check whether setup has been ran before
     return exec("sudo mkdir -p /var/log/journal")
     .then(()=>{
         return exec("sudo systemd-tmpfiles --create --prefix /var/log/journal")
@@ -168,6 +171,13 @@ const setupSDND = async (props)=>{
     })
     .then(()=>{
         return exec("sudo mv /etc/network/interfaces /etc/network/interfaces~")
+        .then((data)=>{
+            return Promise.resolve(data)
+        })
+        .catch((error)=>{
+            // assume that /etc/network/interfaces doesn't exist and that we can safely ignore it.
+            return Promise.resolve()
+        })
     })
     .then(()=>{
         return exec("sudo sed -i '1i resolvconf=NO' /etc/resolvconf.conf")

@@ -22,5 +22,6 @@ jetpack.copy(ROOT_PATH+"/LICENSE.md", ROOT_PATH+"/build/LICENSE.md")
 jetpack.copy(ROOT_PATH+"/README.md", ROOT_PATH+"/build/README.md")
 jetpack.copy(ROOT_PATH+"/firingSchedule.json", ROOT_PATH+"/build/firingSchedule.json")
 jetpack.copy(ROOT_PATH+"/nodemon.json", ROOT_PATH+"/build/nodemon.json")
+jetpack.copy(ROOT_PATH+"/setup.js", ROOT_PATH+"/build/setup.js")
 
 console.log("build complete")

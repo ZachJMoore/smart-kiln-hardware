@@ -8,6 +8,7 @@ const DatapointLogger = require("./app/components/DatapointLogger")
 const CommandRunner = require("./app/components/CommandRunner")
 const ZeroConf = require("./app/components/ZeroConf")
 const RealtimeData = require("./app/components/RealtimeData")
+const WifiManager = require("./app/components/WifiManager")
 const io = require("socket.io")(8009)
 
 
@@ -25,6 +26,7 @@ passel.use(DatapointLogger)
 passel.use(CommandRunner)
 passel.use(ZeroConf)
 passel.use(RealtimeData)
+passel.use(WifiManager)
 
 passel.mountComponents()
 

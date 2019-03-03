@@ -8,21 +8,21 @@ const wifiConfig = {
         password: (process.env.WIFI_MANAGER_WIFI_PASSWORD || "smartkiln"),
     },
     ap: {
-        countryCode: (process.env.WIFI_MANAGER_WIFI_COUNTRY_CODE || "US"),
-        ssid: (process.env.WIFI_MANAGER_WIFI_SSID || "Smart-Kiln_Setup"),
-        password: (process.env.WIFI_MANAGER_WIFI_PASSWORD || "smartkiln"),
+        countryCode: (process.env.WIFI_MANAGER_AP_COUNTRY_CODE || "US"),
+        ssid: (process.env.WIFI_MANAGER_AP_SSID || "Smart-Kiln_Setup"),
+        password: (process.env.WIFI_MANAGER_AP_PASSWORD || "smartkiln"),
     },
 
 }
 
 Promise.all([
     wifiHelper.setupSDND(wifiConfig)
-]).then((successMessages)=>{
-    successMessages.forEach(console.log)
+]).then((success)=>{
+    console.log(success)
     console.log("Everything setup! Please read the above output and ensure there are no other necessary steps that need to be taken before running.")
 })
-.catch((errors)=>{
+.catch((error)=>{
     console.log("Something went wrong during setup")
-    errors.forEach(console.log)
+    console.log(error)
     console.log("Things will need to be investigated and possibly setup manually. Please read the above output to determine the cause of failure.")
 })

@@ -16,9 +16,9 @@ module.exports = class WifiManager extends Components.Base{
                 password: null,
             },
             ap: {
-                countryCode: (process.env.WIFI_MANAGER_WIFI_COUNTRY_CODE || "US"),
-                ssid: (process.env.WIFI_MANAGER_WIFI_SSID || "Smart-Kiln_Setup"),
-                password: (process.env.WIFI_MANAGER_WIFI_PASSWORD || "smartkiln"),
+                countryCode: (process.env.WIFI_MANAGER_AP_COUNTRY_CODE || "US"),
+                ssid: (process.env.WIFI_MANAGER_AP_SSID || "Smart-Kiln_Setup"),
+                password: (process.env.WIFI_MANAGER_AP_PASSWORD || "smartkiln"),
             },
         }
 
@@ -56,7 +56,7 @@ module.exports = class WifiManager extends Components.Base{
 
     startInterval(){
         clearInterval(this.interval)
-        intervalSeconds = process.env.WIFI_MANAGER_INTERVAL_SECONDS
+        let intervalSeconds = process.env.WIFI_MANAGER_INTERVAL_SECONDS
         intervalSeconds = parseInt(intervalSeconds)
         if (isNaN(intervalSeconds)) intervalSeconds = 20
 
@@ -157,7 +157,7 @@ module.exports = class WifiManager extends Components.Base{
                 let config = {...this.state.wifi}
                 Object.keys(this.state.wifi).forEach((key)=>{
 
-                    let value = object[key]
+                    let value = data[key]
 
                     if (key === "countryCode"){
                         if (value && typeof value === typeof "" && !value.includes(" ")){
@@ -178,6 +178,12 @@ module.exports = class WifiManager extends Components.Base{
                     wifi: config,
                     mode: "wlan",
                     defaultBootMode: "wlan"
+                })
+            })
+
+            socket.on("switch-to-ap", ()=>{
+                this.setState({
+                    mode: "ap"
                 })
             })
         })
