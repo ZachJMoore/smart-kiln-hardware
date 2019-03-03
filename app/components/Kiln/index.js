@@ -141,6 +141,7 @@ module.exports = class Kiln extends Components.Base{
         clearTimeout(this._firing_schedule_hold_timeout)
     }
 
+    // TODO: ensure that we ensure state on all firing related functions
     startFiring(schedule){
 
         if (this.state.isFiring) return new Error("kiln is already firing")

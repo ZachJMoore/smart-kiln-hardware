@@ -20,7 +20,10 @@ module.exports = class ServerCommandRunner extends Components.Base{
 
             if (command.type === "start_firing_schedule"){
                 let schedule = dispatcher.getScheduleById(command.properties.firing_schedule_id)
-                if (!schedule) return cb(new Error(`Schedule with id '${command.properties.firing_schedule_id}' was not found on the device`))
+                if (!schedule) {
+                    if (cb) cb(new Error(`Schedule with id '${command.properties.firing_schedule_id}' was not found on the device`))
+                    return
+                }
                 dispatcher.startFiringAsync(schedule).then(()=>{
                     if (cb) cb(null)
                     this.props.addCompletedCommand(command)

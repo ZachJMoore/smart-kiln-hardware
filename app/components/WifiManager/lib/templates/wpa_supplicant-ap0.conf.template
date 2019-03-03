@@ -1,0 +1,12 @@
+country=${ ap_country_code }
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+
+ap_scan=2
+network={
+    ssid="${ ap_ssid }"
+    mode=2
+    key_mgmt=WPA-PSK
+    psk="${ ap_password }"
+    frequency=2412
+}
