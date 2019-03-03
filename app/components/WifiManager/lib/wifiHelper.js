@@ -3,9 +3,13 @@ const jetpack = require("fs-jetpack")
 const util = require('util')
 const exec = util.promisify(require('child_process').exec);
 
-const isDebug = process.env.DEBUG === "true"
+const isValidPlatform = (process.platform === "linux" && process.arch === "arm")
+const useFakeData = (process.env.FAKE_DATA === "true")
+
+let isDebug = (process.env.DEBUG === "true")
 
 const _writeTemplate = async (templatePath, filePath, properties)=>{
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
     return jetpack.readAsync(__dirname + templatePath, "utf8")
             .then((data)=>{
                 if (data){
@@ -23,11 +27,50 @@ const _writeTemplate = async (templatePath, filePath, properties)=>{
             })
 }
 
+const getWifiNames = async ()=>{
+    return exec("sudo iwlist wlan0 scan | grep -e ESSID").then((object)=>{
+
+        // set names from terminal output
+        let names = object.stdout
+        names = names.split("\n")
+
+        // normalize names
+        let nn = names.map((name)=>{
+            return name.slice(name.indexOf("ESSID:") + 7, name.length-1)
+        }).filter((name)=>{
+            if (!name || name === "" || name.includes("\\x00\\x00")) return false
+            else return true
+        })
+
+        // return promise
+        return Promise.resolve(nn)
+    })
+}
+
+const getCurrentConnection = async ()=>{
+    return exec("iwgetid").then(object=>{
+
+        let lines = object.stdout.split("\n")
+        if (lines.length === 0) return Promise.resolve(null)
+        else {
+            let text = lines[0]
+            let nt = text.slice(text.indexOf("ESSID:") + 7, text.length-1)
+            return Promise.resolve(nt)
+        }
+    })
+    .catch(error=>{
+        return Promise.resolve(null)
+    })
+}
+
 const setAP = async (props)=>{
+
+    if (useFakeData) return Promise.resolve("access point credentials are set (fake data is on)")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
 
     let config = {
         ap_country_code: (props.countryCode && typeof props.countryCode === typeof "") ? props.countryCode : "US",
-        ap_ssid: (props.ssid && typeof props.ssid === typeof "") ? props.ssid : "Smart-Kiln-Setup-AP",
+        ap_ssid: (props.ssid && typeof props.ssid === typeof "") ? props.ssid : "Smart-Kiln_Setup",
         ap_password: (props.password && typeof props.password === typeof "") ? props.password : "smartkiln",
     }
     return _writeTemplate(
@@ -42,6 +85,9 @@ const setAP = async (props)=>{
 
 const setWifi = async (props)=>{
 
+    if (useFakeData) return Promise.resolve("wifi credentials set (fake data is on)")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     let config = {
         wifi_country_code: (props.countryCode && typeof props.countryCode === typeof "") ? props.countryCode : "US",
         wifi_ssid: (props.ssid && typeof props.ssid === typeof "") ? props.ssid : "smart-kiln-setup",
@@ -55,9 +101,13 @@ const setWifi = async (props)=>{
         isDebug && console.log("Set chmod 600 permissions for wpa_supplicant.")
         return exec("sudo chmod 600 /etc/wpa_supplicant/wpa_supplicant-wlan0.conf")
     })
+
 }
 
 const setDefaultBootMode = async (defaultMode = "wlan") => {
+
+    if (useFakeData) return Promise.resolve("default boot mode is set (fake data is on)")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
 
     if (defaultMode === "wlan"){
         return Promise.all([
@@ -74,14 +124,31 @@ const setDefaultBootMode = async (defaultMode = "wlan") => {
 }
 
 const switchToAP = ()=>{
+
+    if (useFakeData) return Promise.resolve("switched to access point (fake data is on)")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     return exec("sudo systemctl start wpa_supplicant@ap0.service")
 }
 
 const switchToWifi = ()=>{
+
+    if (useFakeData) return Promise.resolve("switched to wifi (fake data is on)")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     return exec("sudo systemctl start wpa_supplicant@wlan0.service")
 }
 
+const setDebug = (debug = false) => {
+    if (debug) isDebug = true
+    else isDebug = false
+}
+
 const setupSDND = async (props)=>{
+
+    if (useFakeData) return Promise.resolve("systemd-networkd' setup complete (fake data is on)")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     isDebug && console.log("Setting up 'systemd-networkd' and writing appropriate files and permissions.")
     isDebug && console.log("Enable persistent journaling, useful for troubleshooting.")
     return exec("sudo mkdir -p /var/log/journal")
@@ -158,29 +225,33 @@ const setupSDND = async (props)=>{
         )
     })
     .then(()=>{
-        isDebug && console.log("Disable wlan0 for initial setup.")
-        return exec("sudo systemctl disable wpa_supplicant@wlan0.service")
+        let mode = (process.env.WIFI_MANAGER_DEFAULT_BOOT_MODE || "ap")
+        isDebug && console.log(`Set default boot mode to '${mode}' mode.`)
+        return setDefaultBootMode(mode)
     })
     .then(()=>{
-        isDebug && console.log("Enable ap for initial setup.")
-        return exec("sudo systemctl enable wpa_supplicant@ap0.service")
-    })
-    .then(()=>{
-        console.log(`'systemd-networkd' setup complete. A reboot is needed. Once restarted, the device will be in access point mode with ssid '${(props.ap.ssid && typeof props.ap.ssid === typeof "") ? props.ap.ssid : "Smart-Kiln-Setup-AP"}' and password '${(props.ap.password && typeof props.ap.password === typeof "") ? props.ap.password : "smartkiln"}'`)
+        console.log(`'systemd-networkd' setup complete. A reboot is needed. Once restarted, the device will be in access point mode with ssid '${(props.ap.ssid && typeof props.ap.ssid === typeof "") ? props.ap.ssid : "Smart-Kiln_Setup"}' and password '${(props.ap.password && typeof props.ap.password === typeof "") ? props.ap.password : "smartkiln"}'`)
         return Promise.resolve("'systemd-networkd' setup complete")
     })
 }
 
 const reboot = async ()=>{
+
+    if (useFakeData) return Promise.reject("You are using fake data. No promise would normally be returned. We can assume this will in essence always be rejected.")
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     return exec("sudo reboot")
 }
 
 module.exports = {
-    setAP,
-    setWifi,
     switchToAP,
     switchToWifi,
+    setWifi,
+    setAP,
     setDefaultBootMode,
+    setDebug,
     setupSDND,
+    getWifiNames,
+    getCurrentConnection,
     reboot
 }

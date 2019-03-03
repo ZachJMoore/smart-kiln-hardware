@@ -37,20 +37,41 @@ The thermocouple are screwed directly to the amp. Neutral/ground coming back fro
 
 ### Software Setup
 
-After enabling SPI to be used on the raspberry pi, in the server directory, run in terminal the following to start the app:
+https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312
 
+Dependencies: node, SPI, ZeroConf, systemd-networkd helper tools, systemd-networkd setup
+
+##### Node for PiZW:
 ```
-    $ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+    $ curl -o node-v9.7.1-linux-armv6l.tar.gz https://nodejs.org/dist/v9.7.1/node-v9.7.1-linux-armv6l.tar.gz && tar -xzf node-v9.7.1-linux-armv6l.tar.gz && sudo cp -r node-v9.7.1-linux-armv6l/* /usr/local/
+```
+
+##### Node for Pi3B+:
+```
+    $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
     $ sudo apt-get install -y nodejs
-    $ npm install
-    $ mv server/.env.example server/.env
-    $ mv server/app/config/defaultConfig.json server/app/config/config.json
-    $ node server.js
 ```
 
-On the Pis browser, navigate to localhost:2222, which will present you with a web app to interface with the kiln. Currently this is locked to only being accessible from the Pi itself for safety reason.
+##### SPI:
+```
+    $ sudo raspi-config -> Interfacing Options -> SPI
+```
+or in /boot/config.txt append the following line:
+```
+    dtparam=spi=on
+```
 
-You can follow <a href="https://blog.gordonturner.com/2017/12/10/raspberry-pi-full-screen-browser-raspbian-december-2017/">this</a> guide to walk through starting the Pi in kiosk mode.
+##### ZeroConf
+```
+    $ sudo apt-get install libavahi-compat-libdnssd-dev
+```
 
+##### systemd-networkd helper tools
+```
+    sudo apt install rng-tools
+```
 
-Help is very welcome, please feel free to make a pull request!
+##### systemd-networkd setup
+```
+    sudo yarn setup
+```

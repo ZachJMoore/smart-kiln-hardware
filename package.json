@@ -23,9 +23,10 @@
   "scripts": {
     "test:tc": "node app/tests/tc.js",
     "test:relays": "node app/tests/relays.js",
-    "start": "node app.js",
-    "start:nodemon": "nodemon app.js --config nodemon.json",
-    "build": "node compile.js"
+    "start": "sudo node app.js",
+    "start:dev": "nodemon app.js --config nodemon.json",
+    "build": "node compile.js",
+    "setup": "sudo node setup.js"
   },
   "author": "Zach Moore",
   "license": "GPL-3.0"
