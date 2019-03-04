@@ -58,7 +58,7 @@ module.exports = class WifiManager extends Components.Base{
         clearInterval(this.interval)
         let intervalSeconds = process.env.WIFI_MANAGER_INTERVAL_SECONDS
         intervalSeconds = parseInt(intervalSeconds)
-        if (isNaN(intervalSeconds)) intervalSeconds = 20
+        if (isNaN(intervalSeconds)) intervalSeconds = 15
 
         this.interval = setInterval(()=>{
             if (this.state.mode === "wlan"){

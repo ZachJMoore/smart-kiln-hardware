@@ -28,6 +28,7 @@ const _writeTemplate = async (templatePath, filePath, properties)=>{
 }
 
 const getWifiNames = async ()=>{
+    // TODO: switch out for sudo iw dev wlan0 scan ap-force
     return exec("sudo iwlist wlan0 scan | grep -e ESSID").then((object)=>{
 
         // set names from terminal output
