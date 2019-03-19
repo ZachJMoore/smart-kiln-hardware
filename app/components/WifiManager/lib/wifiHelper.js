@@ -28,6 +28,10 @@ const _writeTemplate = async (templatePath, filePath, properties)=>{
 }
 
 const getWifiNames = async ()=>{
+
+    if (useFakeData) return Promise.resolve([process.env.WIFI_MANAGER_WIFI_SSID])
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     // TODO: switch out for sudo iw dev wlan0 scan ap-force
     return exec("sudo iwlist wlan0 scan | grep -e ESSID").then((object)=>{
 
@@ -49,6 +53,10 @@ const getWifiNames = async ()=>{
 }
 
 const getCurrentConnection = async ()=>{
+
+    if (useFakeData) return Promise.resolve(process.env.WIFI_MANAGER_WIFI_SSID)
+    if (!isValidPlatform) return Promise.reject(`Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`)
+
     return exec("iwgetid").then(object=>{
 
         let lines = object.stdout.split("\n")

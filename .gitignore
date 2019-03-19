@@ -6,3 +6,4 @@ build
 .env
 .vscode
 .vscode/sftp.json
+.vscode/sftp.json

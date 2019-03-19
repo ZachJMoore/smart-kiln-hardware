@@ -40,6 +40,7 @@ module.exports = class ZeroConf extends Components.Base{
         let options = {
             name: `Smart-Kiln-${uuid}`,
             txtRecord: {
+                sn: (this.global.Authentication.account.name || "Smart Kiln"),
                 uuid: uuid,
                 skdm: process.env.SMART_KILN_DEVICE_MODEL,
                 rbv: process.env.RELAY_BOARD_VERSION,
