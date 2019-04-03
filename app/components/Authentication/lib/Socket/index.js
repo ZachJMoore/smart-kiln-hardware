@@ -21,7 +21,6 @@ module.exports = class Socket extends Components.Base {
       if (httpIsAuthenticated && !this.parentState.socketIsAuthenticated) {
         clearInterval(this.reconnectInterval);
         this.socket.connect();
-      } else {
       }
     });
 
