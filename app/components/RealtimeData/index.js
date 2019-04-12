@@ -1,4 +1,5 @@
 const { Components } = require("passeljs");
+const helpers = require("../../lib/helpers");
 
 module.exports = class RealtimeData extends Components.Base {
   constructor(props) {
@@ -7,9 +8,12 @@ module.exports = class RealtimeData extends Components.Base {
 
   getRealtimeData() {
     return {
-      id: this.global.Authentication.account
+      kiln_id: this.global.Authentication.account
         ? this.global.Authentication.account.id
         : null,
+      is_firing: this.global.Kiln.isFiring,
+      firing_life_cycle: this.global.Kiln.firingLifeCycle,
+      firing_schedule_id: this.global.Kiln.scheduleId,
       average_temperature: this.global.Kiln.thermoSensor.average,
       has_valid_thermocouple_reading: this.global.Kiln.thermoSensor
         .hasValidReading,
@@ -18,12 +22,9 @@ module.exports = class RealtimeData extends Components.Base {
       thermocouple_sensor_error: this.global.Kiln.thermoSensorError
         ? this.global.Kiln.thermoSensorError.message
         : null,
-      is_firing: this.global.Kiln.isFiring,
-      firing_life_cycle: this.global.Kiln.firingLifeCycle,
-      firing_error: this.global.Kiln.firingError,
+      estimated_minutes_remaining: null,
       ramp_index: this.global.Kiln.rampIndex,
       is_holding: this.global.Kiln.isHolding,
-      schedule_id: this.global.Kiln.scheduleId,
       schedule_type: this.global.Kiln.schedule
         ? this.global.Kiln.schedule.type
         : null
