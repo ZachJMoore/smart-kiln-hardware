@@ -4,6 +4,3 @@ node_modules
 build
 .env.remote
 .env
-.vscode
-.vscode/sftp.json
-.vscode/sftp.json
