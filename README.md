@@ -52,13 +52,16 @@ Dependencies: node, SPI, ZeroConf, systemd-networkd helper tools, systemd-networ
     $ sudo apt-get install -y nodejs
 ```
 
-##### SPI:
+##### SPI and I2C:
 ```
-    $ sudo raspi-config -> Interfacing Options -> SPI
+    $ sudo raspi-config
+    -> Interfacing Options -> SPI
+    -> Interfacing Options -> I2C
 ```
 or in /boot/config.txt append the following line:
 ```
     dtparam=spi=on
+    dtparam=i2c_vc=on
 ```
 
 ##### ZeroConf
