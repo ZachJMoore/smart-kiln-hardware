@@ -27,6 +27,12 @@ module.exports = class RealtimeData extends Components.Base {
       is_holding: this.global.Kiln.isHolding,
       schedule_type: this.global.Kiln.schedule
         ? this.global.Kiln.schedule.type
+        : null,
+      schedule_name: this.global.Kiln.schedule
+        ? this.global.Kiln.schedule.name
+        : null,
+      current_target: this.global.Kiln.isFiring
+        ? this.global.Kiln.PID.target
         : null
     };
   }

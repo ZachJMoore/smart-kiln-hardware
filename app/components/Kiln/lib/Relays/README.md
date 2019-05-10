@@ -22,3 +22,12 @@ gpio 6,
 gpio 13,
 gpio 19,
 gpio 26,
+
+
+- "v4": These are just defined outputs for triggering relays on HIGH. 3.3v is the trigger voltage:
+gpio 13,
+gpio 19,
+gpio 26,
+gpio 16,
+gpio 20,
+gpio 21,

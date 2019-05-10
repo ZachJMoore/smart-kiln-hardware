@@ -73,12 +73,11 @@ or in /boot/config.txt append the following line:
 
 ##### systemd-networkd setup
 ```
-    $ sudo yarn setup
+    $ sudo npm run setup
 ```
 
 
 ##### forever && forever-service
 ```
-    $ npm install -g forever
-    & npm install -g forever-service
+    $ npm install -g forever && npm install -g forever-service
 ```

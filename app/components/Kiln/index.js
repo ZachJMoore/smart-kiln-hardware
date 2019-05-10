@@ -72,7 +72,7 @@ module.exports = class Kiln extends Components.Base {
           include: [
             {
               key: "thermoSensor",
-              emit: false
+              emit: true
             },
             {
               key: "thermoSensorError",
@@ -263,6 +263,6 @@ module.exports = class Kiln extends Components.Base {
             thermoSensorError: error
           });
         });
-    }, 5 * 1000);
+    }, 2 * 1000);
   }
 };
