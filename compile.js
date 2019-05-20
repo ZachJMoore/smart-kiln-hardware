@@ -5,16 +5,23 @@ const ROOT_PATH = fs.realpathSync(".");
 
 jetpack.remove(ROOT_PATH + "/build");
 
+// Select which environment variables to use for build step
 let BUILD_USE_ENV = process.env.BUILD_USE_ENV;
 let env = null;
-
 if (BUILD_USE_ENV && typeof BUILD_USE_ENV === typeof "") env = BUILD_USE_ENV;
 else env = ".env.default";
+
+// Select which package.json to use for build step - Really only useful for excluding things for testing locally
+let BUILD_USE_PACKAGE_JSON = process.env.BUILD_USE_PACKAGE_JSON;
+let packageJSON = null;
+if (BUILD_USE_PACKAGE_JSON && typeof BUILD_USE_PACKAGE_JSON === typeof "")
+  packageJSON = BUILD_USE_PACKAGE_JSON;
+else packageJSON = "package.json";
 
 jetpack.copy(ROOT_PATH + "/app", ROOT_PATH + "/build/app");
 jetpack.remove(ROOT_PATH + "/build/app/storage");
 jetpack.copy(ROOT_PATH + `/${env}`, ROOT_PATH + "/build/.env");
-jetpack.copy(ROOT_PATH + "/package.json", ROOT_PATH + "/build/package.json");
+jetpack.copy(ROOT_PATH + `/${packageJSON}`, ROOT_PATH + "/build/package.json");
 jetpack.copy(ROOT_PATH + "/app.js", ROOT_PATH + "/build/app.js");
 jetpack.copy(ROOT_PATH + "/Dockerfile", ROOT_PATH + "/build/Dockerfile");
 jetpack.copy(ROOT_PATH + "/.dockerignore", ROOT_PATH + "/build/.dockerignore");

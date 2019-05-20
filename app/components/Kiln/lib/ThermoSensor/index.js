@@ -1,4 +1,3 @@
-const Max31855 = require("./lib/Max31855.js");
 const helpers = require("../../../../lib/helpers.js");
 
 module.exports = class ThermoSensor {
@@ -22,6 +21,7 @@ module.exports = class ThermoSensor {
         }
       ];
     } else {
+      const Max31855 = require("./lib/Max31855.js");
       if (sensorType === "v1") {
         this.sensors = [new Max31855(null, this.debug)];
       } else if (sensorType === "v2") {
@@ -41,24 +41,36 @@ module.exports = class ThermoSensor {
     return new Promise((resolve, reject) => {
       Promise.all(
         this.sensors.map(sensor => {
-          return sensor.readTempC();
+          return sensor.readTempC().then(temperature => {
+            return Promise.resolve({
+              temperature,
+              chipSelectNumber: sensor.chipSelectNumber || null
+            });
+          });
+
+          return {
+            temperature: sensor.readTempC(),
+            chipSelectNumber: sensor.chipSelectNumber || null
+          };
         })
-      ).then(temperatures => {
+      ).then(data => {
         let hasValidReading = false;
         let hasValidReadingCount = 0;
         let average = 0;
         let sensors = [];
-        temperatures.map(temperature => {
+        data.map(({ temperature, chipSelectNumber }) => {
           if (!isNaN(temperature)) {
             hasValidReading = true;
             hasValidReadingCount++;
             average += temperature;
             sensors.push({
+              chipSelectNumber,
               hasValidReading: true,
               temperature
             });
           } else {
             sensors.push({
+              chipSelectNumber,
               hasValidReading: false,
               temperature: null
             });

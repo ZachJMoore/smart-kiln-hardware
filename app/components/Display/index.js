@@ -17,7 +17,7 @@ class Display extends Components.Base {
       display.clear();
     };
     process.on("SIGINT", function() {
-      display.clear();
+      clear();
       process.nextTick(function() {
         process.exit(0);
       });
@@ -32,7 +32,11 @@ class Display extends Components.Base {
     if (useFakeData) return;
 
     this.globalChanged.on("Kiln.thermoSensor", thermoSensor => {
-      console.log(thermoSensor);
+      console.log(
+        thermoSensor.sensors.map(sensor => {
+          return { GPIO: sensor.chipSelectNumber, temp: sensor.temperature };
+        })
+      );
       this.display.writeNumber(thermoSensor.average.toFixed(0));
     });
   }

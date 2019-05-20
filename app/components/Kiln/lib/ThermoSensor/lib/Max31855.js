@@ -45,8 +45,7 @@ function MAX31855(chipSelect = null, debug = false) {
 
 /** Read 32 bits from the SPI bus. */
 MAX31855.prototype._read32 = function(callback) {
-  chipSelectReset();
-  this.chipSelect.writeSync(1);
+  const self = this;
   this._spi.read(4, function(error, bytes) {
     if (error) {
       console.error(error);
@@ -58,7 +57,7 @@ MAX31855.prototype._read32 = function(callback) {
       } else {
         value =
           (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3];
-        if (this.debug) console.log("Raw value: ", value);
+        if (self.debug) console.log("Raw value: ", value);
         callback(value);
       }
     }
@@ -88,6 +87,10 @@ MAX31855.prototype.readInternalC = function(callback) {
 /** Return the thermocouple temperature value. Value is returned in degrees celsius */
 MAX31855.prototype.readTempC = function() {
   return new Promise((resolve, reject) => {
+    if (this.chipSelect) {
+      chipSelectReset();
+      this.chipSelect.writeSync(1);
+    }
     var self = this; // Scope closure
     this._read32(function(value) {
       // Check for error reading value.
