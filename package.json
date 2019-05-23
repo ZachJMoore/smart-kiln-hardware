@@ -13,11 +13,12 @@
     "mdns": "^2.4.0",
     "node-fetch": "^2.3.0",
     "nodemon": "^1.18.9",
-    "onoff": "^2.0.0",
+    "onoff": "^4.1.1",
     "passeljs": "^2.4.30",
     "pi-spi": "^1.0.2",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "spi-device": "^2.0.7"
   },
   "devDependencies": {},
   "scripts": {

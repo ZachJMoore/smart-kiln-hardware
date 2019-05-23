@@ -18,7 +18,7 @@ module.exports = function*() {
       isHolding: false
     });
 
-    let tick = 5;
+    let tick = process.env.FIRING_SCHEDULE_INTERVAL_SECONDS || 5;
 
     let ramp = ramps[e];
 

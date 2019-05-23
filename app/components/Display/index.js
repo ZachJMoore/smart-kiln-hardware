@@ -32,11 +32,6 @@ class Display extends Components.Base {
     if (useFakeData) return;
 
     this.globalChanged.on("Kiln.thermoSensor", thermoSensor => {
-      console.log(
-        thermoSensor.sensors.map(sensor => {
-          return { GPIO: sensor.chipSelectNumber, temp: sensor.temperature };
-        })
-      );
       this.display.writeNumber(thermoSensor.average.toFixed(0));
     });
   }

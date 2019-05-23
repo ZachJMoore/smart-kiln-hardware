@@ -1,13 +1,12 @@
 const helpers = require("../../../../lib/helpers.js");
 
-module.exports = class Relays {
+class Relays {
   constructor(relayType = "v1", debug = false) {
     this.debug = debug;
     this.relayType = relayType;
 
     let useFakeData = process.env.FAKE_DATA === "true";
 
-    // TODO: Add v3 relay type. See readme
     if (useFakeData) {
       this.relays = [];
     } else {
@@ -97,4 +96,6 @@ module.exports = class Relays {
       relays
     };
   }
-};
+}
+
+module.exports = Relays;

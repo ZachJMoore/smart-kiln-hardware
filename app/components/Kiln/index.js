@@ -263,6 +263,6 @@ module.exports = class Kiln extends Components.Base {
             thermoSensorError: error
           });
         });
-    }, 2 * 1000);
+    }, (process.env.TEMPERATURE_UPDATE_INTERVAL_SECONDS || 5) * 1000);
   }
 };

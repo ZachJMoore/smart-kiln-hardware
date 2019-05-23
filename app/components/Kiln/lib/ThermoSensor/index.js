@@ -38,54 +38,50 @@ module.exports = class ThermoSensor {
   }
 
   async readCelsiusAsync() {
-    return new Promise((resolve, reject) => {
-      Promise.all(
-        this.sensors.map(sensor => {
-          return sensor.readTempC().then(temperature => {
-            return Promise.resolve({
-              temperature,
-              chipSelectNumber: sensor.chipSelectNumber || null
-            });
-          });
-
-          return {
-            temperature: sensor.readTempC(),
-            chipSelectNumber: sensor.chipSelectNumber || null
-          };
-        })
-      ).then(data => {
-        let hasValidReading = false;
-        let hasValidReadingCount = 0;
-        let average = 0;
-        let sensors = [];
-        data.map(({ temperature, chipSelectNumber }) => {
-          if (!isNaN(temperature)) {
-            hasValidReading = true;
-            hasValidReadingCount++;
-            average += temperature;
-            sensors.push({
-              chipSelectNumber,
-              hasValidReading: true,
-              temperature
-            });
-          } else {
-            sensors.push({
-              chipSelectNumber,
-              hasValidReading: false,
-              temperature: null
-            });
-          }
+    return new Promise(async (resolve, reject) => {
+      const data = [];
+      for (let i = 0; i < this.sensors.length; i++) {
+        const sensor = this.sensors[i];
+        const temperature = await sensor.readTempC();
+        data.push({
+          temperature,
+          chipSelectNumber: sensor.chipSelectNumber || null
         });
-        if (!hasValidReading)
-          return reject(new Error("No valid readings from thermocouple(s)"));
-        else
-          return resolve({
-            hasValidReading,
-            hasValidReadingCount,
-            average: average / hasValidReadingCount,
-            sensors
+      }
+
+      let hasValidReading = false;
+      let hasValidReadingCount = 0;
+      let average = 0;
+      let sensors = [];
+
+      data.map(({ temperature, chipSelectNumber }) => {
+        if (!isNaN(temperature)) {
+          hasValidReading = true;
+          hasValidReadingCount++;
+          average += temperature;
+          sensors.push({
+            chipSelectNumber,
+            hasValidReading: true,
+            temperature
           });
+        } else {
+          sensors.push({
+            chipSelectNumber,
+            hasValidReading: false,
+            temperature: null
+          });
+        }
       });
+
+      if (!hasValidReading)
+        return reject(new Error("No valid readings from thermocouple(s)"));
+      else
+        return resolve({
+          hasValidReading,
+          hasValidReadingCount,
+          average: average / hasValidReadingCount,
+          sensors
+        });
     });
   }
 
