@@ -1371,7 +1371,7 @@ nan@^2.10.0, nan@^2.3.5, nan@^2.9.2:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
   integrity sha512-JY7V6lRkStKcKTvHO5NVSQRv+RV+FIL5pvDoLiAtSL9pKlC5x9PKQcZDsq7m4FO4d57mkhC6Z+QhAh3Jdk5JFw==
 
-nan@^2.13.0, nan@^2.13.1:
+nan@^2.13.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
@@ -2019,14 +2019,6 @@ source-map@^0.5.6:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
-
-spi-device@^2.0.7:
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/spi-device/-/spi-device-2.0.7.tgz#15653bb610242303c6a6216c043161b5b2356155"
-  integrity sha512-rGiFIx4UXRntF3dqktvfSqc58YjHqLat4dugv7SMlkdZpwNlSOC/wVfNTe+sBa9Esrpdnwbd6Nskq9ru8aDJwg==
-  dependencies:
-    bindings "^1.5.0"
-    nan "^2.13.1"
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
