@@ -1,6 +1,3 @@
-APTESTING
 app/storage
 node_modules
 build
-.env.remote
-.env
