@@ -38,7 +38,9 @@ module.exports = class RealtimeData extends Components.Base {
   }
 
   emitRealtimeData() {
-    this.global.socket.emit("update-realtime-data", this.getRealtimeData());
+    if (this.global.Authentication.socketIsAuthenticated) {
+      this.global.socket.emit("update-realtime-data", this.getRealtimeData());
+    }
     this.global.io.emit("update-realtime-data", this.getRealtimeData());
   }
 
