@@ -26,11 +26,10 @@ jetpack.copy(ROOT_PATH + "/app.js", ROOT_PATH + "/build/app.js");
 jetpack.copy(ROOT_PATH + "/Dockerfile", ROOT_PATH + "/build/Dockerfile");
 jetpack.copy(ROOT_PATH + "/.dockerignore", ROOT_PATH + "/build/.dockerignore");
 jetpack.copy(ROOT_PATH + "/README.md", ROOT_PATH + "/build/README.md");
-jetpack.copy(
-  ROOT_PATH + "/firingSchedule.json",
-  ROOT_PATH + "/build/firingSchedule.json"
-);
 jetpack.copy(ROOT_PATH + "/nodemon.json", ROOT_PATH + "/build/nodemon.json");
-jetpack.copy(ROOT_PATH + "/setup.js", ROOT_PATH + "/build/setup.js");
+jetpack.copy(
+  ROOT_PATH + "/scripts/setup.js",
+  ROOT_PATH + "/build/scripts/setup.js"
+);
 
 console.log("build complete");

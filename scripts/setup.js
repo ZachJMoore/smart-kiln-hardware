@@ -1,5 +1,5 @@
 require("dotenv").config();
-const wifiHelper = require("./app/components/WifiManager/lib/wifiHelper.js");
+const wifiHelper = require("../app/components/WifiManager/lib/wifiHelper.js");
 
 const wifiConfig = {
   wifi: {
