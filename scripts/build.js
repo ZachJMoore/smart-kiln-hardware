@@ -1,7 +1,9 @@
-require("dotenv").config();
-const jetpack = require("fs-jetpack");
 const fs = require("fs");
 const ROOT_PATH = fs.realpathSync(".");
+require("dotenv").config({
+  path: ROOT_PATH + "/.env"
+});
+const jetpack = require("fs-jetpack");
 
 jetpack.remove(ROOT_PATH + "/build");
 
