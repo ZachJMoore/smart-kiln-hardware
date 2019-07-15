@@ -3,24 +3,26 @@
   "version": "5.0.0",
   "description": "Smart IoT kiln controller",
   "main": "app.js",
+  "bin": "app.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.3",
     "fetch-cookie": "^0.7.2",
     "fs-jetpack": "^2.2.0",
+    "i2c-bus": "^4.0.7",
     "lodash": "^4.17.11",
     "mdns": "^2.4.0",
     "node-fetch": "^2.3.0",
-    "nodemon": "^1.18.9",
     "onoff": "^4.1.1",
     "passeljs": "^2.4.30",
     "pi-spi": "^1.0.2",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
-    "i2c": "^0.2.3"
+    "socket.io-client": "^2.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
   "scripts": {
     "test:tc": "node app/tests/tc.js",
     "test:relays": "node app/tests/relays.js",

@@ -1,10 +1,11 @@
 'use strict';
 
-const i2c = require('i2c');
+const i2c = require('i2c-bus');
 
 module.exports = class LedBackpack {
 
     constructor(address = 0x70, bus = 1) {
+        this.address = address;
         this.registerDisplaySetup = 0x80;
         this.registerSystemSetup = 0x20;
         this.registerDimming = 0xE0;
@@ -14,9 +15,9 @@ module.exports = class LedBackpack {
         this.blinkRate1Hz = 0x02;
         this.blinkRateHalfHz = 0x03;
 
-        this.wire = new i2c(address, {device: '/dev/i2c-' + bus});
+        this.wire = i2c.openSync(bus);
         this.buffer = [0x0000, 0x0000, 0x0000, 0x0000];
-        this.wire.writeBytes(this.registerSystemSetup | 0x01, [0x00], () => {
+        this.wire.writeByte(this.address, this.registerSystemSetup | 0x01, 0x00, () => {
         });
         this.setBlinkRate(this.blinkRateOff);
         this.setBrightness(10);
@@ -26,13 +27,13 @@ module.exports = class LedBackpack {
     setBrightness(brightness = 15) {
         // brightness 0-15
         brightness = Math.max(0, Math.min(15, brightness));
-        this.wire.writeBytes(this.registerDimming | brightness, [0x00], () => {
+        this.wire.writeByte(this.address, this.registerDimming | brightness, 0x00, () => {
         });
     }
 
     setBlinkRate(blinkRate) {
         if (blinkRate > this.blinkRateHalfHz) blinkRate = this.blinkRateOff;
-        this.wire.writeBytes(this.registerDisplaySetup | 0x01 | (blinkRate << 1), [0x00], () => {
+        this.wire.writeByte(this.address, this.registerDisplaySetup | 0x01 | (blinkRate << 1), 0x00, () => {
         });
     }
 
@@ -49,7 +50,8 @@ module.exports = class LedBackpack {
             bytes.push(item & 0xFF);
             bytes.push((item >> 8) & 0xFF)
         });
-        this.wire.writeBytes(0x00, bytes, () => {
+        let buffer = Buffer.from(bytes);
+        this.wire.writeI2cBlock(this.address, 0x00, buffer.length, buffer, () => {
         });
     }
 

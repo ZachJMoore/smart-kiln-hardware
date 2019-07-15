@@ -1,3 +1,8 @@
+const fs = require("fs");
+const ROOT_PATH = fs.realpathSync(".");
+require("dotenv").config({
+  path: ROOT_PATH + "/.env"
+});
 require("dotenv").config();
 const passel = require("passeljs");
 const Kiln = require("./app/components/Kiln");
