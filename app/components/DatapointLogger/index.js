@@ -72,11 +72,6 @@ module.exports = class DatapointLogger extends Components.Base {
     let backupDatapoints = [...this.state.backupDatapoints, datapoint];
     this.trimDatapoints(backupDatapoints, true);
 
-    this.global.socket.emit(
-      "kiln-to-user-temperature-datapoints-update",
-      datapoints
-    );
-
     if (!this.global.Authentication.socketIsAuthenticated) {
       // If we aren't authenticated: backup datapoints
       this.setState({
