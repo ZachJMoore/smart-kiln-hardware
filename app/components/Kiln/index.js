@@ -161,7 +161,7 @@ module.exports = class Kiln extends Components.Base {
   }
 
   errorFiring(error) {
-    if (isDebug) console.log(error);
+    if (isDebug) console.log(new Date() + ": " + error);
     this.setState({
       firingLifeCycle: "error",
       firingError: error,
@@ -174,7 +174,7 @@ module.exports = class Kiln extends Components.Base {
   }
 
   cancelFiring() {
-    if (isDebug) console.log("Fire schedule canceled");
+    if (isDebug) console.log(new Date() + ": " + "Fire schedule canceled");
     this.setState({
       firingLifeCycle: "canceled",
       rampIndex: null,
@@ -188,7 +188,7 @@ module.exports = class Kiln extends Components.Base {
   }
 
   finishFiring() {
-    if (isDebug) console.log("Fire schedule finished");
+    if (isDebug) console.log(new Date() + ": " + "Fire schedule finished");
     this.setState({
       firingLifeCycle: "finished",
       rampIndex: null,
@@ -216,7 +216,11 @@ module.exports = class Kiln extends Components.Base {
     this.stateChanged.on("isFiring", isFiring => {
       if (!isFiring) {
         if (isDebug)
-          console.log("clearing fire schedule intervals and removing instance");
+          console.log(
+            new Date() +
+              ": " +
+              "clearing fire schedule intervals and removing instance"
+          );
         this.fireScheduleInstance = null;
         this.clearFireScheduleIntervals();
       }

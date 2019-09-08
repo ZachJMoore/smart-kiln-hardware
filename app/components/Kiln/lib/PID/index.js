@@ -57,10 +57,11 @@ module.exports = class PID extends Components.Base {
 
     if (isDebug)
       console.log(
-        "Temperature: ",
-        this.parentState.thermoSensor.average,
-        "Target: ",
-        this.state.target
+        new Date() +
+          ": " +
+          "Temperature: " +
+          this.parentState.thermoSensor.average,
+        "Target: " + this.state.target
       );
   }
 

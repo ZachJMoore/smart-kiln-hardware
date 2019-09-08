@@ -24,15 +24,19 @@ Promise.all([
   //TODO: add complete setup process steps. Install dependencies, system and npm.
 ])
   .then(success => {
-    console.log(success);
+    console.log(new Date() + ": " + success);
     console.log(
-      "Everything setup! Please read the above output and ensure there are no other necessary steps that need to be taken before running."
+      new Date() +
+        ": " +
+        "Everything setup! Please read the above output and ensure there are no other necessary steps that need to be taken before running."
     );
   })
   .catch(error => {
-    console.log("Something went wrong during setup");
-    console.log(error);
+    console.log(new Date() + ": " + "Something went wrong during setup");
+    console.log(new Date() + ": " + error);
     console.log(
-      "Things will need to be investigated and possibly setup manually. Please read the above output to determine the cause of failure."
+      new Date() +
+        ": " +
+        "Things will need to be investigated and possibly setup manually. Please read the above output to determine the cause of failure."
     );
   });

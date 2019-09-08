@@ -8,19 +8,19 @@ const thermoSensor = new ThermoSensor(
 thermoSensor
   .readFahrenheitAsync()
   .then(status => {
-    console.log(status);
+    console.log(new Date() + ": " + status);
   })
   .catch(error => {
-    console.log(error);
+    console.log(new Date() + ": " + error);
   });
 
 const interval = setInterval(() => {
   thermoSensor
     .readFahrenheitAsync()
     .then(status => {
-      console.log(status);
+      console.log(new Date() + ": " + status);
     })
     .catch(error => {
-      console.log(error);
+      console.log(new Date() + ": " + error);
     });
 }, 1000);

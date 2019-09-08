@@ -36,7 +36,7 @@ passel.use(Display);
 
 passel.mountComponents();
 
-console.log(new Date() + ": application started");
+console.log(new Date() + ": " + "application started");
 
 // Testing memory usage of application
 // setInterval(()=>{

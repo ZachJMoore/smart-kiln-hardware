@@ -57,7 +57,7 @@ MAX31855.prototype._read32 = function(callback) {
       } else {
         value =
           (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3];
-        if (self.debug) console.log("Raw value: ", value);
+        if (self.debug) console.log(new Date() + ": " + "raw value: ", value);
         callback(value);
       }
     }
@@ -80,7 +80,9 @@ MAX31855.prototype.readInternalC = function(callback) {
       callback(internal * 0.0625);
     });
   } else {
-    console.log("MAX31855: Read request issued with no callback.");
+    console.log(
+      new Date() + ": " + "MAX31855 read request issued with no callback."
+    );
   }
 };
 

@@ -34,4 +34,4 @@ jetpack.copy(
   ROOT_PATH + "/build/scripts/setup.js"
 );
 
-console.log("build complete");
+console.log(new Date() + ": " + "build complete");

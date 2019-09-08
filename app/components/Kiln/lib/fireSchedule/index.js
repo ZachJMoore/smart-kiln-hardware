@@ -8,7 +8,7 @@ module.exports = function*() {
 
   const ramps = this.state.schedule.firing_schedule_ramps.slice();
 
-  if (isDebug) console.log(ramps);
+  if (isDebug) console.log(new Date() + ": " + ramps);
 
   this.PID.setTarget(this.state.thermoSensor.average + 0);
 
@@ -45,15 +45,19 @@ module.exports = function*() {
     }
 
     if (isDebug) {
-      console.log({
-        ramp: e + 1,
-        difference,
-        hoursNeeded,
-        secondsNeeded,
-        currentTemperature: this.state.thermoSensor.average,
-        rampTarget: ramp.target,
-        risePerSecond
-      });
+      console.log(
+        new Date() +
+          ": " +
+          {
+            ramp: e + 1,
+            difference,
+            hoursNeeded,
+            secondsNeeded,
+            currentTemperature: this.state.thermoSensor.average,
+            rampTarget: ramp.target,
+            risePerSecond
+          }
+      );
     }
 
     this._firing_schedule_increase_interval = setInterval(() => {
@@ -71,7 +75,9 @@ module.exports = function*() {
           this.PID.setTarget(ramp.target);
 
           if (isDebug)
-            console.log(`entering hold for ${ramp.hold * 60} minutes`);
+            console.log(
+              new Date() + ": " + `entering hold for ${ramp.hold * 60} minutes`
+            );
           this.setState({
             isHolding: true
           });
@@ -93,7 +99,9 @@ module.exports = function*() {
           this.PID.setTarget(ramp.target);
 
           if (isDebug)
-            console.log(`entering hold for ${ramp.hold * 60} minutes`);
+            console.log(
+              new Date() + ": " + `entering hold for ${ramp.hold * 60} minutes`
+            );
           this.setState({
             isHolding: true
           });

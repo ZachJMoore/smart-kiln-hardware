@@ -3,11 +3,11 @@ const Relays = require("../components/Kiln/lib/Relays");
 
 const relays = new Relays(process.env.RELAY_BOARD_VERSION || "v1");
 
-console.log("Turning all relays: ON");
+console.log(new Date() + ": " + "Turning all relays: ON");
 relays.setRelays(1);
 
 setTimeout(() => {
-  console.log("Turning all relays: OFF");
+  console.log(new Date() + ": " + "Turning all relays: OFF");
   relays.setRelays(0);
 }, 5 * 1000);
 
@@ -27,11 +27,13 @@ setTimeout(() => {
       }, index * 1000 + 1000);
     }
     if (index === 0) {
-      console.log("Relay: " + (index + 1) + " Turned: ON");
+      console.log(new Date() + ": " + "Relay: " + (index + 1) + " Turned: ON");
       relay.writeSync(on);
     } else {
       setTimeout(() => {
-        console.log("Relay: " + (index + 1) + " Turned: ON");
+        console.log(
+          new Date() + ": " + "Relay: " + (index + 1) + " Turned: ON"
+        );
         relay.writeSync(on);
       }, index * 1000);
     }

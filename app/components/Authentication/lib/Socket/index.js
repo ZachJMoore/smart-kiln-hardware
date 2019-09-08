@@ -34,7 +34,7 @@ module.exports = class Socket extends Components.Base {
     this.socket.on("authenticated", () => {
       this.props.updateAuthState(true);
       this.socket.emit("get-account-data", error => {
-        if (error) console.log(error);
+        if (error) console.log(new Date() + ": " + error);
       });
     });
 
