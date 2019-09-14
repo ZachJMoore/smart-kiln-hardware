@@ -53,12 +53,17 @@ module.exports = class RealtimeData extends Components.Base {
         }
       }
     );
+
+    this.globalChanged.on("Kiln.isFiring", isFiring => {
+      if (isFiring) {
+        this.emitRealtimeData();
+      }
+    });
   }
 
   componentDidMount() {
-    this.emitRealtimeData();
     this.interval = setInterval(() => {
       this.emitRealtimeData();
-    }, (process.env.REALTIME_DATA_UPDATE_INTERVAL_SECONDS || 5) * 1000);
+    }, (process.env.REALTIME_DATA_UPDATE_INTERVAL_SECONDS || 60) * 1000);
   }
 };
