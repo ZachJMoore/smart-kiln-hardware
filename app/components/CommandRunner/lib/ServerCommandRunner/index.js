@@ -7,22 +7,16 @@ module.exports = class ServerCommandRunner extends Components.Base {
   }
 
   componentDidMount() {
-    this.global.socket.on("command", (command, cb) => {
+    this.global.socket.on("kiln-command", (command, cb) => {
+      console.log(command);
       if (command.type === "test_message") {
         if (cb) cb(null);
       }
 
       if (command.type === "start_firing_schedule") {
-        let schedule = dispatcher.getScheduleById(
-          command.properties.firing_schedule_id
-        );
+        let schedule = command.payload.schedule;
         if (!schedule) {
-          if (cb)
-            cb(
-              new Error(
-                `Schedule with id '${command.properties.firing_schedule_id}' was not found on the device`
-              )
-            );
+          if (cb) cb(new `A schedule was not provided.`());
           return;
         }
         dispatcher

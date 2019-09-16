@@ -55,9 +55,7 @@ module.exports = class RealtimeData extends Components.Base {
     );
 
     this.globalChanged.on("Kiln.isFiring", isFiring => {
-      if (isFiring) {
-        this.emitRealtimeData();
-      }
+      this.emitRealtimeData();
     });
   }
 

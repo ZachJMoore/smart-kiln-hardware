@@ -62,6 +62,9 @@ module.exports = class Kiln extends Components.Base {
               key: "isHolding"
             },
             {
+              key: "schedule"
+            },
+            {
               key: "scheduleId"
             }
           ]
@@ -100,6 +103,10 @@ module.exports = class Kiln extends Components.Base {
             },
             {
               key: "scheduleId",
+              emit: false
+            },
+            {
+              key: "schedule",
               emit: false
             }
           ]
