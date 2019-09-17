@@ -49,6 +49,7 @@ module.exports = class RealtimeData extends Components.Base {
       "Authentication.socketIsAuthenticated",
       socketIsAuthenticated => {
         if (socketIsAuthenticated) {
+          console.log("THIS HAPPENED");
           this.emitRealtimeData();
         }
       }
