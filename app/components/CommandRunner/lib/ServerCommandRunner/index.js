@@ -1,5 +1,6 @@
 const { Components } = require("passeljs");
 const dispatcher = require("../../../../dispatcher");
+const isDebug = process.env.DEBUG === "true";
 
 module.exports = class ServerCommandRunner extends Components.Base {
   constructor(props) {
@@ -8,7 +9,8 @@ module.exports = class ServerCommandRunner extends Components.Base {
 
   componentDidMount() {
     this.global.socket.on("kiln-command", (command, cb) => {
-      console.log(command);
+      if (isDebug) console.log(command);
+
       if (command.type === "test_message") {
         if (cb) cb(null);
       }
