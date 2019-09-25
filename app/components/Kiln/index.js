@@ -228,6 +228,7 @@ module.exports = class Kiln extends Components.Base {
               ": " +
               "clearing fire schedule intervals and removing instance"
           );
+        this.setRelays(0);
         this.fireScheduleInstance = null;
         this.clearFireScheduleIntervals();
       }
