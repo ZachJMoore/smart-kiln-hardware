@@ -11,7 +11,7 @@ module.exports = function*() {
   this.relays.setRelays(1);
   setTimeout(() => {
     this.relays.setRelays(0);
-  }, 750);
+  }, 1000);
 
   const ramps = this.state.schedule.firing_schedule_ramps.slice();
 
