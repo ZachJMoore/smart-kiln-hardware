@@ -6,6 +6,13 @@ module.exports = function*() {
     return;
   }
 
+  // Useful for quick user feedback
+  // TODO: change this for some other visual feedback or sound rather than pulsing the elements
+  this.relays.setRelays(1);
+  setTimeout(() => {
+    this.relays.setRelays(0);
+  }, 750);
+
   const ramps = this.state.schedule.firing_schedule_ramps.slice();
 
   if (isDebug) console.log(new Date() + ": " + ramps);
