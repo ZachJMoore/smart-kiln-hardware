@@ -20,7 +20,7 @@ module.exports = class HTTP extends Components.Base {
       },
       redirect: "follow"
     };
-    this.reconnectAttemptTimeout = null;
+    this.reconnectAttemptInterval = null;
   }
 
   createAccount() {
@@ -38,18 +38,21 @@ module.exports = class HTTP extends Components.Base {
     }).then(responseHandler);
   }
 
-  updateAuthState(kiln, error) {
+  updateAuth({ kiln, isNewAccount }, error) {
     if (kiln) {
       this.setState({
         authenticationError: null
       });
-      this.props.updateCredentials({
-        uuid: data.uuid,
-        password: data.password
-      });
-      this.props.updateAccountData(data);
+      if (isNewAccount) {
+        this.props.updateCredentials({
+          uuid: kiln.uuid,
+          password: kiln.password
+        });
+      }
+      this.props.updateAccountData(kiln);
       this.props.updateAuthState(true);
     } else {
+      console.log(new Date() + ": " + "Authentication Error: ", error);
       this.setState({
         authenticationError: error
       });
@@ -61,30 +64,30 @@ module.exports = class HTTP extends Components.Base {
     if (!this.parentState.credentials) {
       this.createAccount()
         .then(data => {
-          this.updateAuthState(data);
+          this.updateAuth({ kiln: data, isNewAccount: true });
         })
         .catch(error => {
-          this.updateAuthState(null, error);
+          this.updateAuth(null, error);
         });
     } else {
       this.login()
         .then(data => {
-          this.updateAuthState(data);
+          this.updateAuth({ kiln: data, isNewAccount: false });
         })
         .catch(error => {
-          this.updateAuthState(null, error);
+          this.updateAuth(null, error);
         });
     }
   }
 
   componentWillMount() {
     this.stateChanged.on("authenticationError", authenticationError => {
+      clearInterval(this.reconnectAttemptInterval);
+
       if (authenticationError) {
-        this.reconnectAttemptTimeout = setTimeout(() => {
+        this.reconnectAttemptInterval = setInterval(() => {
           this.authenticate();
         }, (process.env.SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS || 10) * 1000);
-      } else {
-        clearTimeout(this.reconnectAttemptTimeout);
       }
     });
   }

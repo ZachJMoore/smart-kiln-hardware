@@ -17,14 +17,16 @@ module.exports = class Socket extends Components.Base {
   }
 
   componentWillMount() {
+    this.socket = io(process.env.DB_HOST + "/kiln", {
+      autoConnect: false
+    });
+
     this.parentStateChanged.on("httpIsAuthenticated", httpIsAuthenticated => {
       if (httpIsAuthenticated && !this.parentState.socketIsAuthenticated) {
         clearInterval(this.reconnectInterval);
         this.socket.connect();
       }
     });
-
-    this.socket = io(process.env.DB_HOST + "/kiln");
 
     this.socket.on("connect", () => {
       this.setState({ isConnected: true });
