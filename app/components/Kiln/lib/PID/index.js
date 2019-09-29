@@ -32,7 +32,7 @@ module.exports = class PID extends Components.Base {
   }
 
   holdTarget() {
-    const temperatureOffset = 0;
+    let temperatureOffset = 0;
 
     let tf = helpers.resolveObjectPath(
       "Authentication.account.kiln_settings.temperature_offset",

@@ -18,7 +18,7 @@ module.exports = class ServerCommandRunner extends Components.Base {
       if (command.type === "start_firing_schedule") {
         let schedule = command.payload.schedule;
         if (!schedule) {
-          if (cb) cb(new `A schedule was not provided.`());
+          if (cb) cb("A schedule was not provided.");
           return;
         }
         dispatcher
@@ -28,6 +28,7 @@ module.exports = class ServerCommandRunner extends Components.Base {
             this.props.addCompletedCommand(command);
           })
           .catch(error => {
+            console.log(error);
             if (cb) cb(error);
           });
       }
