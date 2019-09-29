@@ -35,9 +35,6 @@ module.exports = class Socket extends Components.Base {
 
     this.socket.on("authenticated", () => {
       this.props.updateAuthState(true);
-      this.socket.emit("get-account-data", error => {
-        if (error) console.log(new Date() + ": " + error);
-      });
     });
 
     this.socket.on("unauthorized", error => {
@@ -66,7 +63,13 @@ module.exports = class Socket extends Components.Base {
   }
 
   componentDidMount() {
-    this.socket.on("account-data", data => {
+    const requestKilnData = () => {
+      this.socket.emit("kiln-data-refresh-request");
+    };
+
+    this.socket.on("kiln-data-refresh-update-available", requestKilnData);
+
+    this.socket.on("kiln-data-refresh-update", data => {
       this.props.updateAccountData(data);
     });
   }

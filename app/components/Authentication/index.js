@@ -1,6 +1,7 @@
 const { Components } = require("passeljs");
 const Socket = require("./lib/Socket");
 const HTTP = require("./lib/HTTP");
+const _ = require("lodash");
 
 module.exports = class Authentication extends Components.Base {
   constructor(props) {
@@ -52,6 +53,7 @@ module.exports = class Authentication extends Components.Base {
 
     this.updateHTTPAuthState = this.updateHTTPAuthState.bind(this);
     this.updateAccountData = this.updateAccountData.bind(this);
+    this.removeAccountOwner = this.removeAccountOwner.bind(this);
     this.updateCredentials = this.updateCredentials.bind(this);
   }
 
@@ -73,6 +75,14 @@ module.exports = class Authentication extends Components.Base {
     });
   }
 
+  removeAccountOwner() {
+    this.setState(prevState => {
+      let state = _.cloneDeep(prevState);
+      state.account.user_id = null;
+      return state;
+    });
+  }
+
   updateCredentials(credentials) {
     this.setState({
       credentials: {
@@ -85,12 +95,14 @@ module.exports = class Authentication extends Components.Base {
   componentWillMount() {
     this.use(Socket, {
       updateAuthState: this.updateSocketAuthState,
-      updateAccountData: this.updateAccountData
+      updateAccountData: this.updateAccountData,
+      removeAccountOwner: this.removeAccountOwner
     });
 
     this.use(HTTP, {
       updateAuthState: this.updateHTTPAuthState,
       updateAccountData: this.updateAccountData,
+      removeAccountOwner: this.removeAccountOwner,
       updateCredentials: this.updateCredentials
     });
   }
