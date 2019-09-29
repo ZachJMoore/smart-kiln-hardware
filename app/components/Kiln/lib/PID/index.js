@@ -32,26 +32,11 @@ module.exports = class PID extends Components.Base {
   }
 
   holdTarget() {
-    let temperatureOffset = 0;
-
-    let tf = helpers.resolveObjectPath(
-      "Authentication.account.kiln_settings.temperature_offset",
-      this.global
-    );
-
-    if (tf && typeof tf === "number") temperatureOffset = tf;
-
-    if (
-      this.parentState.thermoSensor.average - temperatureOffset >=
-      this.state.target
-    ) {
+    if (this.parentState.thermoSensor.average >= this.state.target) {
       this.props.setRelays(0);
     }
 
-    if (
-      this.parentState.thermoSensor.average - temperatureOffset <
-      this.state.target
-    ) {
+    if (this.parentState.thermoSensor.average < this.state.target) {
       this.props.setRelays(1);
     }
 

@@ -1,4 +1,5 @@
 const helpers = require("../../../../lib/helpers.js");
+const { global } = require("passeljs");
 
 module.exports = class ThermoSensor {
   constructor(sensorType = "v1", debug = false) {
@@ -54,8 +55,19 @@ module.exports = class ThermoSensor {
       let average = 0;
       let sensors = [];
 
+      let temperatureOffset = 0;
+
+      let tf = helpers.resolveObjectPath(
+        "Authentication.account.kiln_settings.temperature_offset",
+        global
+      );
+
+      if (tf && typeof tf === "number") temperatureOffset = tf;
+
       data.map(({ temperature, chipSelectNumber }) => {
         if (!isNaN(temperature)) {
+          temperature =
+            temperature + helpers.fahrenheitToCelsius(temperatureOffset);
           hasValidReading = true;
           hasValidReadingCount++;
           average += temperature;
