@@ -1,13 +1,53 @@
-module.exports.celsiusToFahrenheit = value => {
-  if (typeof value !== typeof 1) return value;
-  return parseFloat((value * 1.8 + 32).toFixed(2));
-};
-module.exports.fahrenheitToCelsius = value => {
-  if (typeof value !== typeof 1) return value;
-  return parseFloat(((value - 32) * (5 / 9)).toFixed(2));
+const toFixed = (value, index = 0) => {
+  return parseFloat(value.toFixed(index));
 };
 
-module.exports.isError = e => {
+const celsiusToFahrenheit = value => {
+  if (typeof value !== typeof 1) return value;
+  return toFixed(value, 2) * 1.8 + 32;
+};
+const fahrenheitToCelsius = value => {
+  if (typeof value !== typeof 1) return value;
+  return (toFixed(value, 2) - 32) * (5 / 9);
+};
+
+const getTemperature = (
+  temperature,
+  displayType = "fahrenheit",
+  reverse = false
+) => {
+  let nt = temperature;
+
+  if (displayType === "celsius") {
+    if (!reverse) nt = fahrenheitToCelsius(temperature);
+
+    if (reverse) nt = celsiusToFahrenheit(temperature);
+  }
+
+  nt = toFixed(nt);
+
+  return nt;
+};
+
+const getTemperatureText = (temperature, displayType = "fahrenheit") => {
+  if (temperature === null) return "N/A";
+
+  let nt = temperature;
+
+  if (displayType === "celsius") {
+    nt = fahrenheitToCelsius(temperature);
+  }
+
+  nt = toFixed(nt);
+
+  return `${nt}º${displayType[0].toUpperCase()}`;
+};
+
+const addTemperatureSymbol = (temperature, displayType = "fahrenheit") => {
+  return `${temperature}º${displayType[0].toUpperCase()}`;
+};
+
+const isError = e => {
   return (
     e &&
     e.stack &&
@@ -17,21 +57,21 @@ module.exports.isError = e => {
   );
 };
 
-module.exports.resolveObjectPath = (path, obj) => {
+const resolveObjectPath = (path, obj) => {
   if (Array.isArray(path)) path = path.join(".");
   return path.split(".").reduce(function(prev, curr) {
     return prev ? prev[curr] : null;
   }, obj);
 };
 
-module.exports.createObjectPath = (path, obj) => {
+const createObjectPath = (path, obj) => {
   if (Array.isArray(path)) path = path.join(".");
   return path.split(".").reduce(function(prev, curr) {
     return (prev[curr] = {});
   }, obj);
 };
 
-module.exports.convertNumberToLetters = number => {
+const convertNumberToLetters = number => {
   const l = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
   const ns = number.toString().split("");
   let lts = "";
@@ -43,7 +83,7 @@ module.exports.convertNumberToLetters = number => {
   return lts;
 };
 
-module.exports.convertLettersToNumber = letters => {
+const convertLettersToNumber = letters => {
   const l = {
     a: 0,
     b: 1,
@@ -65,7 +105,7 @@ module.exports.convertLettersToNumber = letters => {
   return parseInt(nb.join(""));
 };
 
-module.exports.generateUUID = () => {
+const generateUUID = () => {
   var d = new Date().getTime();
   if (
     typeof performance !== "undefined" &&
@@ -78,4 +118,19 @@ module.exports.generateUUID = () => {
     d = Math.floor(d / 16);
     return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
+};
+
+module.exports = {
+  toFixed,
+  celsiusToFahrenheit,
+  fahrenheitToCelsius,
+  getTemperature,
+  getTemperatureText,
+  addTemperatureSymbol,
+  isError,
+  resolveObjectPath,
+  createObjectPath,
+  convertNumberToLetters,
+  convertLettersToNumber,
+  generateUUID
 };

@@ -1,4 +1,5 @@
 const { Components } = require("passeljs");
+const { getTemperature, getTemperatureText } = require("../../lib/helpers");
 
 const useFakeData = process.env.FAKE_DATA === "true";
 
@@ -32,7 +33,24 @@ class Display extends Components.Base {
     if (useFakeData) return;
 
     this.globalChanged.on("Kiln.thermoSensor", thermoSensor => {
-      this.display.writeNumber(thermoSensor.average.toFixed(0));
+      this.display.writeNumber(
+        getTemperature(
+          thermoSensor.average,
+          this.global.Authentication.account.kiln_settings
+            .temperature_display_type
+        )
+      );
+    });
+
+    this.globalChanged.on("Authentication.account", account => {
+      this.display.writeNumber(
+        getTemperature(
+          this.global.Kiln.thermoSensor.average,
+          account.kiln_settings
+            ? account.kiln_settings.temperature_display_type || "fahrenheit"
+            : "fahrenheit"
+        )
+      );
     });
   }
 }

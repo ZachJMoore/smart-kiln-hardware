@@ -38,18 +38,18 @@ module.exports = class HTTP extends Components.Base {
     }).then(responseHandler);
   }
 
-  updateAuth({ kiln, isNewAccount }, error) {
-    if (kiln) {
+  updateAuth(data, error) {
+    if (data) {
       this.setState({
         authenticationError: null
       });
-      if (isNewAccount) {
+      if (data.isNewAccount) {
         this.props.updateCredentials({
-          uuid: kiln.uuid,
-          password: kiln.password
+          uuid: data.kiln.uuid,
+          password: data.kiln.password
         });
       }
-      this.props.updateAccountData(kiln);
+      this.props.updateAccountData(data.kiln);
       this.props.updateAuthState(true);
     } else {
       console.log(new Date() + ": " + "Authentication Error: ", error);

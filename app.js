@@ -29,9 +29,9 @@ passel.use(Schedules);
 passel.use(FiringLogger);
 passel.use(DatapointLogger);
 passel.use(CommandRunner);
-passel.use(ZeroConf);
 passel.use(RealtimeData);
-passel.use(WifiManager);
+// passel.use(ZeroConf);
+// passel.use(WifiManager);
 passel.use(Display);
 
 passel.mountComponents();
