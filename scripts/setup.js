@@ -1,9 +1,10 @@
+// responsible for tedious setup of wifi wlan/ap switching. WifiManager is currently disabled however and this will add no extra functionality.
+
 const fs = require("fs");
 const ROOT_PATH = fs.realpathSync(".");
 require("dotenv").config({
   path: ROOT_PATH + "/.env"
 });
-require("dotenv").config();
 const wifiHelper = require("../app/components/WifiManager/lib/wifiHelper.js");
 
 const wifiConfig = {
@@ -19,10 +20,9 @@ const wifiConfig = {
   }
 };
 
-Promise.all([
-  wifiHelper.setupSDND(wifiConfig)
-  //TODO: add complete setup process steps. Install dependencies, system and npm.
-])
+//TODO: add complete setup process steps. Install dependencies, system and npm.
+wifiHelper
+  .setupSDND(wifiConfig)
   .then(success => {
     console.log(new Date() + ": " + success);
     console.log(

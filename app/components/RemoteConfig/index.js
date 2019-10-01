@@ -6,7 +6,7 @@ module.exports = class RemoteConfig extends Components.Base {
 
     this.state = {
       // ENVIRONMENT
-      isProduction: process.env.NODE_ENV === "production" ? true : false, //Replaces NODE_ENV
+      isProduction: process.env.NODE_ENV === "development" ? false : true, //Replaces NODE_ENV
       isDebug: process.env.DEBUG === "true" ? true : false, // Replaces DEBUG
       DEV_HOST:
         process.env.DEV_HOST || "https://development-backend.smartkiln.net",
