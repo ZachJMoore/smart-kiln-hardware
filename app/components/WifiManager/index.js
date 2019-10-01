@@ -52,12 +52,12 @@ module.exports = class WifiManager extends Components.Base {
 
   startInterval() {
     clearInterval(this.interval);
-    // TODO: set change listener and restart interval whenever this changes
     let intervalSeconds = this.global.RemoteConfig
       .WIFI_MANAGER_INTERVAL_SECONDS;
     intervalSeconds = parseInt(intervalSeconds);
     if (isNaN(intervalSeconds)) intervalSeconds = 15;
 
+    // TODO: when the interval seconds change, make sure we reset things
     this.interval = setInterval(() => {
       if (this.state.mode === "wlan") {
         wifiHelper.getCurrentConnection().then(connection => {
