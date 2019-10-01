@@ -38,7 +38,7 @@ module.exports = class CommandRunner extends Components.Base {
   }
 
   trimCompletedCommands(completedCommands) {
-    let limit = process.env.COMMAND_COMPLETED_LIMIT_COUNT;
+    let limit = this.global.RemoteConfig.COMMAND_COMPLETED_LIMIT_COUNT;
     limit = parseInt(limit);
     if (isNaN(limit)) limit = 30;
 
