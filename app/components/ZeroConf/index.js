@@ -34,7 +34,11 @@ module.exports = class ZeroConf extends Components.Base {
   componentDidMount() {
     let uuid = this.global.Authentication.account
       ? this.global.Authentication.account.uuid
-      : helpers.generateUUID();
+      : null;
+
+    let id = this.global.Authentication.account
+      ? this.global.Authentication.account.id
+      : null;
 
     let options = {
       name: `smart-kiln-${uuid}`,
@@ -42,9 +46,10 @@ module.exports = class ZeroConf extends Components.Base {
         sn: this.global.Authentication.account
           ? this.global.Authentication.account.name
             ? this.global.Authentication.account.name
-            : "smart-kiln"
-          : "smart-kiln",
+            : "Unnamed Kiln"
+          : "Unnamed Kiln",
         uuid: uuid,
+        id: id,
         skdm: process.env.SMART_KILN_DEVICE_MODEL,
         rbv: process.env.RELAY_BOARD_VERSION,
         tsv: process.env.THERMO_SENSOR_VERSION
@@ -52,7 +57,7 @@ module.exports = class ZeroConf extends Components.Base {
     };
 
     let ad = mdns.createAdvertisement(
-      new mdns.ServiceType("smartkiln", "tcp"),
+      new mdns.ServiceType("smart-kiln", "tcp"),
       8009,
       options,
       (error, service) => {
