@@ -89,7 +89,7 @@ const setAP = async props => {
     ap_ssid:
       props.ssid && typeof props.ssid === typeof ""
         ? props.ssid
-        : "Smart-Kiln_Setup",
+        : "smart-kiln-ap",
     ap_password:
       props.password && typeof props.password === typeof ""
         ? props.password
@@ -124,7 +124,7 @@ const setWifi = async props => {
     wifi_ssid:
       props.ssid && typeof props.ssid === typeof ""
         ? props.ssid
-        : "smart-kiln-setup",
+        : "smart-kiln-ap",
     wifi_password:
       props.password && typeof props.password === typeof ""
         ? props.password
@@ -306,7 +306,7 @@ const setupSDND = async props => {
         );
       })
       .then(() => {
-        let mode = process.env.WIFI_MANAGER_DEFAULT_BOOT_MODE || "ap";
+        let mode = "ap";
         isDebug &&
           console.log(
             new Date() + ": " + `Set default boot mode to '${mode}' mode.`
@@ -320,7 +320,7 @@ const setupSDND = async props => {
             `'systemd-networkd' setup complete. A reboot is needed. Once restarted, the device will be in access point mode with ssid '${
               props.ap.ssid && typeof props.ap.ssid === typeof ""
                 ? props.ap.ssid
-                : "Smart-Kiln_Setup"
+                : "smart-kiln-ap"
             }' and password '${
               props.ap.password && typeof props.ap.password === typeof ""
                 ? props.ap.password

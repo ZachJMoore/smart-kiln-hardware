@@ -14,7 +14,7 @@ const wifiConfig = {
   },
   ap: {
     countryCode: "US",
-    ssid: "Smart-Kiln-AP",
+    ssid: "smart-kiln-ap",
     password: "smartkiln"
   }
 };

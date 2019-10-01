@@ -37,13 +37,13 @@ module.exports = class ZeroConf extends Components.Base {
       : helpers.generateUUID();
 
     let options = {
-      name: `Smart-Kiln-${uuid}`,
+      name: `smart-kiln-${uuid}`,
       txtRecord: {
         sn: this.global.Authentication.account
           ? this.global.Authentication.account.name
             ? this.global.Authentication.account.name
-            : "Smart-Kiln"
-          : "Smart-Kiln",
+            : "smart-kiln"
+          : "smart-kiln",
         uuid: uuid,
         skdm: process.env.SMART_KILN_DEVICE_MODEL,
         rbv: process.env.RELAY_BOARD_VERSION,
