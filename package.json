@@ -28,7 +28,6 @@
     "test:relays": "node app/tests/relays.js",
     "start": "sudo node app.js",
     "start:dev": "nodemon app.js --config nodemon.json",
-    "build": "node scripts/build.js",
     "setup": "sudo node scripts/setup.js"
   },
   "author": "Zach Moore",
