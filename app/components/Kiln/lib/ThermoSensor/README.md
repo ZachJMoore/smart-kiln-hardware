@@ -4,7 +4,7 @@ There are different versions of thermocouple amplifiers and setup configurations
 
 The only current supported thermocouple type is "K".
 
-![Basic Wiring](../../../../../simple-wiring.png)
+![Basic Wiring](simple-wiring.png)
 
 - "v1": This is a Max31855 board which communicates over spi with the raspberry pi. Wiring can be found above. Part can be found <a href="https://www.amazon.com/gp/product/B00SK8NDAI/ref=oh_aui_detailpage_o00_s01?ie=UTF8&psc=1">here</a>.
 
