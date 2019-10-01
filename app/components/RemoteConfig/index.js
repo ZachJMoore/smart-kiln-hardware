@@ -1,3 +1,5 @@
+// handles all configurations. Remote setting and adjustment of these will be implemented to help sync server restrictions of how often we can send data
+
 const { Components } = require("passeljs");
 
 module.exports = class RemoteConfig extends Components.Base {
@@ -6,8 +8,8 @@ module.exports = class RemoteConfig extends Components.Base {
 
     this.state = {
       // ENVIRONMENT
-      isProduction: process.env.NODE_ENV === "development" ? false : true, //Replaces NODE_ENV
-      isDebug: process.env.DEBUG === "true" ? true : false, // Replaces DEBUG
+      isProduction: process.env.NODE_ENV === "development" ? false : true, //ONLY NON FS STATE VARIABLE
+      isDebug: process.env.DEBUG === "true" ? true : false,
       DEV_HOST:
         process.env.DEV_HOST || "https://development-backend.smartkiln.net",
       PRODUCTION_HOST:

@@ -1,3 +1,5 @@
+// handles all display content and/or interactions
+
 const { Components } = require("passeljs");
 const Segments = require("./lib/ht16k33").Segments;
 const { getTemperature, resolveObjectPath } = require("../../lib/helpers");

@@ -1,3 +1,5 @@
+// handles all kiln firing logic
+
 const { Components } = require("passeljs");
 const ThermoSensor = require("./lib/ThermoSensor");
 const Relays = require("./lib/Relays");

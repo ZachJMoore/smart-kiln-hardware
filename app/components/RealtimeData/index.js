@@ -1,3 +1,5 @@
+// handles keeping the server updated with all of the current state and temperatures
+
 const { Components } = require("passeljs");
 const helpers = require("../../lib/helpers");
 

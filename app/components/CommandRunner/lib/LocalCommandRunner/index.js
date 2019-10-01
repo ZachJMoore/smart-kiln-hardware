@@ -1,3 +1,5 @@
+// handles all local kiln commands.
+
 const { Components } = require("passeljs");
 const dispatcher = require("../../../../dispatcher");
 

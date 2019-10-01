@@ -1,3 +1,5 @@
+// handles all datapoint logging. This includes sending datapoints to server
+
 const { Components } = require("passeljs");
 
 module.exports = class DatapointLogger extends Components.Base {

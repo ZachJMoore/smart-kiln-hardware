@@ -1,3 +1,5 @@
+// handles all kiln commands. This includes local and remote
+
 const { Components } = require("passeljs");
 const ServerCommandRunner = require("./lib/ServerCommandRunner");
 const LocalCommandRunner = require("./lib/LocalCommandRunner");

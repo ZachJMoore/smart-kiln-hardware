@@ -1,3 +1,5 @@
+// handles the firing logic. This generator function is bound to the main Kiln component when called and can access "this"
+
 module.exports = function*() {
   if (!this.state.schedule) {
     this.errorFiring("No schedule provided");

@@ -1,3 +1,5 @@
+// handles all relays. Makes for an extendable system for different relay types
+
 const helpers = require("../../../../lib/helpers.js");
 
 class Relays {

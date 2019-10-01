@@ -1,3 +1,5 @@
+// bring exposed functions into here before consuming. Makes it easier to track things down.
+
 const { exposedComponentFunctions } = require("passeljs");
 const helpers = require("../lib/helpers.js");
 

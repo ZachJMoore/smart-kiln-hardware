@@ -1,3 +1,5 @@
+// handles all websocket auth and exposing this.socket on global
+
 const { Components } = require("passeljs");
 const io = require("socket.io-client");
 

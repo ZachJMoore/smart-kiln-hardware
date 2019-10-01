@@ -1,4 +1,4 @@
-// responsible for tedious setup of wifi wlan/ap switching. WifiManager is currently disabled however and this will add no extra functionality.
+// responsible for tedious setup of wlan/ap switching. Wifi Manager is currently disabled however and this will add no extra functionality.
 
 const fs = require("fs");
 const ROOT_PATH = fs.realpathSync(".");

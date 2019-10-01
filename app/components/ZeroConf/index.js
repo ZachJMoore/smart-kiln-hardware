@@ -1,3 +1,5 @@
+// Handles setting ZeroConf up and all the variables and meta data to be advertised. Not extremely useful. Waiting on local setup from mobile app to be implemented.
+
 const { Components } = require("passeljs");
 const mdns = require("mdns");
 const helpers = require("../../lib/helpers.js");

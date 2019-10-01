@@ -1,3 +1,5 @@
+// handles all thermocouples. Makes for an extendable system for different sensor types
+
 const helpers = require("../../../../lib/helpers.js");
 const { global } = require("passeljs");
 

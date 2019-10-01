@@ -1,3 +1,5 @@
+// handles all wlan and access point operations and timing. Currently disabled by default till all kinks are worked out and it becomes more reliable. Also waiting on local setup from mobile app to be implemented.
+
 const { Components } = require("passeljs");
 const wifiHelper = require("./lib/wifiHelper.js");
 

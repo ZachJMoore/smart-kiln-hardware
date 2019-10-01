@@ -1,3 +1,5 @@
+// handles all authentication with server
+
 const { Components } = require("passeljs");
 const Socket = require("./lib/Socket");
 const HTTP = require("./lib/HTTP");

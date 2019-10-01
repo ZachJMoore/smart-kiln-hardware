@@ -1,3 +1,5 @@
+// handles all basic http auth. The initial connection, deciding whether to login or register
+
 const { Components } = require("passeljs");
 const fetch = require("../../../../lib/fetch");
 const responseHandler = require("../../../../lib/fetch/lib/responseHandler.js");

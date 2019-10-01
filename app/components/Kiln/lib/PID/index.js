@@ -1,3 +1,5 @@
+// handles most all relay interactions. Just keeps holds a given temperature
+
 const { Components } = require("passeljs");
 const helpers = require("../../../../lib/helpers.js");
 

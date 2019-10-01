@@ -1,3 +1,5 @@
+// handles all kiln firing logs. Sending to server and keeping backups
+
 const { Components } = require("passeljs");
 const helpers = require("../../lib/helpers.js");
 
