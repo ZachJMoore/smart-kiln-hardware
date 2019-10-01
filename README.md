@@ -1,86 +1,148 @@
 # Smart Kiln Hardware
 
-This is the new complete hardware application for the Smart Kiln project which supersedes <a href="https://github.com/ZachJMoore/smart-kiln-standalone" target="_blank">this</a> repository used for handling the logic behind firing a kiln, and <a href="https://github.com/ZachJMoore/smart-kiln-standalone-ui" target="_blank">this</a> repository used for the UI.
+This is the new complete hardware application for the Smart Kiln project which supersedes the<a href="https://github.com/ZachJMoore/smart-kiln-standalone" target="_blank">smart-kiln-standalone</a> repository which was used for handling the logic behind firing a kiln, and <a href="https://github.com/ZachJMoore/smart-kiln-standalone-ui" target="_blank">smart-kiln-standalone-ui</a> repository which was used for the UI.
 
-### Getting Started
+The switch to react native has taken place and the apps can soon be found on the Apple and Google app store in order to interface with this software.
 
-Make sure to edit the server/.env to match your environment.
+## Getting Started
 
-In the root directory run the following commands in separate terminal windows:
-
-```
-$ mv server/.env.example server/.env
-$ npm run server
-```
+After cloning the project, make sure to rename .env.example to .env. You can do so with the following command from the root project directory:
 
 ```
-$ npm run client
+$ mv .env.example .env
+```
+
+Or for those that love one line getting started commands:
+```
+$ git clone https://github.com/ZachJMoore/smart-kiln-hardware.git && cd smart-kiln-hardware && mv .env.example .env
 ```
 
 
-## Hardware Setup
 
-#### Parts:
-- <a href="https://www.amazon.com/gp/product/B07BC6WH7V/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1">Raspberry Pi</a>
-- <a href="https://www.amazon.com/gp/product/B0153R2A9I/ref=oh_aui_search_detailpage?ie=UTF8&psc=1">7" Touchscreen</a>
-- <a href="https://www.amazon.com/gp/product/B06XWN9Q99/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1">SD Card</a>
-- <a href="https://www.amazon.com/gp/product/B0753XW76H/ref=oh_aui_detailpage_o00_s01?ie=UTF8&psc=1">Solid State Relay</a>
-- <a href="https://www.amazon.com/gp/product/B00SK8NDAI/ref=oh_aui_detailpage_o00_s01?ie=UTF8&psc=1">Thermocouple Amplifier</a>
-- <a href="http://www.theceramicshop.com/product/10885/Type-K-Thermocouple-8B/">Ceramic type-k Thermocouple</a>
+## Hardware & Wiring
 
-### Wiring:
+Each SmartKiln software component that deals with hardware has a README with wiring and links to hardware information.
 
-#### soldered parts
-![simple-wiring](https://github.com/ZachJMoore/smart-kiln-hardware/blob/master/simple-wiring.png?raw=true)
+### Parts and Other:
+- Raspberry Pi
+- Power Supply
+- Raspberry Pi Case
+- SD Card
+- [Relays](/app/components/Kiln/lib/Relays/README.md)
+- [Thermocouples and Amplifiers](/app/components/Kiln/lib/ThermoSensor/README.md)
+- [Displays](/app/components/Display/README.md)
 
-The thermocouple are screwed directly to the amp. Neutral/ground coming back from the kiln elements can then also be screwed into the relay to programmatically close the circuit
+## Software Setup
 
-### Software Setup
+This project includes a WiFi Manager under the hood that is based on this for controlling wlan vs ap modes. It currently needs more testing and is not enabled. The WiFi mode switching is based on this answer on [StackExchange](https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312).
 
-https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312
+Even though it as not enabled, the install instructions for the WiFi Manager dependencies are listed below for future use, documentation, and testing purposes.
 
-Dependencies: node, SPI, ZeroConf, systemd-networkd helper tools, systemd-networkd setup, forever && forever-service
+### Dependencies:
 
-##### Node for PiZW:
+The follow is the basics of what we need: Node, SPI, I2C, ZeroConf, forever & forever-service, node_modules, and optional systemd-networkd helper tools & systemd-networkd setup.
+
+#### Installing Node
+
+**Node for Pi Zero W:**
 ```
-    $ curl -o node-v10.16.0-linux-armv6l.tar.gz https://nodejs.org/dist/latest-v10.x/node-v10.16.0-linux-armv6l.tar.gz && tar -xzf node-v10.16.0-linux-armv6l.tar.gz && sudo cp -r node-v10.16.0-linux-armv6l/* /usr/local/
+    $ curl -o node-v9.7.1-linux-armv6l.tar.gz https://nodejs.org/dist/v9.7.1/node-v9.7.1-linux-armv6l.tar.gz && tar -xzf node-v9.7.1-linux-armv6l.tar.gz && sudo cp -r node-v9.7.1-linux-armv6l/* /usr/local/
 ```
 
-##### Node for Pi3B+:
+**Node for Pi 3B+:**
 ```
     $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
     $ sudo apt-get install -y nodejs
 ```
 
-##### SPI and I2C:
+#### SPI, I2C:
+
+**Command Line:**
 ```
     $ sudo raspi-config
     -> Interfacing Options -> SPI
     -> Interfacing Options -> I2C
 ```
-or in /boot/config.txt append the following line:
+
+**Boot Config**
+
+If you'd rather enable these from the very start, in your sd card after installing raspbian, edit /boot/config.txt and append the following lines:
 ```
     dtparam=spi=on
     dtparam=i2c_vc=on
 ```
 
-##### ZeroConf
+#### ZeroConf
+
+We also need helper tools for ZeroConf. Run the following commands:
+
 ```
     $ sudo apt-get install libavahi-compat-libdnssd-dev
 ```
 
-##### systemd-networkd helper tools
+#### forever & forever-service
+
+Used for keeping everything alive after reboots or bugs happen
+
+```
+    $ npm install -g --save forever forever-service
+```
+
+#### Node Modules
+
+Thats it for required dependencies! Run the following command and move onto the usage section.
+
+```
+    $ npm install 
+```
+
+<br/>
+<hr>
+<br />
+
+**OPTIONAL:** Not required in the current version.
+
+#### systemd-networkd:
+
+Just a few helper tools. Run the follow:
+
 ```
     $ sudo apt install rng-tools
 ```
 
-##### systemd-networkd setup
+#### systemd-networkd Setup:
+
+There is some setup before we can use systemd-networkd
+
+**Automatic**
+
+smart-kiln-hardware provides a setup script which tries to copy and edit all the necessary files for you.
+
 ```
     $ sudo npm run setup
 ```
 
+**Manual**
 
-##### forever && forever-service
+If you prefer to do it manually or run into issues, you can follow the StackExchange answer linked above.
+
+## Usage:
+
+I would suggest running the app with `npm start` first to make sure everything is configured correctly, then proceed to following:
+
+**Install & Start**
+
 ```
-    $ npm install -g forever && npm install -g forever-service
+$ npm run service:install
 ```
+
+**Stop & Delete***
+```
+$ npm run service:delete
+```
+
+### Commands to interact with the service:
+- Start   - "sudo service smart-kiln-hardware start"
+- Stop    - "sudo service smart-kiln-hardware stop"
+- Status  - "sudo service smart-kiln-hardware status"
+- Restart - "sudo service smart-kiln-hardware restart"
