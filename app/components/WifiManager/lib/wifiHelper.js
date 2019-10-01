@@ -273,7 +273,7 @@ const setupSDND = async props => {
           console.log(
             new Date() + ": " + "Setup wpa_supplicant and enable it."
           );
-        return setWifi(props.wifi);
+        return setWifi(props.wlan);
       })
       .then(() => {
         isDebug &&

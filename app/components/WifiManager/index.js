@@ -7,18 +7,17 @@ module.exports = class WifiManager extends Components.Base {
 
     this.state = {
       mode: "ap",
-      defaultBootMode: process.env.WIFI_MANAGER_DEFAULT_BOOT_MODE || "ap",
-      inLan: false,
-      apNamePrefix: "Smart-Kiln_",
-      wifi: {
+      defaultBootMode: "ap", // "ap" || "wlan"
+      apNamePrefix: "Smart-Kiln-",
+      wlan: {
         countryCode: null,
         ssid: null,
         password: null
       },
       ap: {
-        countryCode: process.env.WIFI_MANAGER_AP_COUNTRY_CODE || "US",
-        ssid: process.env.WIFI_MANAGER_AP_SSID || "Smart-Kiln_Setup",
-        password: process.env.WIFI_MANAGER_AP_PASSWORD || "smartkiln"
+        countryCode: "US",
+        ssid: "Smart-Kiln-AP",
+        password: "smartkiln"
       }
     };
 
@@ -34,13 +33,10 @@ module.exports = class WifiManager extends Components.Base {
               key: "defaultBootMode"
             },
             {
-              key: "isFirstBoot"
-            },
-            {
               key: "apNamePrefix"
             },
             {
-              key: "wifi"
+              key: "wlan"
             },
             {
               key: "ap"
@@ -56,7 +52,9 @@ module.exports = class WifiManager extends Components.Base {
 
   startInterval() {
     clearInterval(this.interval);
-    let intervalSeconds = process.env.WIFI_MANAGER_INTERVAL_SECONDS;
+    // TODO: set change listener and restart interval whenever this changes
+    let intervalSeconds = this.global.RemoteConfig
+      .WIFI_MANAGER_INTERVAL_SECONDS;
     intervalSeconds = parseInt(intervalSeconds);
     if (isNaN(intervalSeconds)) intervalSeconds = 15;
 
@@ -72,7 +70,7 @@ module.exports = class WifiManager extends Components.Base {
         });
       } else {
         wifiHelper.getWifiNames().then(names => {
-          if (names.includes(this.state.wifi.ssid)) {
+          if (names.includes(this.state.wlan.ssid)) {
             this.stopInterval();
             this.setState({
               mode: "wlan"
@@ -90,9 +88,9 @@ module.exports = class WifiManager extends Components.Base {
   componentWillMount() {
     this.startInterval();
 
-    this.stateChanged.on("wifi", wifi => {
+    this.stateChanged.on("wlan", wlan => {
       wifiHelper
-        .setWifi(wifi)
+        .setWifi(wlan)
         .then(() => {})
         .catch(error => {
           console.log(new Date() + ": " + error);
@@ -166,16 +164,16 @@ module.exports = class WifiManager extends Components.Base {
 
     this.global.io.on("connection", socket => {
       socket.on("set-wifi-credentials", (data, cb) => {
-        let config = { ...this.state.wifi };
-        Object.keys(this.state.wifi).forEach(key => {
+        let config = { ...this.state.wlan };
+        Object.keys(this.state.wlan).forEach(key => {
           let value = data[key];
 
           if (key === "countryCode") {
-            if (value && typeof value === typeof "" && !value.includes(" ")) {
+            if (value && typeof value === typeof "") {
               config[key] = value;
             }
           } else if (key === "ssid") {
-            if (value && typeof value === typeof "" && !value.includes(" ")) {
+            if (value && typeof value === typeof "") {
               config[key] = value;
             }
           } else if (key === "password") {
@@ -189,7 +187,7 @@ module.exports = class WifiManager extends Components.Base {
         });
 
         this.setState({
-          wifi: config,
+          wlan: config,
           mode: "wlan",
           defaultBootMode: "wlan"
         });
@@ -201,5 +199,14 @@ module.exports = class WifiManager extends Components.Base {
         });
       });
     });
+  }
+
+  componentDidMount() {
+    wifiHelper
+      .setAP(this.state.ap)
+      .then(() => {})
+      .catch(error => {
+        console.log(new Date() + ": " + error);
+      });
   }
 };

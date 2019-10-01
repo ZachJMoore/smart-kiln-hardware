@@ -7,15 +7,15 @@ require("dotenv").config();
 const wifiHelper = require("../app/components/WifiManager/lib/wifiHelper.js");
 
 const wifiConfig = {
-  wifi: {
+  wlan: {
     countryCode: process.env.WIFI_MANAGER_WIFI_COUNTRY_CODE || "US",
     ssid: process.env.WIFI_MANAGER_WIFI_SSID || "smart-kiln-setup",
     password: process.env.WIFI_MANAGER_WIFI_PASSWORD || "smartkiln"
   },
   ap: {
-    countryCode: process.env.WIFI_MANAGER_AP_COUNTRY_CODE || "US",
-    ssid: process.env.WIFI_MANAGER_AP_SSID || "Smart-Kiln_Setup",
-    password: process.env.WIFI_MANAGER_AP_PASSWORD || "smartkiln"
+    countryCode: "US",
+    ssid: "Smart-Kiln-AP",
+    password: "smartkiln"
   }
 };
 

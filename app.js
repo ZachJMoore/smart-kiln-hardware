@@ -15,6 +15,7 @@ const ZeroConf = require("./app/components/ZeroConf");
 const RealtimeData = require("./app/components/RealtimeData");
 const WifiManager = require("./app/components/WifiManager");
 const Display = require("./app/components/Display");
+const RemoteConfig = require("./app/components/RemoteConfig");
 const io = require("socket.io")(8009);
 
 // Start application
@@ -33,6 +34,7 @@ passel.use(RealtimeData);
 // passel.use(ZeroConf);
 // passel.use(WifiManager);
 passel.use(Display);
+passel.use(RemoteConfig);
 
 passel.mountComponents();
 
