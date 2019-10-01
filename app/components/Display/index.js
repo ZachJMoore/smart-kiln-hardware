@@ -1,13 +1,9 @@
 const { Components } = require("passeljs");
 const { getTemperature, resolveObjectPath } = require("../../lib/helpers");
 
-const useFakeData = process.env.FAKE_DATA === "true";
-
 class Display extends Components.Base {
   constructor(props) {
     super(props);
-
-    if (useFakeData) return;
 
     const Segments = require("./lib/ht16k33").Segments;
 

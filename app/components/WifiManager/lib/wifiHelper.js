@@ -4,7 +4,6 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
 const isValidPlatform = process.platform === "linux" && process.arch === "arm";
-const useFakeData = process.env.FAKE_DATA === "true";
 
 let isDebug = process.env.DEBUG === "true";
 
@@ -29,7 +28,6 @@ const _writeTemplate = async (templatePath, filePath, properties) => {
 };
 
 const getWifiNames = async () => {
-  if (useFakeData) return Promise.resolve([process.env.WIFI_MANAGER_WIFI_SSID]);
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -57,7 +55,6 @@ const getWifiNames = async () => {
 };
 
 const getCurrentConnection = async () => {
-  if (useFakeData) return Promise.resolve(process.env.WIFI_MANAGER_WIFI_SSID);
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -79,10 +76,6 @@ const getCurrentConnection = async () => {
 };
 
 const setAP = async props => {
-  if (useFakeData)
-    return Promise.resolve(
-      "access point credentials are set (fake data is on)"
-    );
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -118,8 +111,6 @@ const setAP = async props => {
 };
 
 const setWifi = async props => {
-  if (useFakeData)
-    return Promise.resolve("wifi credentials set (fake data is on)");
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -153,8 +144,6 @@ const setWifi = async props => {
 };
 
 const setDefaultBootMode = async (defaultMode = "wlan") => {
-  if (useFakeData)
-    return Promise.resolve("default boot mode is set (fake data is on)");
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -174,8 +163,6 @@ const setDefaultBootMode = async (defaultMode = "wlan") => {
 };
 
 const switchToAP = () => {
-  if (useFakeData)
-    return Promise.resolve("switched to access point (fake data is on)");
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -185,7 +172,6 @@ const switchToAP = () => {
 };
 
 const switchToWifi = () => {
-  if (useFakeData) return Promise.resolve("switched to wifi (fake data is on)");
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -200,10 +186,6 @@ const setDebug = (debug = false) => {
 };
 
 const setupSDND = async props => {
-  if (useFakeData)
-    return Promise.resolve(
-      "systemd-networkd' setup complete (fake data is on)"
-    );
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
@@ -351,10 +333,6 @@ const setupSDND = async props => {
 };
 
 const reboot = async () => {
-  if (useFakeData)
-    return Promise.reject(
-      "You are using fake data. No promise would normally be returned. We can assume this will in essence always be rejected."
-    );
   if (!isValidPlatform)
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`

@@ -5,46 +5,40 @@ class Relays {
     this.debug = debug;
     this.relayType = relayType;
 
-    let useFakeData = process.env.FAKE_DATA === "true";
-
-    if (useFakeData) {
-      this.relays = [];
+    this.Gpio = require("onoff").Gpio;
+    if (relayType === "v1") {
+      this.relays = [new this.Gpio(27, "out")];
+    } else if (relayType === "v2") {
+      this.relays = [
+        new this.Gpio(5, "out"),
+        new this.Gpio(6, "out"),
+        new this.Gpio(13, "out"),
+        new this.Gpio(19, "out"),
+        new this.Gpio(26, "out"),
+        new this.Gpio(17, "out"),
+        new this.Gpio(27, "out"),
+        new this.Gpio(22, "out")
+      ];
+    } else if (relayType === "v3") {
+      this.relays = [
+        new this.Gpio(6, "out"),
+        new this.Gpio(13, "out"),
+        new this.Gpio(19, "out"),
+        new this.Gpio(26, "out")
+      ];
+    } else if (relayType === "v4") {
+      this.relays = [
+        new this.Gpio(13, "out"),
+        new this.Gpio(19, "out"),
+        new this.Gpio(26, "out"),
+        new this.Gpio(16, "out"),
+        new this.Gpio(20, "out"),
+        new this.Gpio(21, "out")
+      ];
     } else {
-      this.Gpio = require("onoff").Gpio;
-      if (relayType === "v1") {
-        this.relays = [new this.Gpio(27, "out")];
-      } else if (relayType === "v2") {
-        this.relays = [
-          new this.Gpio(5, "out"),
-          new this.Gpio(6, "out"),
-          new this.Gpio(13, "out"),
-          new this.Gpio(19, "out"),
-          new this.Gpio(26, "out"),
-          new this.Gpio(17, "out"),
-          new this.Gpio(27, "out"),
-          new this.Gpio(22, "out")
-        ];
-      } else if (relayType === "v3") {
-        this.relays = [
-          new this.Gpio(6, "out"),
-          new this.Gpio(13, "out"),
-          new this.Gpio(19, "out"),
-          new this.Gpio(26, "out")
-        ];
-      } else if (relayType === "v4") {
-        this.relays = [
-          new this.Gpio(13, "out"),
-          new this.Gpio(19, "out"),
-          new this.Gpio(26, "out"),
-          new this.Gpio(16, "out"),
-          new this.Gpio(20, "out"),
-          new this.Gpio(21, "out")
-        ];
-      } else {
-        throw new Error(
-          "No valid relay type provided to constructor. There will be no way to turn on the kiln"
-        );
-      }
+      throw new Error(
+        "No valid relay type provided to constructor. There will be no way to turn on the kiln"
+      );
     }
   }
 

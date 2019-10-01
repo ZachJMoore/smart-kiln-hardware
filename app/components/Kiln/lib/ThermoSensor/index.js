@@ -6,35 +6,18 @@ module.exports = class ThermoSensor {
     this.debug = debug;
     this.sensorType = sensorType;
 
-    let useFakeData = process.env.FAKE_DATA === "true";
-    if (useFakeData) {
+    const Max31855 = require("./lib/Max31855.js");
+    if (sensorType === "v1") {
+      this.sensors = [new Max31855(null, this.debug)];
+    } else if (sensorType === "v2") {
       this.sensors = [
-        {
-          readTempC: () => {
-            return new Promise((resolve, reject) => {
-              if ((Math.random() * 10).toFixed(0) % 2) {
-                resolve(26 + 1);
-              } else {
-                resolve(26 + 2);
-              }
-            });
-          }
-        }
+        new Max31855(23, this.debug),
+        new Max31855(24, this.debug)
       ];
     } else {
-      const Max31855 = require("./lib/Max31855.js");
-      if (sensorType === "v1") {
-        this.sensors = [new Max31855(null, this.debug)];
-      } else if (sensorType === "v2") {
-        this.sensors = [
-          new Max31855(23, this.debug),
-          new Max31855(24, this.debug)
-        ];
-      } else {
-        throw new Error(
-          "No valid sensor type provided to constructor. No interface library will be loaded"
-        );
-      }
+      throw new Error(
+        "No valid sensor type provided to constructor. No interface library will be loaded"
+      );
     }
   }
 
