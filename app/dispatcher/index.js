@@ -6,7 +6,7 @@ module.exports.startFiring = schedule => {
 };
 module.exports.startFiringAsync = async schedule => {
   let rt = exposedComponentFunctions.Kiln.startFiring(schedule);
-  if (helpers.isError(rt)) throw rt;
+  if (helpers.isError(rt)) return Promise.reject(rt);
   else return rt;
 };
 module.exports.cancelFiring = () => {
@@ -14,7 +14,7 @@ module.exports.cancelFiring = () => {
 };
 module.exports.cancelFiringAsync = async () => {
   let rt = exposedComponentFunctions.Kiln.cancelFiring();
-  if (helpers.isError(rt)) throw rt;
+  if (helpers.isError(rt)) return Promise.reject(rt);
   else return rt;
 };
 

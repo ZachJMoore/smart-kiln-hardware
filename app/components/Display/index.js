@@ -1,5 +1,5 @@
 const { Components } = require("passeljs");
-const { getTemperature, getTemperatureText } = require("../../lib/helpers");
+const { getTemperature, resolveObjectPath } = require("../../lib/helpers");
 
 const useFakeData = process.env.FAKE_DATA === "true";
 
@@ -32,13 +32,17 @@ class Display extends Components.Base {
   componentDidMount() {
     if (useFakeData) return;
 
+    let temperatureDisplayType = "fahrenheit";
+    let tdt = resolveObjectPath(
+      ".Authentication.account.kiln_settings.temperature_display_type",
+      this.global
+    );
+
+    if (tdt && typeof tdt === typeof "text") temperatureDisplayType = tdt;
+
     this.globalChanged.on("Kiln.thermoSensor", thermoSensor => {
       this.display.writeNumber(
-        getTemperature(
-          thermoSensor.average,
-          this.global.Authentication.account.kiln_settings
-            .temperature_display_type
-        )
+        getTemperature(thermoSensor.average, temperatureDisplayType)
       );
     });
 
