@@ -10,30 +10,45 @@ class Display extends Components.Base {
     this.display.setBrightness(1);
   }
 
-  componentDidMount() {
+  getTemperatureDisplayType(path, object) {
     let temperatureDisplayType = "fahrenheit";
-    let tdt = resolveObjectPath(
-      ".Authentication.account.kiln_settings.temperature_display_type",
-      this.global
-    );
 
-    if (tdt && typeof tdt === typeof "text") temperatureDisplayType = tdt;
+    let resolvePath = path;
+    let objectToResolve = object;
 
+    if (!object || !path) {
+      resolvePath =
+        "Authentication.account.kiln_settings.temperature_display_type";
+      objectToResolve = this.global;
+    }
+
+    let tdt = resolveObjectPath(resolvePath, objectToResolve);
+
+    if (tdt) temperatureDisplayType = tdt;
+
+    return temperatureDisplayType;
+  }
+
+  componentDidMount() {
     this.globalChanged.on("Kiln.thermoSensor", thermoSensor => {
-      this.display.writeNumber(
-        getTemperature(thermoSensor.average, temperatureDisplayType)
+      let temperature = getTemperature(
+        thermoSensor.average,
+        this.getTemperatureDisplayType()
       );
+
+      this.display.writeNumber(temperature);
     });
 
     this.globalChanged.on("Authentication.account", account => {
-      this.display.writeNumber(
-        getTemperature(
-          this.global.Kiln.thermoSensor.average,
-          account.kiln_settings
-            ? account.kiln_settings.temperature_display_type || "fahrenheit"
-            : "fahrenheit"
+      let temperature = getTemperature(
+        this.global.Kiln.thermoSensor.average,
+        this.getTemperatureDisplayType(
+          "kiln_settings.temperature_display_type",
+          account
         )
       );
+
+      this.display.writeNumber(temperature);
     });
   }
 }
