@@ -7,7 +7,7 @@ module.exports = class WifiManager extends Components.Base {
 
     this.state = {
       mode: "ap",
-      defaultBootMode: "ap", // "ap" || "wlan"
+      defaultBootMode: "wlan", // "ap" || "wlan"
       apNamePrefix: "smart-kiln-",
       wlan: {
         countryCode: null,

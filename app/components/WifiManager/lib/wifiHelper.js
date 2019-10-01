@@ -306,7 +306,7 @@ const setupSDND = async props => {
         );
       })
       .then(() => {
-        let mode = "ap";
+        let mode = "wlan";
         isDebug &&
           console.log(
             new Date() + ": " + `Set default boot mode to '${mode}' mode.`
