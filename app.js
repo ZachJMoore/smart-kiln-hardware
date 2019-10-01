@@ -46,6 +46,8 @@ console.log(new Date() + ": " + "application started");
 // setInterval(() => {
 //   const used = process.memoryUsage().heapUsed / 1024 / 1024;
 //   console.log(
-//     "The script uses approximately ${Math.round(used * 100) / 100} MB"
+//     new Date() +
+//       ": " +
+//       `The script uses approximately ${Math.round(used * 100) / 100} MB`
 //   );
-// }, 5000);
+// }, 1000);
