@@ -8,8 +8,11 @@ module.exports = class RemoteConfig extends Components.Base {
       // ENVIRONMENT
       isProduction: process.env.NODE_ENV === "production" ? true : false, //Replaces NODE_ENV
       isDebug: process.env.DEBUG === "true" ? true : false, // Replaces DEBUG
-      DEV_HOST: "https://development-backend.smartkiln.net", // TODO: switch to env for initial settings
-      PRODUCTION_HOST: "https://production-backend.smartkiln.net",
+      DEV_HOST:
+        process.env.DEV_HOST || "https://development-backend.smartkiln.net",
+      PRODUCTION_HOST:
+        process.env.PRODUCTION_HOST ||
+        "https://production-backend.smartkiln.net",
 
       // kiln firing settings
       TEMPERATURE_UPDATE_INTERVAL_SECONDS: 5,
@@ -96,5 +99,7 @@ module.exports = class RemoteConfig extends Components.Base {
 
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    //   TODO: work with this.global.socket to remotely update and keep the database restrictions and smart-kiln intervals in sync
+  }
 };
