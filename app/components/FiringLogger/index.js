@@ -24,9 +24,7 @@ module.exports = class FiringLogger extends Components.Base {
 
     this.options = {
       fsState: {
-        recurrentUpdateLimit:
-          this.global.RemoteConfig
-            .KILN_LOG_DATAPOINT_FS_INTERVAL_LIMIT_SECONDS * 1000,
+        recurrentUpdateLimit: 600 * 1000,
         options: {
           include: [
             {

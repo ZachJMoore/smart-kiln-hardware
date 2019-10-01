@@ -24,7 +24,6 @@ module.exports = class RemoteConfig extends Components.Base {
       COMMAND_COMPLETED_LIMIT_COUNT: 30,
 
       // KILN FIRING LOGGING
-      KILN_LOG_DATAPOINT_FS_INTERVAL_LIMIT_SECONDS: 600,
       KILN_LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS: 60,
       // A max of 30 logs will be kept in storage
       KILN_LOG_LIMIT_COUNT: 30,
@@ -35,7 +34,6 @@ module.exports = class RemoteConfig extends Components.Base {
       REALTIME_DATA_UPDATE_INTERVAL_SECONDS: 45,
 
       // DATAPOINT LOGGING
-      DATAPOINT_FS_INTERVAL_LIMIT_SECONDS: 600,
       DATAPOINT_UPDATE_INTERVAL_SECONDS: 60,
       // 720 @60 second update interval = 12 hours worth of datapoints
       DATAPOINT_BACKUP_LIMIT_COUNT: 720,
@@ -59,12 +57,10 @@ module.exports = class RemoteConfig extends Components.Base {
             { key: "SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS" },
             { key: "HTTP_RECONNECT_ATTEMPT_INTERVAL_SECONDS" },
             { key: "COMMAND_COMPLETED_LIMIT_COUNT" },
-            { key: "KILN_LOG_DATAPOINT_FS_INTERVAL_LIMIT_SECONDS" },
             { key: "KILN_LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS" },
             { key: "KILN_LOG_LIMIT_COUNT" },
             { key: "KILN_LOG_BACKUP_LIMIT_COUNT" },
             { key: "REALTIME_DATA_UPDATE_INTERVAL_SECONDS" },
-            { key: "DATAPOINT_FS_INTERVAL_LIMIT_SECONDS" },
             { key: "DATAPOINT_UPDATE_INTERVAL_SECONDS" },
             { key: "DATAPOINT_BACKUP_LIMIT_COUNT" },
             { key: "DATAPOINT_LIMIT_COUNT" },
@@ -84,12 +80,10 @@ module.exports = class RemoteConfig extends Components.Base {
             { key: "SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS", emit: true },
             { key: "HTTP_RECONNECT_ATTEMPT_INTERVAL_SECONDS", emit: true },
             { key: "COMMAND_COMPLETED_LIMIT_COUNT", emit: true },
-            { key: "KILN_LOG_DATAPOINT_FS_INTERVAL_LIMIT_SECONDS", emit: true },
             { key: "KILN_LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS", emit: true },
             { key: "KILN_LOG_LIMIT_COUNT", emit: true },
             { key: "KILN_LOG_BACKUP_LIMIT_COUNT", emit: true },
             { key: "REALTIME_DATA_UPDATE_INTERVAL_SECONDS", emit: true },
-            { key: "DATAPOINT_FS_INTERVAL_LIMIT_SECONDS", emit: true },
             { key: "DATAPOINT_UPDATE_INTERVAL_SECONDS", emit: true },
             { key: "DATAPOINT_BACKUP_LIMIT_COUNT", emit: true },
             { key: "DATAPOINT_LIMIT_COUNT", emit: true },

@@ -11,8 +11,7 @@ module.exports = class DatapointLogger extends Components.Base {
 
     this.options = {
       fsState: {
-        recurrentUpdateLimit:
-          (process.env.DATAPOINT_FS_INTERVAL_LIMIT_SECONDS || 600) * 1000,
+        recurrentUpdateLimit: 600 * 1000,
         options: {
           include: [
             {
@@ -48,11 +47,11 @@ module.exports = class DatapointLogger extends Components.Base {
     let limit = null;
 
     if (isBackup) {
-      limit = process.env.DATAPOINT_BACKUP_LIMIT_COUNT;
+      limit = this.global.RemoteConfig.DATAPOINT_BACKUP_LIMIT_COUNT;
       limit = parseInt(limit);
       if (isNaN(limit)) limit = 720;
     } else {
-      limit = process.env.DATAPOINT_LIMIT_COUNT;
+      limit = this.global.RemoteConfig.DATAPOINT_LIMIT_COUNT;
       limit = parseInt(limit);
       if (isNaN(limit)) limit = 360;
     }
@@ -125,8 +124,9 @@ module.exports = class DatapointLogger extends Components.Base {
 
   componentDidMount() {
     this.trackDatapoints();
+    // TODO: when the interval seconds change, make sure we reset things
     setInterval(() => {
       this.trackDatapoints();
-    }, (process.env.DATAPOINT_UPDATE_INTERVAL_SECONDS || 60) * 1000);
+    }, this.global.RemoteConfig.DATAPOINT_UPDATE_INTERVAL_SECONDS * 1000);
   }
 };
