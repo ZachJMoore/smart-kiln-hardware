@@ -1,33 +1,16 @@
 const { Components } = require("passeljs");
+const Segments = require("./lib/ht16k33").Segments;
 const { getTemperature, resolveObjectPath } = require("../../lib/helpers");
 
 class Display extends Components.Base {
   constructor(props) {
     super(props);
 
-    const Segments = require("./lib/ht16k33").Segments;
-
-    const display = new Segments(0x70, 1);
-    display.setBrightness(1);
-
-    const clear = () => {
-      display.clear();
-    };
-    process.on("SIGINT", function() {
-      clear();
-      process.nextTick(function() {
-        process.exit(0);
-      });
-    });
-    process.on("exit", clear);
-    process.on("uncaughtException", clear);
-
-    this.display = display;
+    this.display = new Segments(0x70, 1);
+    this.display.setBrightness(1);
   }
 
   componentDidMount() {
-    if (useFakeData) return;
-
     let temperatureDisplayType = "fahrenheit";
     let tdt = resolveObjectPath(
       ".Authentication.account.kiln_settings.temperature_display_type",
