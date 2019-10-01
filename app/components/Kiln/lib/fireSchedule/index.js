@@ -23,7 +23,8 @@ module.exports = function*() {
       isHolding: false
     });
 
-    let tick = process.env.FIRING_SCHEDULE_INTERVAL_SECONDS || 5;
+    // TODO: if this interval seconds change. Make sure we update it
+    let tick = this.global.RemoteConfig.FIRING_SCHEDULE_INTERVAL_SECONDS;
 
     let ramp = ramps[e];
 

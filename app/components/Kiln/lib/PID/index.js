@@ -59,9 +59,11 @@ module.exports = class PID extends Components.Base {
   startPID() {
     clearInterval(this.interval);
     this.holdTarget();
+
+    // TODO: if this interval seconds change, reset interval with new setting
     this.interval = setInterval(
       this.holdTarget,
-      (process.env.PID_INTERVAL_SECONDS || 5) * 1000
+      this.global.RemoteConfig.PID_INTERVAL_SECONDS * 1000
     );
   }
 

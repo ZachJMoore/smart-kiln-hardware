@@ -256,6 +256,7 @@ module.exports = class Kiln extends Components.Base {
   }
 
   componentDidMount() {
+    // TODO: if the update interval seconds change, reset this interval
     this.temperatureUpdateInterval = setInterval(() => {
       this.thermoSensor
         .readFahrenheitAsync()
@@ -276,6 +277,6 @@ module.exports = class Kiln extends Components.Base {
             thermoSensorError: error
           });
         });
-    }, (process.env.TEMPERATURE_UPDATE_INTERVAL_SECONDS || 5) * 1000);
+    }, this.global.RemoteConfig.TEMPERATURE_UPDATE_INTERVAL_SECONDS * 1000);
   }
 };
