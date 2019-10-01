@@ -17,7 +17,11 @@ module.exports = class Socket extends Components.Base {
   }
 
   componentWillMount() {
-    this.socket = io(process.env.DB_HOST + "/kiln", {
+    let host = this.global.RemoteConfig.isProduction
+      ? this.global.RemoteConfig.PRODUCTION_HOST
+      : this.global.RemoteConfig.DEV_HOST;
+
+    this.socket = io(host + "/kiln", {
       autoConnect: false
     });
 

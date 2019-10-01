@@ -12,7 +12,11 @@ module.exports = class HTTP extends Components.Base {
       authenticationError: null
     };
 
-    this.authPath = process.env.DB_HOST + "/api/auth/kiln";
+    let host = this.global.RemoteConfig.isProduction
+      ? this.global.RemoteConfig.PRODUCTION_HOST
+      : this.global.RemoteConfig.DEV_HOST;
+
+    this.authPath = host + "/api/auth/kiln";
     this.options = {
       headers: {
         Accept: "application/json",

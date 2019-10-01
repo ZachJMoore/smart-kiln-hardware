@@ -24,6 +24,7 @@ passel.setGlobalDefaults({
   io
 });
 
+passel.use(RemoteConfig); // must mount as soon as possible
 passel.use(Authentication);
 passel.use(Kiln);
 passel.use(Schedules);
@@ -34,7 +35,6 @@ passel.use(RealtimeData);
 // passel.use(ZeroConf);
 // passel.use(WifiManager);
 passel.use(Display);
-passel.use(RemoteConfig);
 
 passel.mountComponents();
 

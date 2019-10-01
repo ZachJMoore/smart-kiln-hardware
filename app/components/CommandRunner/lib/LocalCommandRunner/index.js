@@ -1,6 +1,5 @@
 const { Components } = require("passeljs");
 const dispatcher = require("../../../../dispatcher");
-const isDebug = process.env.DEBUG === "true";
 
 module.exports = class LocalCommandRunner extends Components.Base {
   constructor(props) {
@@ -9,11 +8,11 @@ module.exports = class LocalCommandRunner extends Components.Base {
 
   componentDidMount() {
     this.global.io.on("connection", socket => {
-      if (isDebug)
+      if (this.global.RemoteConfig.isDebug)
         console.log(new Date() + ": " + "mobile device connected over the LAN");
 
       socket.on("command", (command, cb) => {
-        if (isDebug) console.log(command);
+        if (this.global.RemoteConfig.isDebug) console.log(command);
 
         if (command.type === "test_message") {
           if (cb) cb(null);

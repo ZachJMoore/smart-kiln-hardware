@@ -1,8 +1,6 @@
 const { Components } = require("passeljs");
 const helpers = require("../../../../lib/helpers.js");
 
-const isDebug = process.env.DEBUG === "true";
-
 module.exports = class PID extends Components.Base {
   constructor(props) {
     super(props);
@@ -40,7 +38,7 @@ module.exports = class PID extends Components.Base {
       this.props.setRelays(1);
     }
 
-    if (isDebug)
+    if (this.global.RemoteConfig.isDebug)
       console.log(
         new Date() +
           ": " +

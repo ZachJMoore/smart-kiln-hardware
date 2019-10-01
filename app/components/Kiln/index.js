@@ -4,8 +4,6 @@ const Relays = require("./lib/Relays");
 const PID = require("./lib/PID");
 const fireSchedule = require("./lib/fireSchedule");
 
-const isDebug = process.env.DEBUG === "true";
-
 module.exports = class Kiln extends Components.Base {
   constructor(props) {
     super(props);
@@ -168,7 +166,8 @@ module.exports = class Kiln extends Components.Base {
   }
 
   errorFiring(error) {
-    if (isDebug) console.log(new Date() + ": " + error);
+    if (this.global.RemoteConfig.isDebug)
+      console.log(new Date() + ": " + error);
     this.setState({
       firingLifeCycle: "error",
       firingError: error,
@@ -181,7 +180,8 @@ module.exports = class Kiln extends Components.Base {
   }
 
   cancelFiring() {
-    if (isDebug) console.log(new Date() + ": " + "Fire schedule canceled");
+    if (this.global.RemoteConfig.isDebug)
+      console.log(new Date() + ": " + "Fire schedule canceled");
     this.setState({
       firingLifeCycle: "canceled",
       rampIndex: null,
@@ -195,7 +195,8 @@ module.exports = class Kiln extends Components.Base {
   }
 
   finishFiring() {
-    if (isDebug) console.log(new Date() + ": " + "Fire schedule finished");
+    if (this.global.RemoteConfig.isDebug)
+      console.log(new Date() + ": " + "Fire schedule finished");
     this.setState({
       firingLifeCycle: "finished",
       rampIndex: null,
@@ -222,7 +223,7 @@ module.exports = class Kiln extends Components.Base {
 
     this.stateChanged.on("isFiring", isFiring => {
       if (!isFiring) {
-        if (isDebug)
+        if (this.global.RemoteConfig.isDebug)
           console.log(
             new Date() +
               ": " +

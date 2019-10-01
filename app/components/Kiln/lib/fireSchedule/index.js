@@ -1,5 +1,3 @@
-const isDebug = process.env.DEBUG === "true";
-
 module.exports = function*() {
   if (!this.state.schedule) {
     this.errorFiring("No schedule provided");
@@ -15,7 +13,7 @@ module.exports = function*() {
 
   const ramps = this.state.schedule.firing_schedule_ramps.slice();
 
-  if (isDebug) console.log(new Date() + ": " + ramps);
+  if (this.global.RemoteConfig.isDebug) console.log(new Date() + ": " + ramps);
 
   this.PID.setTarget(this.state.thermoSensor.average + 0);
 
@@ -51,7 +49,7 @@ module.exports = function*() {
       risePerSecond = -risePerSecond;
     }
 
-    if (isDebug) {
+    if (this.global.RemoteConfig.isDebug) {
       console.log(
         new Date() +
           ": " +
@@ -81,7 +79,7 @@ module.exports = function*() {
           clearInterval(this._firing_schedule_increase_interval);
           this.PID.setTarget(ramp.target);
 
-          if (isDebug)
+          if (this.global.RemoteConfig.isDebug)
             console.log(
               new Date() + ": " + `entering hold for ${ramp.hold * 60} minutes`
             );
@@ -105,7 +103,7 @@ module.exports = function*() {
           clearInterval(this._firing_schedule_increase_interval);
           this.PID.setTarget(ramp.target);
 
-          if (isDebug)
+          if (this.global.RemoteConfig.isDebug)
             console.log(
               new Date() + ": " + `entering hold for ${ramp.hold * 60} minutes`
             );
