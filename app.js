@@ -3,7 +3,6 @@ const ROOT_PATH = fs.realpathSync(".");
 require("dotenv").config({
   path: ROOT_PATH + "/.env"
 });
-require("dotenv").config();
 const passel = require("passeljs");
 const Kiln = require("./app/components/Kiln");
 const Authentication = require("./app/components/Authentication");
@@ -24,6 +23,8 @@ passel.setGlobalDefaults({
   io
 });
 
+// Order of .use() matters! If components need access to each other, make sure the values you need are set in componentWillMount or Constructor, and are not accessed from other components until componentDidMount
+
 passel.use(RemoteConfig); // must mount as soon as possible
 passel.use(Authentication);
 passel.use(Kiln);
@@ -32,18 +33,19 @@ passel.use(FiringLogger);
 passel.use(DatapointLogger);
 passel.use(CommandRunner);
 passel.use(RealtimeData);
-// passel.use(ZeroConf);
-// passel.use(WifiManager);
+passel.use(ZeroConf);
 passel.use(Display);
+// passel.use(WifiManager); // this is not quite complete and needs refining.
 
 passel.mountComponents();
 
 console.log(new Date() + ": " + "application started");
 
 // Testing memory usage of application
-// setInterval(()=>{
 
-//     const used = process.memoryUsage().heapUsed / 1024 / 1024;
-//     console.log(`The script uses approximately ${Math.round(used * 100) / 100} MB`);
-
-// }, 1000)
+// setInterval(() => {
+//   const used = process.memoryUsage().heapUsed / 1024 / 1024;
+//   console.log(
+//     "The script uses approximately ${Math.round(used * 100) / 100} MB"
+//   );
+// }, 5000);
