@@ -25,8 +25,8 @@ module.exports = class FiringLogger extends Components.Base {
     this.options = {
       fsState: {
         recurrentUpdateLimit:
-          (process.env.KILN_LOG_DATAPOINT_FS_INTERVAL_LIMIT_SECONDS || 600) *
-          1000,
+          this.global.RemoteConfig
+            .KILN_LOG_DATAPOINT_FS_INTERVAL_LIMIT_SECONDS * 1000,
         options: {
           include: [
             {
@@ -99,11 +99,11 @@ module.exports = class FiringLogger extends Components.Base {
     let limit = null;
 
     if (isBackup) {
-      limit = process.env.KILN_LOG_BACKUP_LIMIT_COUNT;
+      limit = this.global.RemoteConfig.KILN_LOG_BACKUP_LIMIT_COUNT;
       limit = parseInt(limit);
       if (isNaN(limit)) limit = 30;
     } else {
-      limit = process.env.KILN_LOG_LIMIT_COUNT;
+      limit = this.global.RemoteConfig.KILN_LOG_LIMIT_COUNT;
       limit = parseInt(limit);
       if (isNaN(limit)) limit = 60;
     }
@@ -134,10 +134,11 @@ module.exports = class FiringLogger extends Components.Base {
           datapoints: [this.getDatapoint(1)]
         });
         this.ensureFsState();
+        // TODO: if the interval seconds change, make sure we update them
         this.kiln_log_datapoint_interval = setInterval(() => {
           this.uploadDatapoint();
           this.addDatapoint();
-        }, (process.env.KILN_LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS || 60) * 1000);
+        }, this.global.RemoteConfig.KILN_LOG_DATAPOINT_UPDATE_INTERVAL_SECONDS * 1000);
       } else {
         clearInterval(this.kiln_log_datapoint_interval);
         this.addDatapoint();
