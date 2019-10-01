@@ -1,6 +1,6 @@
 {
   "name": "smart-kiln-hardware",
-  "version": "5.0.0",
+  "version": "2.0.0",
   "description": "Smart IoT kiln controller",
   "main": "app.js",
   "bin": "app.js",
