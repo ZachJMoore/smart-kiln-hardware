@@ -58,7 +58,7 @@ module.exports = class Socket extends Components.Base {
       this.reconnectInterval = setInterval(() => {
         if (this.state.isConnected) clearInterval(this.reconnectInterval);
         else this.socket.connect();
-      }, (process.env.SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS || 10) * 1000);
+      }, this.global.RemoteConfig.SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS * 1000);
     });
 
     this.setGlobal({

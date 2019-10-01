@@ -91,7 +91,7 @@ module.exports = class HTTP extends Components.Base {
       if (authenticationError) {
         this.reconnectAttemptInterval = setInterval(() => {
           this.authenticate();
-        }, (process.env.SOCKET_RECONNECT_ATTEMPT_INTERVAL_SECONDS || 10) * 1000);
+        }, this.global.RemoteConfig.HTTP_RECONNECT_ATTEMPT_INTERVAL_SECONDS * 1000);
       }
     });
   }
