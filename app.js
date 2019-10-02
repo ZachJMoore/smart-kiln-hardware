@@ -1,8 +1,6 @@
 const fs = require("fs");
 const ROOT_PATH = fs.realpathSync(".");
-require("dotenv").config({
-  path: ROOT_PATH + "/.env"
-});
+require("dotenv").config();
 const passel = require("passeljs");
 const Kiln = require("./app/components/Kiln");
 const Authentication = require("./app/components/Authentication");
@@ -39,7 +37,11 @@ passel.use(Display);
 
 passel.mountComponents();
 
-console.log(new Date() + ": " + "application started");
+console.log(
+  `${new Date()}: application started. NODE_ENV is ${
+    passel.global.RemoteConfig.isProduction ? "production" : "development"
+  }`
+);
 
 // Testing memory usage of application
 
