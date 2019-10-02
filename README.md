@@ -1,8 +1,31 @@
+# SmartKiln
+
+![smart-kiln-hardware-header](smart-kiln-hardware-header.png)
+
+SmartKiln brings a smarter, better, more connected ecosystem to all your kilns. With SmartKiln you have full access of the network to all of your connected kilns.
+
+SmartKiln provides all and more of the following features:
+
+- **Remotely control kilns from anywhere**
+- **Add, edit, and sync multiple firing schedules from one place**
+- **View real-time kiln data and charted temperature data points for multiple kilns**
+- **Easily see current state of all linked kilns**
+- **Edit kiln temperature display types and temperature offsets**
+- **Easily switch between displaying Celsius and Fahrenheit temperatures**
+
+The mobile apps for Apple and Google will both be released soon! If you want to get a head start though, below are all the details for setting up your own kiln powered by the SmartKiln ecosystem.
+
+<br />
+
 # Smart Kiln Hardware
 
-This is the new complete hardware application for the Smart Kiln project which supersedes the<a href="https://github.com/ZachJMoore/smart-kiln-standalone" target="_blank">smart-kiln-standalone</a> repository which was used for handling the logic behind firing a kiln, and <a href="https://github.com/ZachJMoore/smart-kiln-standalone-ui" target="_blank">smart-kiln-standalone-ui</a> repository which was used for the UI.
+This is the new complete hardware application for the Smart Kiln project which supersedes the <a href="https://github.com/ZachJMoore/smart-kiln-standalone" target="_blank">smart-kiln-standalone</a> repository which was used for handling the logic behind firing a kiln, and <a href="https://github.com/ZachJMoore/smart-kiln-standalone-ui" target="_blank">smart-kiln-standalone-ui</a> repository which was used for the UI.
 
-The switch to react native has taken place and the apps can soon be found on the Apple and Google app store in order to interface with this software.
+**Mobile Apps**
+
+The switch to react native has taken place and the apps can soon be found on the Apple and Google app stores in order to interface with this software. The docs will  be updated as soon as each one is available for download
+
+<br />
 
 ## Getting Started
 
@@ -17,7 +40,7 @@ Or for those that love one line getting started commands:
 $ git clone https://github.com/ZachJMoore/smart-kiln-hardware.git && cd smart-kiln-hardware && mv .env.example .env
 ```
 
-
+<br />
 
 ## Hardware & Wiring
 
@@ -31,6 +54,8 @@ Each SmartKiln software component that deals with hardware has a README with wir
 - [Relays](/app/components/Kiln/lib/Relays/README.md)
 - [Thermocouples and Amplifiers](/app/components/Kiln/lib/ThermoSensor/README.md)
 - [Displays](/app/components/Display/README.md)
+
+<br />
 
 ## Software Setup
 
@@ -125,6 +150,8 @@ smart-kiln-hardware provides a setup script which tries to copy and edit all the
 **Manual**
 
 If you prefer to do it manually or run into issues, you can follow the StackExchange answer linked above.
+
+<br />
 
 ## Usage:
 
