@@ -6,9 +6,10 @@ module.exports = class RemoteConfig extends Components.Base {
   constructor(props) {
     super(props);
 
+    console.log(process.env.NODE_ENV);
     this.state = {
       // ENVIRONMENT
-      isProduction: process.env.NODE_ENV === "development" ? false : true, //ONLY NON FS STATE VARIABLE
+      isProduction: process.env.NODE_ENV === "production", //ONLY NON FS STATE VARIABLE
       isDebug: process.env.DEBUG === "true" ? true : false,
       DEV_HOST:
         process.env.DEV_HOST || "https://development-backend.smartkiln.net",
@@ -76,6 +77,7 @@ module.exports = class RemoteConfig extends Components.Base {
       globalState: {
         options: {
           include: [
+            { key: "isProduction" },
             { key: "isDebug", emit: true },
             { key: "DEV_HOST", emit: true },
             { key: "PRODUCTION_HOST", emit: true },
