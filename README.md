@@ -185,6 +185,8 @@ $ npm run service:delete
 - Status  - "sudo service smart-kiln-hardware status"
 - Restart - "sudo service smart-kiln-hardware restart"
 
+<br />
+
 ## Linking and Using
 
 All kilns are currently being strictly manually linked to your account while in the beta. If you have downloaded the SmartKiln app, created an account, setup your SmartKiln controller, and have all the appropriate hardware correctly assembled and attached to your kiln, you can follow the steps below:
@@ -197,6 +199,8 @@ All kilns are currently being strictly manually linked to your account while in 
   - **User Account Identification**. You can find your account identification in the SmartKiln app settings. As of 10/3/2019, this information is listed in the top left. It will be in following format: "number"."Your Name", for example, "1.Smart Kiln".
 
 After receiving this information, we will make the changes to your account on our end and will email you once this has been completed. You will be able to find your kiln listed in the SmartKiln app under the home page. If you don't immediately see it, try refreshing or restarting the app.
+
+<br />
 
 ## Issues and Bug Reports
 
@@ -222,7 +226,8 @@ Please send an email to <a href="mailto:contact@smartkiln.net">contact@smartkiln
 
 If your problem does not fit directly into any of the issues above, please direct an email with a title of `Issue/Bug report` to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a>.
 
+<br />
 
-## Privacy Policy
+## SmartKiln Privacy Policy
 
 https://zachjmoore.com/smartkiln/privacy-policy/
