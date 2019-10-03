@@ -1,6 +1,15 @@
 # SmartKiln
 
-![smart-kiln-hardware-header](smart-kiln-hardware-header.png)
+![smart-kiln-hardware-header](docs/images/smart-kiln-hardware-header.png)
+
+<div style="display: flex; justify-content:center; flex-wrap: wrap;">
+  <a style="margin: -30px 10px -30px 10px;" href="https://testflight.apple.com/join/0vnadjan" target="_blank">
+    <img style="width: 125px" src="docs/images/download-apple.png" alt="Download on Apple App Store" />
+  </a>
+  <a style="margin: -30px 10px -30px 10px; opacity: .25;" target="_blank">
+    <img style="width: 125px" src="docs/images/download-google.png" alt="Download on Google Play Store" />
+  </a>
+</div>
 
 SmartKiln brings a smarter, better, more connected ecosystem to all your kilns. With SmartKiln you have full access of the network to all of your connected kilns.
 
@@ -13,7 +22,7 @@ SmartKiln provides all and more of the following features:
 - **Edit kiln temperature display types and temperature offsets**
 - **Easily switch between displaying Celsius and Fahrenheit temperatures**
 
-The mobile apps for Apple and Google will both be released soon! If you want to get a head start though, below are all the details for setting up your own kiln powered by the SmartKiln ecosystem.
+Once you've downloaded the app for your device, below are all the details for setting up your own kiln controller powered by the SmartKiln ecosystem.
 
 <br />
 
@@ -21,21 +30,21 @@ The mobile apps for Apple and Google will both be released soon! If you want to 
 
 This is the new complete hardware application for the Smart Kiln project which supersedes the <a href="https://github.com/ZachJMoore/smart-kiln-standalone" target="_blank">smart-kiln-standalone</a> repository which was used for handling the logic behind firing a kiln, and <a href="https://github.com/ZachJMoore/smart-kiln-standalone-ui" target="_blank">smart-kiln-standalone-ui</a> repository which was used for the UI.
 
-**Mobile Apps**
+**Kiln Interactions**
 
-The switch to react native has taken place and the apps can soon be found on the Apple and Google app stores in order to interface with this software. The docs will  be updated as soon as each one is available for download
+The switch to React Native has taken place and the apps can be found at the links above. All of the interactions are handled through mobile, as well as eventually a web app.
 
 <br />
 
 ## Getting Started
 
-After cloning the project, make sure to rename .env.example to .env. You can do so with the following command from the root project directory:
+After cloning the project or downloading the [latest release](https://github.com/ZachJMoore/smart-kiln-hardware/releases), make sure to rename .env.example to .env. You can do so with the following command from the root project directory:
 
 ```
 $ mv .env.example .env
 ```
 
-Or for those that love one line getting started commands:
+Or for those that love one liners for getting started:
 ```
 $ git clone https://github.com/ZachJMoore/smart-kiln-hardware.git && cd smart-kiln-hardware && mv .env.example .env
 ```
