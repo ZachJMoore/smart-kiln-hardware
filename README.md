@@ -2,11 +2,13 @@
 
 ![smart-kiln-hardware-header](docs/images/smart-kiln-hardware-header.png)
 
-<p align="center">
+<p align="left">
   <a href="https://testflight.apple.com/join/0vnadjan" target="_blank">
     <img width="125px" src="docs/images/download-apple.png" alt="Download on Apple App Store" />
   </a>
+  <!-- <a target="_blank">
     <img width="125px" src="docs/images/download-google.png" alt="Download on Google Play Store" />
+  </a> -->
 </p >
 
 SmartKiln brings a smarter, better, more connected ecosystem to all your kilns. With SmartKiln you have full access of the network to all of your connected kilns.
