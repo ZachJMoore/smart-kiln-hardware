@@ -13,14 +13,15 @@
 
 SmartKiln brings a smarter, better, more connected ecosystem to all your kilns. With SmartKiln you have full access through the cloud to all of your connected kilns.
 
-SmartKiln provides all and more of the following features:
+The SmartKiln beta currently provides all and more of the following features:
 
 - **Remotely control kilns from anywhere**
 - **Add, edit, and sync multiple firing schedules from one place**
+- **Unlimited firing schedule ramps**
 - **View real-time kiln data and charted temperature data points for multiple kilns**
 - **Easily see current state of all linked kilns**
 - **Edit kiln temperature display types and temperature offsets**
-- **Easily switch between displaying Celsius and Fahrenheit temperatures**
+- **Easily switch between displaying Celsius and Fahrenheit**
 
 After downloading the SmartKiln app for your device, follow all the steps below to setup your own kiln controller powered by the SmartKiln ecosystem.
 
@@ -32,16 +33,27 @@ This is the new complete hardware application for all SmartKiln devices and supe
 
 The switch to React Native has taken place for all interactions between you and your kiln and the apps can be found at the links above. All kiln interactions are currently handled through mobile, as well as eventually a web app.
 
-Currently while in beta, the only way to get access to a SmartKiln controller is to build it yourself. Listed below is everything you need to get started, but if you run into any issues, please direct any inquiries to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a>
+Currently while in beta, the only way to get access to a SmartKiln controller is to build it yourself. Listed below is everything you need to get started, but if you run into any issues, please see the [Issues & Bug Reports](#issues-&-bug-reports) section.
+<hr/>
 
+<details>
+<summary>**Disclaimer**</summary>
 
-### **Disclaimer**
+<br />
 
 The SmartKiln is provided by myself and the maintainers "as is" and "with all faults." Myself and the maintainers makes no representations or warranties of any kind concerning the safety, suitability, lack of viruses or bugs, inaccuracies, typographical errors, or other harmful components of the SmartKiln. There are inherent dangers in the use of any software and hardware, and you are solely responsible for determining whether the SmartKiln is compatible with your kiln and hardware, as well as any other software installed on your hardware. You are also solely responsible for the protection of yourself, kilns, hardware, and backup of your data. Myself and the maintainers will not be liable for any damages you may suffer in connection with using, modifying, or distributing the SmartKiln. By using any part of the SmartKiln, you accept sole responsibility of any and all damage or harm caused by yourself or SmartKiln products.
+
+</details>
+<hr/>
 
 <br />
 
 ## Getting Started
+
+<details>
+<summary>Expand Getting Started</summary>
+
+<br />
 
 To get started, download the [latest release](https://github.com/ZachJMoore/smart-kiln-hardware/releases), make sure to rename .env.example to .env. You can do so with the following command from the root project directory:
 
@@ -49,15 +61,24 @@ To get started, download the [latest release](https://github.com/ZachJMoore/smar
 $ mv .env.example .env
 ```
 
-Look over the .env configuration and ensure that all the settings are correct. The only section you have to worry about if you only install the required dependencies are the hardware versions. Please the next section for configuring and correctly setting your version numbers.
+Look over the .env configuration and ensure that all the settings are correct. The only section you have to worry about if you only intend to install the required dependencies are the hardware versions. There are instructions below for configuring and correctly setting your version numbers.
+
+Please follow, in full, each section below to setup your hardware and the SmartKiln software.
+
+</details>
 
 <br />
 
 ## Hardware & Wiring
 
+<details>
+<summary>Expand Hardware & Wiring</summary>
+
+<br />
+
 Each SmartKiln software component that deals with hardware has a README with wiring and hardware information.
 
-### Parts and Wiring
+### Parts and Wiring README's
 - Raspberry Pi (already setup with Raspbian)
 - Raspberry Pi Case
 - Power Supply
@@ -66,9 +87,17 @@ Each SmartKiln software component that deals with hardware has a README with wir
 - [Thermocouples and Amplifiers](/app/components/Kiln/lib/ThermoSensor/README.md)
 - [Displays](/app/components/Display/README.md)
 
+</details>
+
+
 <br />
 
 ## Software Setup
+
+<details>
+<summary>Expand Software Setup</summary>
+
+<br />
 
 This project includes a WiFi Manager under the hood that is used for controlling wlan vs ap modes. It currently needs more testing and is not enabled. The WiFi mode switching is based on this answer from [StackExchange](https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312).
 
@@ -138,6 +167,11 @@ That all for required dependencies! Run the following command and move onto the 
 
 **OPTIONAL:** Not required in the current version.
 
+<details>
+<summary>Expand WiFi Manager Setup</summary>
+
+<br />
+
 #### systemd-networkd
 
 Just a few helper tools. Run the follow:
@@ -162,9 +196,19 @@ smart-kiln-hardware provides a setup script which tries to copy and edit all the
 
 If you prefer to do it manually or run into issues, you can follow the StackExchange answer linked above. Although as the project changes, the setup script apply addition steps to make everything work. It is recommended not to do this manually.
 
+</details>
+
+</details>
+
+
 <br />
 
-## Deploy
+## Deploy Instructions
+
+<details>
+<summary>Expand Deploy Instructions</summary>
+
+<br />
 
 Before first deploying, make sure to run the app with `npm start` to make sure everything is configured correctly, then proceed to the following:
 
@@ -185,9 +229,17 @@ $ npm run service:delete
 - Status  - "sudo service smart-kiln-hardware status"
 - Restart - "sudo service smart-kiln-hardware restart"
 
+</details>
+
+
 <br />
 
-## Linking and Using
+## Linking & Usage
+
+<details>
+<summary>Expand Linking & Usage</summary>
+
+<br />
 
 All kilns are currently being strictly manually linked to your account while in the beta. If you have downloaded the SmartKiln app, created an account, setup your SmartKiln controller, and have all the appropriate hardware correctly assembled and attached to your kiln, you can follow the steps below:
 
@@ -200,9 +252,17 @@ All kilns are currently being strictly manually linked to your account while in 
 
 After receiving this information, we will make the changes to your account on our end and will email you once this has been completed. You will be able to find your kiln listed in the SmartKiln app under the home page. If you don't immediately see it, try refreshing or restarting the app.
 
+</details>
+
+
 <br />
 
-## Issues and Bug Reports
+## Issues & Bug Reports
+
+<details>
+<summary>Expand Issues & Bug Reports</summary>
+
+<br />
 
 If you happen to run into a bug or issue using our service. Use the sections below as a guide for where to report these.
 
@@ -225,6 +285,9 @@ Please send an email to <a href="mailto:contact@smartkiln.net">contact@smartkiln
 #### Doesn't Fit a Category?
 
 If your problem does not fit directly into any of the issues above, please direct an email with a title of `Issue/Bug report` to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a>.
+
+</details>
+
 
 <br />
 
