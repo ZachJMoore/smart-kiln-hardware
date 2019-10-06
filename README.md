@@ -19,23 +19,23 @@ The SmartKiln beta currently provides all and more of the following features:
 - **Add, edit, and sync multiple firing schedules from one place**
 - **Unlimited firing schedule ramps**
 - **View real-time kiln data and charted temperature data points for multiple kilns**
-- **Easily see current state of all linked kilns**
+- **Easily see the current state of all linked kilns**
 - **Edit kiln temperature display types and temperature offsets**
 - **Easily switch between displaying Celsius and Fahrenheit**
 
-After downloading the SmartKiln app for your device, follow all the steps below to setup your own kiln controller powered by the SmartKiln ecosystem.
+After downloading the SmartKiln app for your device, follow all the steps below to set up your kiln controller powered by the SmartKiln ecosystem.
 
 <br />
 
 # Smart Kiln Hardware
 
-This is the new complete hardware application for all SmartKiln devices and supersedes all past code bases up to this point.
+This is the new complete hardware application for all SmartKiln devices and supersedes all past codebases up to this point.
 
 The switch to React Native has taken place for all interactions between you and your kiln and the apps can be found at the links above. All kiln interactions are currently handled through mobile, as well as eventually a web app.
 
 ### Where do I get a kiln controller?
 
-Currently while in beta, the only way to get access to a SmartKiln controller is to build it yourself. Listed below is everything you need to get started, but if you run into any issues, please see the [Issues & Bug Reports](#issues-&-bug-reports) section.
+Currently, while in beta, the only way to get access to a SmartKiln controller is to build it yourself. Listed below is everything you need to get started, but if you run into any issues, please see the [Issues & Bug Reports](#issues-&-bug-reports) section.
 
 ### What if I can't build my own?
 
@@ -54,7 +54,7 @@ If you don't feel comfortable or can't make your own, you can sign up for our wa
 
 <br />
 
-The SmartKiln is provided by myself and the maintainers "as is" and "with all faults." Myself and the maintainers makes no representations or warranties of any kind concerning the safety, suitability, lack of viruses or bugs, inaccuracies, typographical errors, or other harmful components of the SmartKiln. There are inherent dangers in the use of any software and hardware, and you are solely responsible for determining whether the SmartKiln is compatible with your kiln and hardware, as well as any other software installed on your hardware. You are also solely responsible for the protection of yourself, kilns, hardware, and backup of your data. Myself and the maintainers will not be liable for any damages you may suffer in connection with using, modifying, or distributing the SmartKiln. By using any part of the SmartKiln, you accept sole responsibility of any and all damage or harm caused by yourself or SmartKiln products.
+The SmartKiln is provided by myself and the maintainers "as is" and "with all faults." I and the maintainers make no representations or warranties of any kind concerning the safety, suitability, lack of viruses or bugs, inaccuracies, typographical errors, or other harmful components of the SmartKiln. There are inherent dangers in the use of any software and hardware, and you are solely responsible for determining whether the SmartKiln is compatible with your kiln and hardware, as well as any other software installed on your hardware. You are also solely responsible for the protection of yourself, kilns, hardware, and backup of your data. I and the maintainers will not be liable for any damages you may suffer in connection with using, modifying, or distributing the SmartKiln. By using any part of the SmartKiln, you accept sole responsibility of any and all damage or harm caused by yourself or SmartKiln products.
 
 </details>
 <hr/>
@@ -76,7 +76,7 @@ $ mv .env.example .env
 
 Look over the .env configuration and ensure that all the settings are correct. The only section you have to worry about if you only intend to install the required dependencies are the hardware versions. There are instructions below for configuring and correctly setting your version numbers.
 
-Please follow, in full, each section below to setup your hardware and the SmartKiln software.
+Please follow, in full, each section below to set up your hardware and the SmartKiln software.
 
 </details>
 
@@ -112,13 +112,13 @@ Each SmartKiln software component that deals with hardware has a README with wir
 
 <br />
 
-This project includes a WiFi Manager under the hood that is used for controlling wlan vs ap modes. It currently needs more testing and is not enabled. The WiFi mode switching is based on this answer from [StackExchange](https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312).
+This project includes a WiFi Manager under the hood that is used for controlling WLAN vs ap modes. It currently needs more testing and is not enabled. The WiFi mode switching is based on this answer from [StackExchange](https://raspberrypi.stackexchange.com/questions/93311/switch-between-wifi-client-and-access-point-without-reboot/93312#93312).
 
 Even though it as not enabled, the install instructions for the WiFi Manager dependencies are listed below for future use, documentation, and testing purposes.
 
 ### Dependencies
 
-The follow is the basics of what we need: Node, SPI, I2C, ZeroConf, forever & forever-service, node_modules, and optional systemd-networkd helper tools & systemd-networkd setup.
+The following are the basics of what we need: Node, SPI, I2C, ZeroConf, forever & forever-service, node_modules, and optional systemd-networkd helper tools & systemd-networkd setup.
 
 #### Installing Node
 
@@ -203,7 +203,7 @@ There is some setup before we can use systemd-networkd
 
 **Automatic**
 
-smart-kiln-hardware provides a setup script which tries to copy and edit all the necessary files for you.
+smart-kiln-hardware provides a setup script that tries to copy and edit all the necessary files for you.
 
 ```
     $ sudo npm run setup
@@ -211,7 +211,7 @@ smart-kiln-hardware provides a setup script which tries to copy and edit all the
 
 **Manual**
 
-If you prefer to do it manually or run into issues, you can follow the StackExchange answer linked above. Although as the project changes, the setup script apply addition steps to make everything work. It is recommended not to do this manually.
+If you prefer to do it manually or run into issues, you can follow the StackExchange answer linked above. Although as the project changes, the setup script applies addition steps to make everything work. It is recommended not to do this manually.
 
 </details>
 
@@ -258,14 +258,14 @@ $ npm run service:delete
 
 <br />
 
-All kilns are currently being strictly manually linked to your account while in the beta. If you have downloaded the SmartKiln app, created an account, setup your SmartKiln controller, and have all the appropriate hardware correctly assembled and attached to your kiln, you can follow the steps below:
+All kilns are currently being strictly manually linked to your account while in the beta. If you have downloaded the SmartKiln app, created an account, set up your SmartKiln controller, and have all the appropriate hardware correctly assembled and attached to your kiln, you can follow the steps below:
 
 - Login to the email you used for your account at SmartKiln
 - Compose an email to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a>
 - Set the subject title to: `SmartKiln Link Request`
 - In the email body, please include the following in order
-  - **Kiln UUID & ID Number**. Your kiln UUID can be found, from the directory you started the SmartKiln hardware app in, at the following file `app/storage/internal/Authentication/state.json`. In this file, your UUID and ID is under the the account section. If there is no information in this section, your kiln has not connected to our servers yet and most likely is just not connected to a network, behind a firewall, or is incorrectly configured.
-  - **User Account Identification**. You can find your account identification in the SmartKiln app settings. As of 10/3/2019, this information is listed in the top left. It will be in following format: "number"."Your Name", for example, "1.Smart Kiln".
+  - **Kiln UUID & ID Number**. Your kiln UUID can be found, from the directory you started the SmartKiln hardware app in, at the following file `app/storage/internal/Authentication/state.json`. In this file, your UUID and ID are under the account section. If there is no information in this section, your kiln has not connected to our servers yet and most likely is just not connected to a network, behind a firewall, or is incorrectly configured.
+  - **User Account Identification**. You can find your account identification in the SmartKiln app settings. As of 10/3/2019, this information is listed in the top left. It will be in the following format: "number"."Your Name", for example, "1.Smart Kiln".
 
 After receiving this information, we will make the changes to your account on our end and will email you once this has been completed. You will be able to find your kiln listed in the SmartKiln app under the home page. If you don't immediately see it, try refreshing or restarting the app.
 
@@ -284,11 +284,11 @@ If you happen to run into a bug or issue using our service. Use the sections bel
 
 #### Kiln Software Bug?
 
-Please open an issue directly here on github
+Please open an issue directly here on GitHub
 
 #### Kiln Setup?
 
-While the SmartKiln is purely software based while in the beta, and you handle the hardware, we can't provide any support in this area
+While the SmartKiln is purely software-based while in the beta, and you handle the hardware, we can't provide any support in this area
 
 #### SmartKiln App Bug?
 
