@@ -6,9 +6,9 @@
   <a href="https://testflight.apple.com/join/0vnadjan" target="_blank">
     <img height="48px" src="docs/images/download-apple.png" alt="Download on Apple App Store" />
   </a>
-  <!-- <a target="_blank">
+  <a href="https://play.google.com/apps/testing/com.smartkilnrnb" target="_blank">
     <img height="48px" src="docs/images/download-google.png" alt="Download on Google Play Store" />
-  </! -->
+  </!
 </p >
 
 SmartKiln brings a smarter, better, more connected ecosystem to all your kilns. With SmartKiln you have full access through the cloud to all of your connected kilns.
@@ -34,6 +34,7 @@ This is the new complete hardware application for all SmartKiln devices and supe
 The switch to React Native has taken place for all interactions between you and your kiln and the apps can be found at the links above. All kiln interactions are currently handled through mobile, as well as eventually a web app.
 
 Currently while in beta, the only way to get access to a SmartKiln controller is to build it yourself. Listed below is everything you need to get started, but if you run into any issues, please see the [Issues & Bug Reports](#issues-&-bug-reports) section.
+
 <hr/>
 
 <details>
@@ -79,6 +80,7 @@ Please follow, in full, each section below to setup your hardware and the SmartK
 Each SmartKiln software component that deals with hardware has a README with wiring and hardware information.
 
 ### Parts and Wiring README's
+
 - Raspberry Pi (already setup with Raspbian)
 - Raspberry Pi Case
 - Power Supply
@@ -88,7 +90,6 @@ Each SmartKiln software component that deals with hardware has a README with wir
 - [Displays](/app/components/Display/README.md)
 
 </details>
-
 
 <br />
 
@@ -110,11 +111,13 @@ The follow is the basics of what we need: Node, SPI, I2C, ZeroConf, forever & fo
 #### Installing Node
 
 **Node for Pi Zero W:**
+
 ```
     $ curl -o node-v9.7.1-linux-armv6l.tar.gz https://nodejs.org/dist/v9.7.1/node-v9.7.1-linux-armv6l.tar.gz && tar -xzf node-v9.7.1-linux-armv6l.tar.gz && sudo cp -r node-v9.7.1-linux-armv6l/* /usr/local/
 ```
 
 **Node for Pi 3B+:**
+
 ```
     $ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
     $ sudo apt-get install -y nodejs
@@ -123,6 +126,7 @@ The follow is the basics of what we need: Node, SPI, I2C, ZeroConf, forever & fo
 #### SPI, I2C
 
 **Command Line:**
+
 ```
     $ sudo raspi-config
     -> Interfacing Options -> SPI
@@ -132,6 +136,7 @@ The follow is the basics of what we need: Node, SPI, I2C, ZeroConf, forever & fo
 **Boot Config**
 
 If you'd rather enable these from the very start, in your sd card after installing raspbian, edit /boot/config.txt and append the following lines:
+
 ```
     dtparam=spi=on
     dtparam=i2c_vc=on
@@ -200,7 +205,6 @@ If you prefer to do it manually or run into issues, you can follow the StackExch
 
 </details>
 
-
 <br />
 
 ## Deploy Instructions
@@ -219,18 +223,19 @@ $ npm run service:install
 ```
 
 **Stop & Delete**
+
 ```
 $ npm run service:delete
 ```
 
 ### Commands to interact with the service
-- Start   - "sudo service smart-kiln-hardware start"
-- Stop    - "sudo service smart-kiln-hardware stop"
-- Status  - "sudo service smart-kiln-hardware status"
+
+- Start - "sudo service smart-kiln-hardware start"
+- Stop - "sudo service smart-kiln-hardware stop"
+- Status - "sudo service smart-kiln-hardware status"
 - Restart - "sudo service smart-kiln-hardware restart"
 
 </details>
-
 
 <br />
 
@@ -253,7 +258,6 @@ All kilns are currently being strictly manually linked to your account while in 
 After receiving this information, we will make the changes to your account on our end and will email you once this has been completed. You will be able to find your kiln listed in the SmartKiln app under the home page. If you don't immediately see it, try refreshing or restarting the app.
 
 </details>
-
 
 <br />
 
@@ -287,7 +291,6 @@ Please send an email to <a href="mailto:contact@smartkiln.net">contact@smartkiln
 If your problem does not fit directly into any of the issues above, please direct an email with a title of `Issue/Bug report` to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a>.
 
 </details>
-
 
 <br />
 
