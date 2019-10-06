@@ -8,7 +8,7 @@
   </a>
   <a href="https://play.google.com/apps/testing/com.smartkilnrnb" target="_blank">
     <img height="48px" src="docs/images/download-google.png" alt="Download on Google Play Store" />
-  </!
+    </a>
 </p >
 
 SmartKiln brings a smarter, better, more connected ecosystem to all your kilns. With SmartKiln you have full access through the cloud to all of your connected kilns.
