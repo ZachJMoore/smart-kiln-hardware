@@ -29,11 +29,23 @@ After downloading the SmartKiln app for your device, follow all the steps below 
 
 # Smart Kiln Hardware
 
-This is the new complete hardware application for all SmartKiln devices and supersedes all past projects up to this point.
+This is the new complete hardware application for all SmartKiln devices and supersedes all past code bases up to this point.
 
 The switch to React Native has taken place for all interactions between you and your kiln and the apps can be found at the links above. All kiln interactions are currently handled through mobile, as well as eventually a web app.
 
+### Where do I get a kiln controller?
+
 Currently while in beta, the only way to get access to a SmartKiln controller is to build it yourself. Listed below is everything you need to get started, but if you run into any issues, please see the [Issues & Bug Reports](#issues-&-bug-reports) section.
+
+### What if I can't build my own?
+
+If you don't feel comfortable or can't make your own, you can sign up for our waitlist at https://smartkiln.net and we will let you know when our official kiln controller is available.
+
+<br/>
+
+<a href="https://github.com/ZachJMoore/passeljs">
+  <small>SmartKiln Hardware is Powered by Passel.js</small>
+</a>
 
 <hr/>
 
