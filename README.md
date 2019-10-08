@@ -275,37 +275,8 @@ After receiving this information, we will make the changes to your account on ou
 
 ## Issues & Bug Reports
 
-<details>
-<summary>Expand Issues & Bug Reports</summary>
-
-<br />
-
-If you happen to run into a bug or issue using our service. Use the sections below as a guide for where to report these.
-
-#### Kiln Software Bug?
-
-Please open an issue directly here on GitHub
-
-#### Kiln Setup?
-
-While the SmartKiln is purely software-based while in the beta, and you handle the hardware, we can't provide any support in this area
-
-#### SmartKiln App Bug?
-
-Please go through the appropriate channels, whether Apple or Google, to report bugs in the beta apps. This is much easier for us and provides us with greater detail.
-
-#### Having Account Troubles?
-
-Please send an email to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a> with a detailed description of the issue your facing
-
-#### Doesn't Fit a Category?
-
-If your problem does not fit directly into any of the issues above, please direct an email with a title of `Issue/Bug report` to <a href="mailto:contact@smartkiln.net">contact@smartkiln.net</a>.
-
-</details>
-
-<br />
+https://smartkiln.net/support-page
 
 ## SmartKiln Privacy Policy
 
-https://zachjmoore.com/smartkiln/privacy-policy/
+https://smartkiln.net/privacy-policy
