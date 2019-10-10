@@ -151,7 +151,7 @@ If you'd rather enable these from the very start, in your sd card after installi
 
 ```
     dtparam=spi=on
-    dtparam=i2c_vc=on
+    dtparam=i2c_arm=on
 ```
 
 #### ZeroConf
@@ -222,6 +222,7 @@ If you prefer to do it manually or run into issues, you can follow the StackExch
 ## Deploy Instructions
 
 <details>
+
 <summary>Expand Deploy Instructions</summary>
 
 <br />
