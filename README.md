@@ -6,7 +6,7 @@
   <a href="https://testflight.apple.com/join/0vnadjan" target="_blank">
     <img height="48px" src="docs/images/download-apple.png" alt="Download on Apple App Store" />
   </a>
-  <a href="https://play.google.com/apps/testing/com.smartkilnrnb" target="_blank">
+  <a href="https://play.google.com/store/apps/details?id=com.smartkilnrnb&ah=JB0JJlthaT0pzv7eerekxm7VE1c" target="_blank">
     <img height="48px" src="docs/images/download-google.png" alt="Download on Google Play Store" />
     </a>
 </p >
