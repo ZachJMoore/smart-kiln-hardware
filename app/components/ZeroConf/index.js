@@ -29,42 +29,63 @@ module.exports = class ZeroConf extends Components.Base {
         }
       }
     };
+
+    this.advertisement = null;
+    this.options = {
+      name: null,
+      txtRecord: {
+        sn: null,
+        uuid: null,
+        user_id: null,
+        id: null,
+        skdm: null,
+        rbv: null,
+        tsv: null
+      }
+    };
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {
-    let uuid = this.global.Authentication.account
+  _createAdvertisement() {
+    const uuid = this.global.Authentication.account
       ? this.global.Authentication.account.uuid
       : null;
 
-    let id = this.global.Authentication.account
+    const user_id = this.global.Authentication.account
+      ? this.global.Authentication.account.user_id
+      : null;
+
+    const id = this.global.Authentication.account
       ? this.global.Authentication.account.id
       : null;
 
-    let options = {
-      name: `smart-kiln-${uuid}`,
+    const options = {
+      name: `${uuid}`,
       txtRecord: {
-        sn: this.global.Authentication.account
+        name: this.global.Authentication.account
           ? this.global.Authentication.account.name
             ? this.global.Authentication.account.name
             : "Unnamed Kiln"
           : "Unnamed Kiln",
         uuid: uuid,
         id: id,
-        skdm: process.env.SMART_KILN_DEVICE_MODEL,
-        rbv: process.env.RELAY_BOARD_VERSION,
-        tsv: process.env.THERMO_SENSOR_VERSION
+        user_id: user_id,
+        software_v: helpers.getSoftwareVersion(),
+        model_v: process.env.SMART_KILN_DEVICE_MODEL,
+        relay_v: process.env.RELAY_BOARD_VERSION,
+        thermo_v: process.env.THERMO_SENSOR_VERSION
       }
     };
 
-    let ad = mdns.createAdvertisement(
+    this.options = options;
+
+    const ad = mdns.createAdvertisement(
       new mdns.ServiceType("smart-kiln", "tcp"),
-      8009,
+      parseInt(process.env.LOCAL_PORT),
       options,
       (error, service) => {
         if (error) {
           this.setState({
+            isAdvertising: false,
             advertisementError: error
           });
         } else {
@@ -76,6 +97,42 @@ module.exports = class ZeroConf extends Components.Base {
       }
     );
 
-    ad.start();
+    return ad;
+  }
+
+  _stopAdvertisement() {
+    if (this.advertisement) this.advertisement.stop();
+
+    this.setState({
+      isAdvertising: false,
+      advertisementError: null
+    });
+  }
+
+  _startAdvertisement() {
+    this.advertisement = this._createAdvertisement();
+    this.advertisement.start();
+  }
+
+  advertise() {
+    this._stopAdvertisement();
+    this._startAdvertisement();
+  }
+
+  componentWillMount() {}
+
+  componentDidMount() {
+    this.advertise();
+
+    this.globalChanged.on("Authentication.account", account => {
+      if (
+        account.name !== this.options.txtRecord.sn ||
+        account.uuid !== this.options.txtRecord.uuid ||
+        account.user_id !== this.options.txtRecord.user_id ||
+        account.id !== this.options.txtRecord.id
+      ) {
+        this.advertise();
+      }
+    });
   }
 };

@@ -1,21 +1,25 @@
-const fs = require("fs");
-const ROOT_PATH = fs.realpathSync(".");
 require("dotenv").config();
 const passel = require("passeljs");
-const Kiln = require("./app/components/Kiln");
+const { isValidPlatform } = require("./app/lib/helpers");
+const RemoteConfig = require("./app/components/RemoteConfig");
 const Authentication = require("./app/components/Authentication");
+const Kiln = require("./app/components/Kiln");
 const Schedules = require("./app/components/Schedules");
 const FiringLogger = require("./app/components/FiringLogger");
 const DatapointLogger = require("./app/components/DatapointLogger");
 const CommandRunner = require("./app/components/CommandRunner");
 const ZeroConf = require("./app/components/ZeroConf");
 const RealtimeData = require("./app/components/RealtimeData");
-const WifiManager = require("./app/components/WifiManager");
-const Display = require("./app/components/Display");
-const RemoteConfig = require("./app/components/RemoteConfig");
-const io = require("socket.io")(8009);
+
+const WifiManager = null;
+if (isValidPlatform()) WifiManager = require("./app/components/WifiManager");
+
+let Display = null;
+if (isValidPlatform()) Display = require("./app/components/Display");
 
 // Start application
+
+const io = require("socket.io")(process.env.LOCAL_PORT);
 passel.setGlobalDefaults({
   socket: null,
   io
@@ -32,16 +36,23 @@ passel.use(DatapointLogger);
 passel.use(CommandRunner);
 passel.use(RealtimeData);
 passel.use(ZeroConf);
-passel.use(Display);
-// passel.use(WifiManager); // this is not quite complete and needs refining.
+if (isValidPlatform()) passel.use(Display);
+// if (isValidPlatform()) passel.use(WifiManager); // this is not quite complete and needs refining.
 
 passel.mountComponents();
 
 console.log(
-  `${new Date()}: application started. NODE_ENV is ${
+  `${new Date()}: application started in ${
     passel.global.RemoteConfig.isProduction ? "production" : "development"
-  }`
+  } mode`
 );
+
+if (!isValidPlatform())
+  console.log(
+    `${new Date()}:\x1b[33m running smart-kiln-hardware on system '${process.platform +
+      "-" +
+      process.arch}' is unsupported. All Relays, Thermocouples, and WifiManager components are disabled`
+  );
 
 // Testing memory usage of application
 

@@ -7,40 +7,44 @@ class Relays {
     this.debug = debug;
     this.relayType = relayType;
 
-    this.Gpio = require("onoff").Gpio;
-    if (relayType === "v1") {
-      this.relays = [new this.Gpio(27, "out")];
-    } else if (relayType === "v2") {
-      this.relays = [
-        new this.Gpio(5, "out"),
-        new this.Gpio(6, "out"),
-        new this.Gpio(13, "out"),
-        new this.Gpio(19, "out"),
-        new this.Gpio(26, "out"),
-        new this.Gpio(17, "out"),
-        new this.Gpio(27, "out"),
-        new this.Gpio(22, "out")
-      ];
-    } else if (relayType === "v3") {
-      this.relays = [
-        new this.Gpio(6, "out"),
-        new this.Gpio(13, "out"),
-        new this.Gpio(19, "out"),
-        new this.Gpio(26, "out")
-      ];
-    } else if (relayType === "v4") {
-      this.relays = [
-        new this.Gpio(13, "out"),
-        new this.Gpio(19, "out"),
-        new this.Gpio(26, "out"),
-        new this.Gpio(16, "out"),
-        new this.Gpio(20, "out"),
-        new this.Gpio(21, "out")
-      ];
+    if (!helpers.isValidPlatform()) {
+      this.relays = [];
     } else {
-      throw new Error(
-        "No valid relay type provided to constructor. There will be no way to turn on the kiln"
-      );
+      const gpio = require("onoff").Gpio;
+      if (relayType === "v1") {
+        this.relays = [new gpio(27, "out")];
+      } else if (relayType === "v2") {
+        this.relays = [
+          new gpio(5, "out"),
+          new gpio(6, "out"),
+          new gpio(13, "out"),
+          new gpio(19, "out"),
+          new gpio(26, "out"),
+          new gpio(17, "out"),
+          new gpio(27, "out"),
+          new gpio(22, "out")
+        ];
+      } else if (relayType === "v3") {
+        this.relays = [
+          new gpio(6, "out"),
+          new gpio(13, "out"),
+          new gpio(19, "out"),
+          new gpio(26, "out")
+        ];
+      } else if (relayType === "v4") {
+        this.relays = [
+          new gpio(13, "out"),
+          new gpio(19, "out"),
+          new gpio(26, "out"),
+          new gpio(16, "out"),
+          new gpio(20, "out"),
+          new gpio(21, "out")
+        ];
+      } else {
+        throw new Error(
+          "No valid relay type provided to constructor. There will be no way to turn on the kiln"
+        );
+      }
     }
   }
 

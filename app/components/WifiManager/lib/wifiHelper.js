@@ -2,13 +2,12 @@ const _ = require("lodash");
 const jetpack = require("fs-jetpack");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
-
-const isValidPlatform = process.platform === "linux" && process.arch === "arm";
+const { isValidPlatform } = require("../../../lib/helpers");
 
 let isDebug = process.env.DEBUG === "true";
 
 const _writeTemplate = async (templatePath, filePath, properties) => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -28,7 +27,7 @@ const _writeTemplate = async (templatePath, filePath, properties) => {
 };
 
 const getWifiNames = async () => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -55,7 +54,7 @@ const getWifiNames = async () => {
 };
 
 const getCurrentConnection = async () => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -76,7 +75,7 @@ const getCurrentConnection = async () => {
 };
 
 const setAP = async props => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -111,7 +110,7 @@ const setAP = async props => {
 };
 
 const setWifi = async props => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -144,7 +143,7 @@ const setWifi = async props => {
 };
 
 const setDefaultBootMode = async (defaultMode = "wlan") => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -163,7 +162,7 @@ const setDefaultBootMode = async (defaultMode = "wlan") => {
 };
 
 const switchToAP = () => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -172,7 +171,7 @@ const switchToAP = () => {
 };
 
 const switchToWifi = () => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -186,7 +185,7 @@ const setDebug = (debug = false) => {
 };
 
 const setupSDND = async props => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );
@@ -333,7 +332,7 @@ const setupSDND = async props => {
 };
 
 const reboot = async () => {
-  if (!isValidPlatform)
+  if (!isValidPlatform())
     return Promise.reject(
       `Platform '${process.platform}' with architecture '${process.arch}' is not a valid device of deployment. Must be a Linux Arm device`
     );

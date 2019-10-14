@@ -1,3 +1,5 @@
+const package = require("../../package.json");
+
 const toFixed = (value, index = 0) => {
   return parseFloat(value.toFixed(index));
 };
@@ -120,6 +122,14 @@ const generateUUID = () => {
   });
 };
 
+const isValidPlatform = () => {
+  return process.platform === "linux" && process.arch === "arm";
+};
+
+const getSoftwareVersion = () => {
+  return package.version;
+};
+
 module.exports = {
   toFixed,
   celsiusToFahrenheit,
@@ -132,5 +142,7 @@ module.exports = {
   createObjectPath,
   convertNumberToLetters,
   convertLettersToNumber,
-  generateUUID
+  generateUUID,
+  isValidPlatform,
+  getSoftwareVersion
 };
