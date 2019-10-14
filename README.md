@@ -281,3 +281,15 @@ https://smartkiln.net/support-page
 ## SmartKiln Privacy Policy
 
 https://smartkiln.net/privacy-policy
+
+## License
+
+smart-kiln-hardware uses the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/) license and the software can be shared and adapted as long as all terms are met. Before contributing or using this software in any regard, ensure that you read the [license](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode) in full.
+
+See the main three license requirements below:
+
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+
+- **NonCommercial** — You may not use the material for commercial purposes.
+
+- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
