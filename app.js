@@ -11,7 +11,7 @@ const CommandRunner = require("./app/components/CommandRunner");
 const ZeroConf = require("./app/components/ZeroConf");
 const RealtimeData = require("./app/components/RealtimeData");
 
-const WifiManager = null;
+let WifiManager = null;
 if (isValidPlatform()) WifiManager = require("./app/components/WifiManager");
 
 let Display = null;
