@@ -33,24 +33,32 @@ class Display extends Components.Base {
 
   componentDidMount() {
     this.globalChanged.on("Kiln.thermoSensor", thermoSensor => {
-      let temperature = getTemperature(
-        thermoSensor.average,
-        this.getTemperatureDisplayType()
-      );
+      if (thermoSensor.hasValidReading) {
+        let temperature = getTemperature(
+          thermoSensor.average,
+          this.getTemperatureDisplayType()
+        );
 
-      this.display.writeNumber(temperature);
+        this.display.writeNumber(temperature);
+      } else {
+        this.display.writeString("Er-t");
+      }
     });
 
     this.globalChanged.on("Authentication.account", account => {
-      let temperature = getTemperature(
-        this.global.Kiln.thermoSensor.average,
-        this.getTemperatureDisplayType(
-          "kiln_settings.temperature_display_type",
-          account
-        )
-      );
+      if (this.global.Kiln.thermoSensor.hasValidReading) {
+        let temperature = getTemperature(
+          this.global.Kiln.thermoSensor.average,
+          this.getTemperatureDisplayType(
+            "kiln_settings.temperature_display_type",
+            account
+          )
+        );
 
-      this.display.writeNumber(temperature);
+        this.display.writeNumber(temperature);
+      } else {
+        this.display.writeString("Er-t");
+      }
     });
   }
 }

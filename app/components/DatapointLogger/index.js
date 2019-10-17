@@ -65,6 +65,8 @@ module.exports = class DatapointLogger extends Components.Base {
   }
 
   trackDatapoints() {
+    if (!this.global.Kiln.thermoSensor.hasValidReading) return;
+
     let datapoint = this.getDatapoint();
 
     let datapoints = [...this.state.datapoints, datapoint];
