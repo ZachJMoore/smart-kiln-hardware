@@ -63,6 +63,7 @@ module.exports = class RealtimeData extends Components.Base {
 
   componentDidMount() {
     // TODO: when the interval seconds change, make sure we reset things
+    this.emitRealtimeData();
     this.interval = setInterval(() => {
       this.emitRealtimeData();
     }, this.global.RemoteConfig.REALTIME_DATA_UPDATE_INTERVAL_SECONDS * 1000);
