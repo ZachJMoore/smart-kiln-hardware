@@ -11,7 +11,7 @@
     "fetch-cookie": "^0.7.2",
     "fs-jetpack": "^2.2.0",
     "i2c-bus": "^4.0.7",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "mdns": "^2.4.0",
     "node-fetch": "^2.6.1",
     "onoff": "^4.1.1",
